@@ -1,0 +1,93 @@
+---
+tags: [pattern, trust-model, custody, tss, serai]
+seen_in: [serai]
+---
+
+# Serai trust model
+
+> Lead question: who do users have to trust, and what stops the trusted parties from stealing the custodied funds?
+
+Serai is a Substrate-based execution layer whose validator set holds user assets in threshold multisigs on each connected external network (Bitcoin, Ethereum, Monero). Bridging in mints a Serai-native representation; bridging out burns it and instructs the validator multisig to release the underlying coin. There is no light client; the entire honesty assumption rests on a bonded validator set producing FROST signatures. See [[projects/serai]] for the product context, and [[patterns/signer-federation-trust]] for the broader pattern.
+
+## Signer set composition
+
+Serai validators are permissionless proof-of-stake operators staking the native SRI token. The set is not a fixed multi-party committee, it is the live PoS validator set, sliced per external network.
+
+- Validators stake per network (NetworkId): the same operator running Bitcoin and Monero processors stakes separately for each. Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19).
+- A validator set is parameterised by `(network, allocation_per_key_share)`: each multiple of `allocation_per_key_share` you allocate buys one key share in that network's multisig. Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19).
+- Target launch size: "at launch Serai was looking at having up to 600 validators", with stake-per-network meaning the same operator can hold shares on several external multisigs. Source: [Serai blog, "How Far We've Come"](https://serai.exchange/2023/10/06/how-far-weve-come.html) (accessed 2026-05-19).
+- Sessions: the validator set is rotated by `Session: u32` per `(NetworkId, Session)` tuple. Each session triggers a new DKG and multisig rotation. Source: [Constants spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Constants.md) (accessed 2026-05-19).
+- Exact session length in blocks: [NOT FOUND] in the public spec as of 2026-05-19. The Multisig Rotation spec describes the procedural rotation but does not pin a session-duration constant. Source: [Multisig Rotation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Multisig%20Rotation.md) (accessed 2026-05-19).
+
+Contrast with both alternative federation patterns: Serai is permissionless PoS (anyone meeting `allocation_per_key_share` joins), not permissioned (Wormhole guardians) and not bonded operator-set with churn-by-bond (Thorchain). See the comparison section below.
+
+## Threshold and signing scheme
+
+Serai uses FROST (Schnorr) threshold signing, one separate multisig key per external network, with the threshold fixed to a two-thirds supermajority of key shares.
+
+- "Every Validator Set is expected to form a `t`-of-`n` multisig, where `n` is the amount of key shares in the Validator Set and `t` is `n * 2 / 3 + 1`". Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19).
+- FROST is the IETF draft variant: "Serai implements FROST, as specified in draft-irtf-cfrg-frost-11". Source: [FROST spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/cryptography/FROST.md) (accessed 2026-05-19).
+- Separate key per external network, bound to the network: "The processor generates a distinct set of keys per network. Beyond the key-generation itself being isolated, the generated keys are further bound to their respective networks via an additive offset created by hashing the network's name". Curves: Bitcoin/Ethereum on Secp256k1, Monero on Ed25519, Serai's own consensus on Ristretto. Source: [Constants spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Constants.md) (accessed 2026-05-19).
+- Each Serai processor instance generates a *pair* of FROST DKG keys per network: one for the external network and one Ristretto key for publishing batches back to Serai. Source: [Processor spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Processor.md) (accessed 2026-05-19).
+- DKG protocol: a modified Pedersen DKG (Feldman VSS run by every participant, plus the FROST Schnorr proof-of-knowledge for coefficient zero to block rogue-key attacks). Secret shares are point-to-point encrypted using ECDH + ChaCha20 with per-message keys, enabling identifiable blame if a participant misbehaves. Source: [Distributed Key Generation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/cryptography/Distributed%20Key%20Generation.md) (accessed 2026-05-19).
+- The DKG has since been upgraded to a one-round eVRF-based variant with verifiable encryption of shares and identifiable aborts: "Serai's goal of remaining operational when up to one-third of validators are offline". Source: [Serai blog, "Security Proofs for our One-Round, Robust Threshold DKG"](https://serai.exchange/2025/09/26/dkg-evrf-security-proofs.html) (accessed 2026-05-19).
+- DKG completion is *confirmed on-chain via a MuSig of all participants*: "having 100% of participants agree on the resulting group key", to avoid a malicious party forcing a `t`-of-`n-1` (i.e. tighter) multisig. Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19).
+
+## Asset release flow
+
+A withdrawal is *not* a user-presented claim; it is an instruction emerging from Serai's BFT consensus that the validator multisig then signs.
+
+1. A user burns the Serai-side representation. The on-chain `Burn` event is observed by every processor instance. Source: [Processor spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Processor.md) (accessed 2026-05-19).
+2. The processor's signing scheduler emits a "plan" for the burn on the appropriate external network. Coordination happens over a per-multisig disposable side-chain called a `Tributary`, which acts as a verifiable-broadcast layer (Tendermint-style BFT consensus among the same validators). Source: [Tributary spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/coordinator/Tributary.md) (accessed 2026-05-19).
+3. Each signer's processor independently verifies the plan against the Serai blockchain state (i.e. that the `Burn` is real and finalised), then publishes a `SignPreprocess` FROST preprocess to the Tributary. "When `t` validators have published `SignPreprocess` transactions, ... a `sign::ProcessorMessage::Preprocesses` is sent to the processor". Source: [Tributary spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/coordinator/Tributary.md) (accessed 2026-05-19).
+4. The first `t` to respond produce FROST signature shares; the aggregated Schnorr signature is broadcast on the external network as a normal Bitcoin / Ethereum / Monero transaction.
+5. Symmetrically, deposits in (`InInstruction`s) are batched per external block and signed by the same multisig with its Ristretto-key partner before being submitted as unsigned Serai extrinsics: "the validator set responsible for the network in question produces a threshold signature of their authenticity. This lets all other validators verify the instructions with an O(1) operation." Source: [In Instructions spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/In%20Instructions.md) (accessed 2026-05-19).
+
+### Reorg handling on the source chain
+
+- Only blocks with `CONFIRMATIONS` confirmations are operated upon: probabilistic finality for PoW chains, instant for known-finality chains. Source: [Scanning spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Scanning.md) (accessed 2026-05-19).
+- For multisig rotation, Serai explicitly avoids using a UI's view of an unfinalised "activation block" to prevent the kind of bridge-eclipse attack that exists when you trust local confirmations rather than Serai's own finality. Source: [Multisig Rotation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Multisig%20Rotation.md) (accessed 2026-05-19).
+- A source-chain reorg deeper than `CONFIRMATIONS` is out-of-model: Serai's solvency proof is contingent on each `Batch` reflecting a finalised state, so a confirmation-window-deep reorg is treated as a configuration failure of `CONFIRMATIONS`, not as something the protocol recovers from automatically. Source: [Multisig Rotation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Multisig%20Rotation.md) (accessed 2026-05-19).
+
+## What stops the federation from colluding to steal
+
+The core defence is economic, not cryptographic: a two-thirds threshold of validators *can* sign any spend, so the protocol enforces that doing so is unprofitable.
+
+- Hard cap on custodied value relative to stake: "This multisig is secure to hold coins valued at up to 33% of the Validator Set's allocated stake. If the coins exceed that threshold, ... it'd be no longer financially secure, and it MUST reject newly added coins." Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19).
+  - The reasoning: a colluding 67% threshold can steal 100% of the multisig, but is only at risk of losing the ~67% slice of stake that supermajority controls. With custody capped at 33% of *total* stake, custody is at most ~50% of the colluders' bonded SRI (33 / 67), so collusion is loss-making.
+- The pre-economic-security era is explicitly an interim where this invariant is *not yet* met; the chain mints staked SRI to validators (paid for in external coins) until enough stake has accumulated. Source: [Serai Economics docs](https://docs.serai.exchange/economics/) (accessed 2026-05-19). Detail pages [pre.html](https://docs.serai.exchange/economics/pre.html) and [post.html](https://docs.serai.exchange/economics/post.html) currently render as empty stubs on docs.serai.exchange (accessed 2026-05-19): the precise pre/post mint schedule is [NOT FOUND] in published docs.
+- Slashing conditions on misbehaviour: the `DKG Exclusions` design slashes (or removes from the validator set) participants who fail or sabotage the DKG, and the Validator Sets spec authorises slashing of nodes that prevent multisig creation: "If a node does prevent multisig creation, other validators should issue slashes for it/remove it from the Validator Set entirely". Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md), [DKG Exclusions spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/DKG%20Exclusions.md) (accessed 2026-05-19).
+- Slashing for an unauthorised external-chain signature (i.e. detection of an actually-malicious threshold spend) is *not* directly automatable from Serai's consensus, since Serai cannot natively verify Bitcoin/Monero on-chain state. The closest enforcement is `Batch` reconciliation by the *next* multisig: "The new multisig confirms all transactions from all prior multisigs were made as expected, including the reported `Batch`s." A discrepancy results in the discrepant multisig "to be fully slashed (as needed to reacquire any lost coins)". Source: [Multisig Rotation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Multisig%20Rotation.md) (accessed 2026-05-19).
+- Honest-threshold assumption: a 67% honest supermajority (`t = floor(n * 2/3) + 1`) is required for both liveness *and* safety of the custody multisig. Source: [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19).
+- Reputational or legal stakes: validators are pseudonymous PoS stakers, so unlike Wormhole's named-guardian model there is little extra-protocol enforcement; the entire defence is the bonded SRI plus the 33% custody cap.
+
+## Failure modes
+
+- **Threshold corrupted (>67% collude)**: the colluding supermajority can sign any external spend. The 33% custody cap means this is loss-making if economic security has been reached, and the next-multisig audit in step 7 of multisig rotation triggers slashing to "reacquire any lost coins". Source: [Multisig Rotation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Multisig%20Rotation.md) (accessed 2026-05-19). In the pre-economic-security era the cap may not yet be enforced for new deposits, and an attack would be unrecoverable. Source: [Serai Economics docs](https://docs.serai.exchange/economics/) (accessed 2026-05-19).
+- **Threshold offline (>33% offline)**: no FROST signature can be produced, so withdrawals freeze. The DKG Exclusions design lets honest validators *remove* the unresponsive ones: "an honest 67% may remove a faulty (explicitly or simply offline) 33%, letting 67% of the remaining 67% (4/9ths) take control of the associated private keys." Source: [DKG Exclusions spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/DKG%20Exclusions.md) (accessed 2026-05-19). Note: that arithmetic also shows the worst-case post-exclusion safety floor is *4/9ths* honest, well below the original 2/3 assumption, so an offline-then-excluded cycle weakens the threshold.
+- **DKG failure**: the modified Pedersen + FROST DKG is *not* fault-tolerant for liveness, it requires 100% participation to confirm a key on Substrate. A misbehaving participant is identified via the per-message ECDH+ChaCha20 blame proofs, removed, and the DKG retried with a smaller set. Source: [Distributed Key Generation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/cryptography/Distributed%20Key%20Generation.md), [Validator Sets spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/protocol/Validator%20Sets.md) (accessed 2026-05-19). The 2025 eVRF DKG upgrade weakens this requirement, supporting one-third offline by encrypting and publishing shares verifiably in a single round. Source: [Serai blog, "Security Proofs for our One-Round, Robust Threshold DKG"](https://serai.exchange/2025/09/26/dkg-evrf-security-proofs.html) (accessed 2026-05-19).
+- **Tributary corruption**: the per-multisig Tributary side-chain has the same validator set as the multisig itself and runs Tendermint. Currently the Tributary validator set is *static* between sessions, which means a validator removed from the active multisig (e.g. for failing the DKG) cannot yet be removed from the Tributary's consensus weight: open issue at the time of writing. Source: [GitHub issue serai-dex/serai#426](https://github.com/serai-dex/serai/issues/426) (accessed 2026-05-19).
+- **Reorg longer than `CONFIRMATIONS`**: out of model. `CONFIRMATIONS` is the trust knob; setting it too low on a PoW chain exposes Serai to a deposit-then-reorg double-spend that mints unbacked Serai-side tokens. The Multisig Rotation spec relies on Serai-finality (not external-chain confirmations) for activating new multisigs precisely to prevent UI eclipse. Source: [Multisig Rotation spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Multisig%20Rotation.md), [Scanning spec](https://raw.githubusercontent.com/serai-dex/serai/develop/spec/processor/Scanning.md) (accessed 2026-05-19).
+
+## Comparison: Serai vs Thorchain vs Wormhole
+
+All three are signer-federation trust models, but the *who*, *bond shape*, and *failure recovery* differ:
+
+| Property | Serai | [[projects/thorchain]] | [[projects/wormhole]] |
+|---|---|---|---|
+| Set type | Permissionless PoS, up to ~600 validators | Permissionless bonded operators, ~100 active ThorNodes | Permissioned, 19 named guardians |
+| Threshold | FROST `floor(n*2/3)+1` | GG20 `2/3` supermajority | 13-of-19 (~2/3) |
+| Bond / stake | SRI staked per `(network, session)`; custody hard-capped at 33% of stake | RUNE bonded; protocol targets bond:pooled-asset ratio of 2:1 so that the bonded set has more to lose than to steal | None on-chain. Guardians are reputation-bonded (Figment, Jump, Staked, etc.) |
+| Rotation | Per-session DKG, full multisig rotation with forwarding period (`CONFIRMATIONS` + 10 min + 6 hr forwarding window) | Every ~3 days "node churn": some leave, some join, new Asgard vault via fresh TSS keygen | Manually upgraded guardian set, no scheduled churn |
+| Slashing on theft | Indirect: next multisig audits prior multisig's `Batch`s and slashes for any unauthorised spend; pre-economic-security era has no theft recovery | Direct: bonded RUNE slashed on detection (1.5x stolen value historically) | None on-chain; relies on legal / reputational consequences |
+| Honest-threshold assumption | 67%+ honest stake-weighted | 67%+ honest bond-weighted active nodes | 67%+ honest named-guardian count |
+
+Sources: Serai as cited above; Thorchain: [Thorchain Docs: Bifrost, TSS and Vaults](https://docs.thorchain.org/technology/bifrost-tss-and-vaults), [Thorchain University on Asgard vaults](https://thorchain-university.medium.com/under-the-hood-asgard-vaults-tss-and-node-churns-4767f3a5624b) (accessed 2026-05-19). Wormhole: [Wormhole Docs: Guardians](https://wormhole.com/docs/protocol/infrastructure/guardians/), [Wormhole Docs: Security](https://wormhole.com/docs/protocol/security/) (accessed 2026-05-19).
+
+The short version: Serai sits between Thorchain and Wormhole on the trust spectrum. Like Thorchain, the signer set is permissionless, bonded, and economically capped; unlike Thorchain, Serai's bond is the native chain's PoS stake rather than a dedicated bond bucket, and rotation is BFT-driven rather than calendar-driven. Unlike Wormhole, there is no permissioned identity layer at all: the only thing keeping a colluding two-thirds from stealing is the 33%-of-stake custody cap and the next-multisig audit-and-slash.
+
+## Open gaps
+
+- Per-session length in blocks and the exact pre-economic-security mint schedule are [NOT FOUND] in published spec / docs (pre.html and post.html on docs.serai.exchange are empty stubs).
+- The economic argument for the 33% cap is convincing for the *steady state*, but Serai has not published a closed-form analysis of the pre-economic-security era when the cap is *not* yet enforceable: how much value can be at risk before custody-to-stake reaches 33%, and what governance limits new deposits during that period, is [NOT FOUND].
+- Quantitative slashing parameters (percentage slashed per offence class) are [NOT FOUND] in the public spec.

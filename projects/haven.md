@@ -1,15 +1,18 @@
 ---
-tags: [project, monero, privacy, stablecoin, offshore-banking]
+tags: [project, monero, privacy, stablecoin, offshore-banking, shutdown]
 ecosystem: Monero-based L1
 category: Privacy/Stablecoin
 website: https://havenprotocol.org
 docs: https://docs.havenprotocol.org
 launched: 2018
+status: Shut down 2024-12-12 after range-proof exploit allowed ~1.3B illicit XHV mint over 42 transactions since 2023-08; >94% of known supply controlled by attackers at closure
 ---
 
 # Haven Protocol
 
-Haven Protocol is a Monero-forked L1 that enables users to mint, transfer, and burn privacy-preserving synthetic assets (xAssets) pegged to fiat currencies, commodities, and cryptocurrencies. Its flagship asset is xUSD, a privacy-preserving USD stablecoin. The protocol uses Monero's ring-signature and stealth-address model to hide transaction amounts, senders, and recipients.
+**STATUS UPDATE (verified 2026-05-22)**: Haven Protocol announced project closure on **2024-12-12** following discovery of a range-proof validation vulnerability introduced in the 3.2 rebase to Monero (effective from August 2023) that allowed at least 1.3 billion XHV to be illicitly minted across at least 42 transactions. At the time of the closure announcement, the development team stated "over 94% of the known supply is now controlled by the attackers" and that "there is no realistic way forward". Source: [Project Closure Announcement, havenprotocol.org, 2024-12-12](https://havenprotocol.org/2024/12/12/project-closure-announcement/) :: accessed 2026-05-22 :: [archived](../sources/2026-05-22-havenprotocol-org-project-closure-announcement.html). The CoinGecko market-cap and on-chain numbers in the metrics table below reflect **residual exchange trading of an unbacked token**, not active protocol use; xUSD's stated pegging mechanism has been non-operational since the closure.
+
+Historically (2018-2024), Haven Protocol was a Monero-forked L1 that enabled users to mint, transfer, and burn privacy-preserving synthetic assets (xAssets) pegged to fiat currencies, commodities, and cryptocurrencies. Its flagship asset was xUSD, a privacy-preserving USD stablecoin. The protocol used Monero's ring-signature and stealth-address model to hide transaction amounts, senders, and recipients.
 
 ## Adoption metrics
 
@@ -64,7 +67,8 @@ Haven Protocol is a Monero-forked L1 that enables users to mint, transfer, and b
 
 ## Limitations and criticisms
 
-- **Depeg events:** xUSD has depegged multiple times (notably in 2022-2023) due to low liquidity, oracle delays, and market stress. Recovery required protocol interventions.
+- **Project shutdown (2024-12-12)**: The protocol announced closure after discovery of a range-proof validation vulnerability in the August 2023 rebase to Monero. At least 1.3B XHV were illicitly minted across 42+ transactions; >94% of known supply controlled by attackers at closure. Listed here as a structural failure mode for any privacy-preserving CDP / mint-burn synthetic protocol — the same ring-signature properties that protect users prevent post-incident wallet identification and freezing. See [Project Closure Announcement, 2024-12-12](https://havenprotocol.org/2024/12/12/project-closure-announcement/) :: accessed 2026-05-22 :: [archived](../sources/2026-05-22-havenprotocol-org-project-closure-announcement.html).
+- **Depeg events:** xUSD depegged multiple times prior to the shutdown (notably in 2022-2023) due to low liquidity, oracle delays, and market stress.
 - **Low liquidity:** Thin order books and low trading volume make xUSD impractical for large transfers or as a medium of exchange.
 - **Regulatory risk:** Privacy stablecoins attract intense regulatory scrutiny; exchanges have delisted XHV in multiple jurisdictions.
 - **Oracle trust:** While decentralised, oracles remain a trust assumption; a compromised oracle could enable infinite-mint attacks.
@@ -74,6 +78,7 @@ Haven Protocol is a Monero-forked L1 that enables users to mint, transfer, and b
 
 ## Sources
 
+- [Haven Protocol: Project Closure Announcement (2024-12-12)](https://havenprotocol.org/2024/12/12/project-closure-announcement/) — accessed 2026-05-22 :: [archived](../sources/2026-05-22-havenprotocol-org-project-closure-announcement.html)
 - [Haven Protocol Documentation](https://docs.havenprotocol.org) — accessed 2026-05-22
 - [Haven Protocol Whitepaper](https://havenprotocol.org/whitepaper/) — accessed 2026-05-22
 - [CoinGecko: Haven (XHV)](https://www.coingecko.com/en/coins/haven) — accessed 2026-05-22

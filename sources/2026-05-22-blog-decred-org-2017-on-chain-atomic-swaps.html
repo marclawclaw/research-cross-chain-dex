@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Decred is an open and progressive cryptocurrency with a system of community-based governance integrated into its blockchain.">
+    
+    <title>On-Chain Atomic Swaps | Decred Blog</title>
+
+    <!-- combined, minified CSS -->
+    
+    <link rel="stylesheet" href="/sass/main.css">
+
+    
+    <link rel="stylesheet" href="/css/fonts.css">
+
+    
+    <link rel="stylesheet" href="/css/font-awesome-4.7.0.min.css">
+
+    <meta property="og:url" content="https://blog.decred.org/2017/09/20/On-Chain-Atomic-Swaps/">
+  <meta property="og:site_name" content="Decred Blog">
+  <meta property="og:title" content="On-Chain Atomic Swaps">
+  <meta property="og:description" content="As many of you know, yesterday marked the first cross-chain atomic swap between Decred and Litecoin. This is an important step in a direction that allows users to conduct trustless, cross-chain, over-the-counter (“OTC”) trades without a third party. This disintermediates the exchange process between cryptocurrencies that support these swap transactions. We have created some simple prototype tools under the atomicswap repository, dcratomicswap, btcatomicswap and ltcatomicswap, to allow Decred, Bitcoin and Litecoin users to swap between DCR, BTC and LTC using on-chain atomic swaps. These tools were built for those who we have the means at hand to disintermediate the exchange process: transaction script and OP_CLTV support. It is worth noting that these tools do not address the issue of order book management that is typically performed with full-featured exchanges. There are some privacy and transparency consequences related to on-chain atomic swaps that are not present with centralized exchanges. As of this announcement, the tools are text-based, but we will be integrating this into the Decrediton GUI wallet in a future release. The process for on-chain atomic swaps is described in more detail below.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2017-09-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2017-09-20T00:00:00+00:00">
+    <meta property="article:tag" content="Decred">
+    <meta property="article:tag" content="Atomic Swap">
+    <meta property="article:tag" content="Litecoin">
+    <meta property="article:tag" content="Bitcoin">
+    <meta property="article:tag" content="OTC">
+    <meta property="article:tag" content="Exchange">
+    <meta property="og:image" content="https://blog.decred.org/images/card.png">
+
+    
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://blog.decred.org/images/card.png">
+  <meta name="twitter:title" content="On-Chain Atomic Swaps">
+  <meta name="twitter:description" content="As many of you know, yesterday marked the first cross-chain atomic swap between Decred and Litecoin. This is an important step in a direction that allows users to conduct trustless, cross-chain, over-the-counter (“OTC”) trades without a third party. This disintermediates the exchange process between cryptocurrencies that support these swap transactions. We have created some simple prototype tools under the atomicswap repository, dcratomicswap, btcatomicswap and ltcatomicswap, to allow Decred, Bitcoin and Litecoin users to swap between DCR, BTC and LTC using on-chain atomic swaps. These tools were built for those who we have the means at hand to disintermediate the exchange process: transaction script and OP_CLTV support. It is worth noting that these tools do not address the issue of order book management that is typically performed with full-featured exchanges. There are some privacy and transparency consequences related to on-chain atomic swaps that are not present with centralized exchanges. As of this announcement, the tools are text-based, but we will be integrating this into the Decrediton GUI wallet in a future release. The process for on-chain atomic swaps is described in more detail below.">
+      <meta name="twitter:site" content="@decredproject">
+
+
+    <!-- RSS 2.0 feed -->
+    </head>
+
+  <body>
+
+    
+      <nav class="nav site-navigation">
+        <div class="inner">
+          <div class="nav-menu">
+            <ul class="menu">
+              <li class="">
+                <a class="nav-link " href="https://blog.decred.org/">Home</a>
+              </li>
+              
+              <li>
+                <a class="nav-link" href="https://github.com/decred" title="">GitHub</a>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+    
+
+    
+    <header class="site-header">
+        <div class="inner">
+	        <h1 class="site-title">
+            <a class="logo-text" href="https://blog.decred.org/">
+              
+              <img class="logo-art" src="/images/banner.png" alt="Decred Blog">
+            </a>
+          </h1>
+        </div>
+    </header>
+    
+
+    
+    <div class="site-content">
+      <div class="inner">
+        <main class="site-main">
+
+          
+
+
+<article class="post">
+
+  <header class="entry-header"> 
+      <div class="entry-header-wrap">
+          
+          <div class="post-thumbnail">
+              <img src="https://blog.decred.org//images/posts/atomic_swap.png" alt="On-Chain Atomic Swaps">
+          </div>
+          
+          <h1 class="entry-title">On-Chain Atomic Swaps</h1>
+      </div>
+      <div class="entry-meta">
+          by <span class="post-author">
+  
+    <a href="/authors/jy-p">Jake Yocom-Piatt</a>
+  
+
+</span> on <time class="published" datetime="2017-09-20 00:00:00 &#43;0000 UTC">September 20, 2017</time>
+      </div>
+  </header>
+
+  <div class="entry-content">
+    <p>As many of you know, yesterday marked the <a href="https://twitter.com/decredproject/status/910224860625780736">first cross-chain atomic swap between Decred and Litecoin</a>. This is an important step in a direction that allows users to conduct trustless, cross-chain, over-the-counter (“OTC”) trades without a third party. This disintermediates the exchange process between cryptocurrencies that support these swap transactions. We have created some simple prototype tools under the <a href="https://github.com/decred/atomicswap/">atomicswap repository</a>, dcratomicswap, btcatomicswap and ltcatomicswap, to allow Decred, Bitcoin and Litecoin users to swap between DCR, BTC and LTC using on-chain atomic swaps. These tools were built for those who we have the means at hand to disintermediate the exchange process: transaction script and OP_CLTV support. It is worth noting that these tools do not address the issue of order book management that is typically performed with full-featured exchanges. There are some privacy and transparency consequences related to on-chain atomic swaps that are not present with centralized exchanges. As of this announcement, the tools are text-based, but we will be integrating this into the Decrediton GUI wallet in a future release. The process for on-chain atomic swaps is described in more detail below.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>In order to perform an on-chain atomic swap between 2 cryptocurrencies, there are several prerequisites.  Both chains must support:</p>
+<ul>
+<li>branched transaction scripts</li>
+<li>the same hash algorithm in both chains&rsquo; transaction scripts</li>
+<li>signature checks in transaction scripts</li>
+<li>CheckLockTimeVerify or CheckSequenceVerify (“CLTV” and “CSV” for short) in transaction scripts</li>
+</ul>
+<p>Since Decred and Litecoin are forks of Bitcoin, the first 3 conditions are trivially satisfied.  Further, both Decred and Litecoin have been tracking updates from Bitcoin, so they both support CLTV.  The CLTV/CSV support is used to effect a refund, in the cases where either party does not complete part of the process.  With some further work on part of other Bitcoin-based cryptocurrency projects, this on-chain atomic swap can occur between any pair of cryptocurrencies that satisfy the above constraints.</p>
+<h3 id="use-cases">Use Cases</h3>
+<p>On-chain atomic swaps are not useful in all cases where users want to perform an exchange.  This process is well-suited to larger trades that do not require a particularly low latency or high frequency.  Since the process involves on-chain transactions, the speed of the process is bound by the mining of blocks, which can take roughly an hour in a worst-case scenario with Bitcoin.  Additionally, users must pay transaction fees for both the swap transaction and the redeem transaction on each chain, which can have a non-trivial cost with Bitcoin.</p>
+<h3 id="privacy">Privacy</h3>
+<p>Since these swaps are on-chain, there are some privacy implications that users should be aware of.  The swap transactions on each chain include the same hashed value, meaning that anyone doing passive surveillance of the corresponding blockchains can link the coins on one side of the swap to the coins on the other side.  This is a different threat model than typical centralized exchanges, where the exchange is required by nation state regulations to retain records of user identities and activity.  Instead of having to request data from an exchange, interested parties can follow the coins from one chain to the other.  However, despite the ease of determining provenance of the coins across chains, there is no associated identity data available on the counterparties.</p>
+<h3 id="transparency">Transparency</h3>
+<p>In contrast to the way trading works at exchanges, attempts to churn volume via on-chain atomic swaps will be detectable by passive observers.  This means that users cannot show up with a small amount of coins and then create a ton of fake volume covertly.  In this sense, atomic swaps are a true return to the “moneychanger mat” scenario of the past, before the “casinoization” of exchanges.</p>
+<h3 id="integration">Integration</h3>
+<p>Currently, this process uses a standalone binary on each side of the swap, e.g. a DCR binary and a BTC binary on each side.  The swap process has 3 steps on each side, requires some manual relaying of information via an existing communications channel, e.g. email or instant messaging, and uses a text interface, which is obviously less than ideal.  Over the next several weeks, we will integrate this process into the Decrediton GUI wallet to simplify it and automate some of the process.  It is our hope that a similar integration can occur with Bitcoin-QT and Litecoin-QT as well, for ease of use.  Detailed instructions on executing an atomic swap can be found <a href="https://github.com/decred/atomicswap/">here</a>.</p>
+<p>The atomic swap process has been tested against dcrwallet (CLI), Decrediton (GUI), Bitcoin Core, and Litecoin Core.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>We hope that Decred, Bitcoin and Litecoin users get some utility out of these tools and ultimately integrate them into their respective GUI wallets.  On-chain (and ultimately off-chain) atomic swaps are an exciting technology that earmarks a leap in cryptocurrency: the direct empowerment of users. Decred will be active in this space and continue to innovate toward this goal. We are interested in integrating support for additional cryptocurrencies, so atomic swaps can occur between many different chains.  Please contact us for advice on supporting swaps for your cryptocurrency on <a href="https://github.com/decred/atomicswap/">GitHub</a>, <a href="https://decred.slack.com/">Slack</a>, <a href="https://reddit.com/r/decred/">Reddit</a> or <a href="https://forum.decred.org/">our Forum</a>.</p>
+  </div>
+
+  <footer class="entry-footer">
+    <div class="share-post">
+        <span>Share</span>
+        <a class="fa-twitter" target="_blank" rel="noopener noreferrer" href="https://twitter.com/intent/tweet?text=On-Chain%20Atomic%20Swaps&amp;url=https%3a%2f%2fblog.decred.org%2f2017%2f09%2f20%2fOn-Chain-Atomic-Swaps%2f"><span class="screen-reader-text">Twitter</span></a>
+        <a class="fa-facebook" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.decred.org%2f2017%2f09%2f20%2fOn-Chain-Atomic-Swaps%2f/&amp;t=On-Chain%20Atomic%20Swaps"><span class="screen-reader-text">Facebook</span></a>
+    </div>
+  </footer>
+
+</article> 
+
+
+  
+    <div class="author-box">
+    <div class="author-info">
+        <div class="author-avatar" style="background-image: url(/images/authors/jy-p_300x300.png)">
+            <span class="screen-reader-text">Jake Yocom-Piatt's Picture</span>
+        </div>
+        <div class="author-details">
+            <h2 class="author-title">About <a href="https://blog.decred.org//authors/jy-p">Jake Yocom-Piatt</a></h2>
+            <p class="author-bio">Decred Project Lead</p>
+            <span class="author-location"><i class="fa-map-marker" aria-hidden="true"></i> Chicago, US</span>
+            <span class="author-website"><i class="fa-chain" aria-hidden="true"></i> <a href="https://twitter.com/behindtext" target="_blank" rel="noopener noreferrer"> https://twitter.com/behindtext</a></span>
+        </div>
+    </div>
+</div>
+
+  
+
+
+
+<nav class="post-navigation">
+  
+  
+    <div class="nav-previous">
+        <div class="nav-inside">
+            
+            <a href="https://blog.decred.org/2017/08/02/2017-Roadmap-Update-1/" class="nav-thumb" style="background-image: url(/images/posts/2017_roadmap_update_1.png)"></a>
+            
+            <div class="nav-before">Previous</div>
+            <div class="nav-title"><a href="https://blog.decred.org/2017/08/02/2017-Roadmap-Update-1/">2017 Roadmap Update 1</a></div>
+            <div class="nav-date">August 2, 2017</div>
+        </div>
+    </div>
+  
+    
+    
+  
+    <div class="nav-next">
+        <div class="nav-inside">
+            
+            <a href="https://blog.decred.org/2017/10/25/Politeia-Proposals-in-a-Timestamped-Filesystem/" class="nav-thumb" style="background-image: url(/images/posts/politeia.jpg)"></a>
+            
+            <div class="nav-before">Next</div>
+            <div class="nav-title"><a href="https://blog.decred.org/2017/10/25/Politeia-Proposals-in-a-Timestamped-Filesystem/">Politeia: Proposals in a Timestamped Filesystem</a></div>
+            <div class="nav-date">October 25, 2017</div>
+        </div>
+    </div>
+  
+    
+</nav>
+
+
+
+        </main> <!-- /.blog-main -->
+
+        <aside class="sidebar">
+ 
+  
+    
+  
+    <section class="widget widget-text">
+    <h2 class="widget-title">About Jake Yocom-Piatt</h2>
+    <p>
+        Decred Project Lead
+        <br />
+        Chicago, US
+    </p>
+    <img style="border-radius: 50%; height: 100px;" src="https://blog.decred.org//images/authors/jy-p_300x300.png" />
+</section>
+
+  
+
+
+  
+
+  
+  
+  
+</aside>
+
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="site-footer">
+      <div class="inner">
+          <div class="social-links">
+              <a href="https://twitter.com/decredproject" class="fa-twitter square fill-horizontal"><span class="screen-reader-text">Twitter</span></a>
+              <a href="https://github.com/decred" class="fa-github-alt square fill-horizontal"><span class="screen-reader-text">GitHub</span></a>
+          </div>
+          <div class="site-info">
+              © <a href="https://blog.decred.org/">DECRED BLOG</a> ALL RIGHTS RESERVED.<br>
+              <a href="#" id="top-link" class="fa-chevron-up top-link square fill-horizontal"><span class="screen-reader-text">Back to the top</span></a>
+          </div>
+      </div>
+    </footer>
+    
+
+  </body>
+
+</html>
+

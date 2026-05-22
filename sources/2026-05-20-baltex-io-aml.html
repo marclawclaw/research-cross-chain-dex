@@ -1,0 +1,970 @@
+<!DOCTYPE html><!-- Last Published: Tue May 05 2026 10:51:52 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain="bee076a51c89.baltex.io" data-wf-page="692d8a0fbc213695d8f486a5" data-wf-site="69206c9a20c1819b4ba8800a"><head><meta charset="utf-8"/><link href="https://cdn.prod.website-files.com" rel="preconnect" crossorigin="anonymous"/><title>Baltex Crypto AML Tool – Real-Time Wallet Screening &amp; Risk Scoring</title><meta content="Advanced crypto AML solution with real-time wallet screening, ML-driven risk scoring, and continuously updated anti-fraud intelligence. Stay compliant and secure." name="description"/><meta content="Baltex Crypto AML Tool – Real-Time Wallet Screening &amp; Risk Scoring" property="og:title"/><meta content="Advanced crypto AML solution with real-time wallet screening, ML-driven risk scoring, and continuously updated anti-fraud intelligence. Stay compliant and secure." property="og:description"/><meta content="Baltex Crypto AML Tool – Real-Time Wallet Screening &amp; Risk Scoring" property="twitter:title"/><meta content="Advanced crypto AML solution with real-time wallet screening, ML-driven risk scoring, and continuously updated anti-fraud intelligence. Stay compliant and secure." property="twitter:description"/><meta property="og:type" content="website"/><meta content="summary_large_image" name="twitter:card"/><meta content="width=device-width, initial-scale=1" name="viewport"/><link href="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/css/baltexioprivate.webflow.shared.c41b28ccd.css" rel="stylesheet" type="text/css" integrity="sha384-xBsozNNbkd2NW08XeXdsvZBMRNkEG/kU8MsqrAUClRlgi8SAw9tfxT7ztvyG3qxd" crossorigin="anonymous"/><script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script><link href="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/6926d1cf520827ea0fe0960e_Favicon%2032px.png" rel="shortcut icon" type="image/x-icon"/><link href="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/6926d21e0e8e00f61e2adc6c_Webclip%20255.png" rel="apple-touch-icon"/><link href="https://baltex.io/aml" rel="canonical"/><script>(function(w,i,g){w[g]=w[g]||[];if(typeof w[g].push=='function')w[g].push.apply(w[g],Array.isArray(i)?i:[i]);})(window,['G-GQPV40XZGT'],'google_tags_first_party');</script><script async="" src="/0oarx4usxq70NjkyMDZjOWEyMGMxODE5YjRiYTg4MDBh/gqd4LQRGL5_Tf6SXC_A7tBUd_gw"></script><script type="text/javascript">window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('set', 'developer_id.dZGVlNj', true);gtag('set', 'developer_id.dYWYxNW', true);gtag('js', new Date());gtag('config', 'G-GQPV40XZGT');</script><style>
+/* ====== Base ====== */
+.baltex-email-widget{ width:100%; }
+
+.baltex-email-card{
+  background:#050505;
+  border-radius:40px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 16px 40px rgba(0,0,0,.7);
+  color:#fff;
+  font-family: Inter, system-ui, sans-serif;
+  position:relative;
+}
+
+.baltex-email-close{
+  position:absolute;
+  right:16px;
+  top:16px;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#191919;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:20px;
+  color:#fff;
+}
+
+.baltex-email-card h4{
+  margin:0 40px 6px 0;
+  font-size:16px;
+  font-weight:600;
+}
+
+.baltex-email-card p{
+  margin:0 0 16px 0;
+  font-size:16px;
+  color:#b9b9b9;
+}
+
+/* ====== EmailOctopus: hide footer (Powered by) ====== */
+.baltex-email-card .eo-block-footer,
+.baltex-email-card .emailoctopus-form-wrapper + .text-center,
+.baltex-email-card .text-center{
+  display:none !important;
+}
+
+/* ======================================================
+   KEY FIX: делаем ряд через контейнер полей EO
+   ====================================================== */
+
+/* Убираем отступы/ширины EO, чтобы не ломали flex */
+.baltex-email-card form.emailoctopus-form{
+  margin:0 !important;
+}
+
+/* Сам ряд: у EO обычно есть eo-form-fields-container */
+.baltex-email-card form.emailoctopus-form .eo-form-fields-container{
+  display:flex !important;
+  flex-direction:row !important;
+  gap:12px !important;
+  align-items:stretch !important;
+  width:100% !important;
+}
+
+/* Обёртка инпута должна растягиваться */
+.baltex-email-card form.emailoctopus-form .eo-form-fields-container .emailoctopus-form-row{
+  flex:1 1 auto !important;
+  min-width:0 !important; /* важно, чтобы инпут не выталкивал кнопку */
+  margin:0 !important; 
+ }
+
+/* Инпут */
+.baltex-email-card form.emailoctopus-form input[type="email"].form-control{
+  width:100% !important;
+  height:48px !important;
+
+  background:#131313 !important;
+  border:1px solid #262626 !important;
+  border-radius:999px !important;
+  padding:16px 16px !important;
+
+  color:rgba(255,255,255,.52) !important;
+  font-size:16px !important;
+  outline:none !important;
+
+  box-shadow:none !important;
+  transition:border-color .12s ease, box-shadow .12s ease;
+}
+
+.baltex-email-card form.emailoctopus-form input[type="email"].form-control::placeholder{
+  color:rgba(255,255,255,.52) !important;
+}
+
+/* (опционально) focus — если нужно, просто раскомментируй
+.baltex-email-card form.emailoctopus-form input[type="email"].form-control:focus{
+  border-color:rgba(56,248,174,.6) !important;
+  box-shadow:0 0 0 4px rgba(56,248,174,.18) !important;
+  color:#fff !important;
+}
+*/
+
+/* Кнопка (submit обычно лежит рядом с контейнером полей) */
+.baltex-email-card form.emailoctopus-form input[type="submit"],
+.baltex-email-card form.emailoctopus-form button{
+  height:48px !important;
+  margin-top:0 !important;
+
+  background:rgba(56, 248, 174, 0.20) !important;
+  color:#38F8AE !important;
+  border:none !important;
+  border-radius:999px !important;
+
+  font-size:16px !important;
+  font-weight:600 !important;
+  cursor:pointer !important;
+
+  box-shadow:none !important;
+  transition:color .12s ease, transform .08s ease, box-shadow .12s ease, filter .12s ease;
+}
+
+/* Hover */
+@media (hover:hover){
+  .baltex-email-card form.emailoctopus-form input[type="submit"]:hover,
+  .baltex-email-card form.emailoctopus-form button:hover{
+    background:#38F8AE !important;
+    color:#0c0c0c !important;
+  }
+}
+
+/* Active */
+.baltex-email-card form.emailoctopus-form input[type="submit"]:active,
+.baltex-email-card form.emailoctopus-form button:active{
+  transform:translateY(2px);
+}
+
+/* ====== Mobile sticky bottom (НО тоже в ряд) ====== */
+@media (max-width:500px){
+  .subscribe-email{
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .baltex-email-card{
+    border-radius:16px !important;
+    padding:16px 16px 18px !important;
+    border-left:0 !important;
+    border-right:0 !important;
+    border-bottom:0 !important;
+  }
+
+  /* На мобилке тоже оставляем row */
+  .baltex-email-card form.emailoctopus-form .eo-form-fields-container{
+    gap:10px !important;
+  }
+
+  /* Кнопку делаем чуть уже, чтобы помещалось */
+  .baltex-email-card form.emailoctopus-form input[type="submit"],
+  .baltex-email-card form.emailoctopus-form button{
+    flex:0 0 140px !important;
+  }
+}
+  
+  
+ 
+
+</style></head><body class="body"><div class="page-wrapper"><div class="w-layout-blockcontainer subscribe-email w-container"><div class="code-embed-2 w-embed w-script"><div class="baltex-email-widget">
+  <div class="baltex-email-card">
+    <div class="baltex-email-close"
+      onclick="this.closest('.baltex-email-widget').style.display='none'">×</div>
+
+    <h4>Subscribe to receive a gift</h4>
+    <p>Signup to receive $50 welcome bonus!</p>
+
+    <div class="eo-wrap">
+      <!-- EmailOctopus embed (обязателен) -->
+      <script async
+        src="https://eomail6.com/form/1896c254-f836-11f0-b71b-0d1dd39aab01.js"
+        data-form="1896c254-f836-11f0-b71b-0d1dd39aab01">
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const widget = document.querySelector('.baltex-email-widget');
+  const card   = document.querySelector('.baltex-email-card');
+  if (!widget || !card) return;
+
+  const SUCCESS_TEXT = 'Thanks for subscribing!';
+  const CLOSE_AFTER_MS = 4000;
+
+  // success label (наш)
+  let successEl = card.querySelector('.baltex-success');
+  if (!successEl) {
+    successEl = document.createElement('div');
+    successEl.className = 'baltex-success';
+    successEl.style.display = 'none';
+    successEl.style.marginTop = '14px';
+    successEl.style.fontSize = '16px';
+    successEl.style.color = 'rgba(255,255,255,.72)';
+    card.appendChild(successEl);
+  }
+
+  function showSuccessAndClose() {
+    successEl.textContent = SUCCESS_TEXT;
+    successEl.style.display = 'block';
+
+    const wrap = card.querySelector('.eo-wrap');
+    if (wrap) wrap.style.display = 'none';
+
+    setTimeout(() => {
+      widget.style.display = 'none';
+    }, CLOSE_AFTER_MS);
+  }
+
+  function detectSuccess() {
+    const eoSuccess = card.querySelector('.emailoctopus-success-message');
+    if (eoSuccess) {
+      const txt = (eoSuccess.textContent || '').trim();
+      if (txt.length > 0) return true;
+    }
+    const anyThanks = (card.textContent || '').toLowerCase().includes('thanks for subscribing');
+    if (anyThanks) return true;
+
+    return false;
+  }
+
+  function armSuccessWatch() {
+    const obs = new MutationObserver(() => {
+      if (detectSuccess()) {
+        obs.disconnect();
+        showSuccessAndClose();
+      }
+    });
+    obs.observe(card, { childList: true, subtree: true, characterData: true });
+
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      if (detectSuccess()) {
+        clearInterval(t);
+        obs.disconnect();
+        showSuccessAndClose();
+      }
+      if (tries > 40) {
+        clearInterval(t);
+        obs.disconnect();
+      }
+    }, 250);
+  }
+
+  function hookSubmit() {
+    const form = card.querySelector('form.emailoctopus-form') || card.querySelector('form');
+    if (!form) return false;
+
+    form.addEventListener('submit', () => {
+      armSuccessWatch();
+    });
+
+    card.addEventListener('click', (e) => {
+      const btn = e.target.closest('input[type="submit"], button[type="submit"], button');
+      if (btn) armSuccessWatch();
+    });
+
+    return true;
+  }
+
+  if (hookSubmit()) return;
+
+  const wait = new MutationObserver(() => {
+    if (hookSubmit()) wait.disconnect();
+  });
+  wait.observe(card, { childList: true, subtree: true });
+
+})();
+</script></div></div><nav class="header header-test"><div class="container-default"><div class="header_wrapper display-none"><div id="w-node-_834566fb-e4e2-caa8-ab94-968d599f9edc-d8f486a5" class="header_left"><a href="https://baltex.io" class="header_logo-wrapper w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8800d_logo.svg" loading="lazy" alt="" class="header_logo-svg"/></a></div><div id="w-node-_85017992-dc11-4fbc-2203-656062c5e5ad-d8f486a5" class="header_center"><div class="header_nav-wrapper"><div data-w-id="3f953f83-be08-cb9b-12fa-222952cff376" class="support-dropdown products"><div>Products</div><div data-w-id="3f953f83-be08-cb9b-12fa-222952cff379" class="w-layout-hflex support-link-flex products"><div class="dropdown-wrapper-support"><a href="https://app.baltex.io/dex" class="header_nav-link padding-24 w-inline-block"><div>Swap</div></a><a href="https://app.baltex.io/standard" class="header_nav-link padding-24 w-inline-block"><div class="text-footer-width-100">Bridge</div></a><a href="https://app.baltex.io/private" class="header_nav-link padding-24 w-inline-block"><div>Private Swap</div></a><a href="https://app.baltex.io/fiat" class="header_nav-link padding-24 w-inline-block"><div>Buy/Sell</div></a></div></div></div><a href="https://baltex.io/blog" class="header_nav-link w-inline-block"><div>Learn</div></a><a href="https://partner.baltex.io/" class="header_nav-link w-inline-block"><div>Partners</div></a><div data-w-id="a726e745-9cc2-5254-9d20-a06e83ec07ca" class="support-dropdown"><div>More</div><div data-w-id="2955529a-6483-9877-ed12-a87eb96e9df7" class="w-layout-hflex support-link-flex"><div class="dropdown-wrapper-support"><div class="w-layout-hflex ttile-dropdown-support"><div>Legal</div></div><a href="https://baltex.io/support/faq#kyc" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>KYC/AML</div></a><a href="https://baltex.io/legal/terms-of-services" target="_blank" class="header_nav-link padding-24 w-inline-block"><div class="text-footer-width-100">Terms of Sevices</div></a><a href="https://baltex.io/legal/privacy-policy" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Privacy policy</div></a><a href="https://baltex.io/legal/risk-disclosure" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Risk Disclosure</div></a></div><div class="dropdown-wrapper-support"><div class="w-layout-hflex ttile-dropdown-support"><div>Support</div></div><a href="https://baltex.io/support/status-page" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Status Page</div></a><a href="https://baltex.io/support/glossary/a" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Glossary</div></a><a href="https://baltex.io/support/faq" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>FAQ</div></a><a href="https://baltex.io/support/how-it-works/standard/crypto-exchange-pair" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>How it works</div></a><a href="https://baltex.io/support/contact-us" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Contact us</div></a><a href="https://baltex.ladesk.com" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Help Center</div></a></div></div></div></div></div><div id="w-node-_5053233f-4107-6771-18e9-02ad32d6153b-d8f486a5" class="header_right"><div class="header_right-buttons"><div lang-element="is-button" class="change-lang-wrapper"><div>EN</div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 6" fill="none" class="dropdown-icon"><path d="M9 1.00024L5 4.99976L1 1.00024" stroke="currentColor" stroke-opacity="0.74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><div lang-element="is-list" class="dropdown-wrapper"><a href="#" class="lang-item-link w-inline-block"><div>Russia</div></a><a href="#" class="lang-item-link w-inline-block"><div>China</div></a><a href="#" class="lang-item-link w-inline-block"><div>Deutsch</div></a><a href="#" class="lang-item-link w-inline-block"><div>Espaniol</div></a></div></div><div class="w-layout-vflex nav-item"></div><a href="https://app.baltex.io/private" class="button-secondary is-header w-inline-block"><div>Launch App</div></a></div></div></div><div class="header_wrapper"><div id="w-node-_77409dbc-087e-0259-4891-a9db979c6985-979c6984" class="header_left"><a href="https://baltex.io" class="header_logo-wrapper w-inline-block"><img loading="lazy" src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8800d_logo.svg" alt="" class="header_logo-svg"/></a></div><div id="w-node-_77409dbc-087e-0259-4891-a9db979c6988-979c6984" class="header_center"><div class="header_nav-wrapper"><div data-w-id="77409dbc-087e-0259-4891-a9db979c698a" class="support-dropdown products"><div>Exchange crypto</div><div data-w-id="77409dbc-087e-0259-4891-a9db979c698d" class="w-layout-hflex support-link-flex exchange"><div class="dropdown-wrapper-support"><a href="https://baltex.io/currencies/btc-to-xmr" class="header_nav-link padding-24 w-inline-block"><div>BTC to XMR</div></a><a href="https://baltex.io/currencies/btc-to-usdterc20" class="header_nav-link padding-24 w-inline-block"><div class="text-footer-width-100">BTC to USDT</div></a><a href="https://baltex.io/currencies/usdterc20-to-xmr" class="header_nav-link padding-24 w-inline-block"><div>USDT to XMR</div></a><a href="https://baltex.io/currencies/eth-to-xmr" class="header_nav-link padding-24 w-inline-block"><div>ETH to XMR</div></a><a href="https://baltex.io/currencies/eth-to-btc" class="header_nav-link padding-24 w-inline-block"><div>ETH to BTC</div></a><a href="https://baltex.io/currencies/xmr-to-btc" class="header_nav-link padding-24 w-inline-block"><div>XMR to BTC</div></a><a href="https://baltex.io/currencies/btc-to-eth" class="header_nav-link padding-24 w-inline-block"><div>BTC to ETH</div></a><a href="https://baltex.io/currencies/sol-to-btc" class="header_nav-link padding-24 w-inline-block"><div>SOL to BTC</div></a><a href="https://baltex.io/currencies/usdterc20-to-btc" class="header_nav-link padding-24 w-inline-block"><div>USDT to BTC</div></a></div></div></div><div data-w-id="a7806970-38dc-ffda-93a2-122640e3da1e" class="support-dropdown products"><div>Products</div><div data-w-id="a7806970-38dc-ffda-93a2-122640e3da21" class="w-layout-hflex support-link-flex products"><div class="dropdown-wrapper-support"><a href="https://app.baltex.io/dex" class="header_nav-link padding-24 w-inline-block"><div>Swap</div></a><a href="https://app.baltex.io/standard" class="header_nav-link padding-24 w-inline-block"><div class="text-footer-width-100">Bridge</div></a><a href="https://app.baltex.io/private" class="header_nav-link padding-24 w-inline-block"><div>Private Swap</div></a><a href="https://app.baltex.io/fiat" class="header_nav-link padding-24 display-none w-inline-block"><div>Buy/Sell</div></a></div></div></div><a href="https://baltex.io/blog" class="header_nav-link w-inline-block"><div>Learn</div></a><a href="https://partner.baltex.io/" class="header_nav-link w-inline-block"><div class="text-block-2">Partners</div></a><div data-w-id="77409dbc-087e-0259-4891-a9db979c69a1" class="support-dropdown"><div>More</div><div data-w-id="77409dbc-087e-0259-4891-a9db979c69a4" class="w-layout-hflex support-link-flex"><div class="dropdown-wrapper-support"><div class="w-layout-hflex ttile-dropdown-support"><div>Legal</div></div><a href="https://baltex.io/support/faq#kyc" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>KYC/AML</div></a><a href="https://baltex.io/legal/terms-of-services" target="_blank" class="header_nav-link padding-24 w-inline-block"><div class="text-footer-width-100">Terms of Sevices</div></a><a href="https://baltex.io/legal/privacy-policy" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Privacy policy</div></a><a href="https://baltex.io/legal/risk-disclosure" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Risk Disclosure</div></a></div><div class="dropdown-wrapper-support"><div class="w-layout-hflex ttile-dropdown-support"><div>Support</div></div><a href="https://baltex.io/support/status-page" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Status Page</div></a><a href="https://baltex.io/support/glossary/a" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Glossary</div></a><a href="https://baltex.io/support/faq" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>FAQ</div></a><a href="https://baltex.io/support/how-it-works/standard/crypto-exchange-pair" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>How it works</div></a><a href="https://baltex.io/support/contact-us" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Contact us</div></a><a href="https://baltex.ladesk.com" target="_blank" class="header_nav-link padding-24 w-inline-block"><div>Help Center</div></a></div></div></div></div></div><div id="w-node-_77409dbc-087e-0259-4891-a9db979c69cb-979c6984" class="header_right"><div class="header_right-buttons"><div lang-element="is-button" class="change-lang-wrapper"><div>EN</div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 6" fill="none" class="dropdown-icon"><path d="M9 1.00024L5 4.99976L1 1.00024" stroke="currentColor" stroke-opacity="0.74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><div lang-element="is-list" class="dropdown-wrapper"><a href="#" class="lang-item-link w-inline-block"><div>Russia</div></a><a href="#" class="lang-item-link w-inline-block"><div>China</div></a><a href="#" class="lang-item-link w-inline-block"><div>Deutsch</div></a><a href="#" class="lang-item-link w-inline-block"><div>Espaniol</div></a></div></div><div class="w-layout-vflex nav-item"></div><a href="https://app.baltex.io/private" class="button-secondary is-header w-inline-block"><div>Launch App</div></a></div></div></div></div></nav><div class="global-styles w-embed"><style>
+	html {
+  	font-size: 16px;
+  }
+  section {
+  	overflow: hidden;
+    padding-top: 7.2rem;
+    padding-bottom: 7.2rem;
+  }
+  @media (max-width: 768px) {
+		  section {
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+	}
+  body {
+  	 -webkit-font-smoothing: antialiased;
+  	-moz-osx-font-smoothing: grayscale;
+  }
+</style></div><div class="main"><div class="w-layout-blockcontainer blur-left w-container"></div><div class="w-layout-blockcontainer blur-left right w-container"></div><section class="section_hero _100vh test-class"><div class="container-default"><div class="section_hero-content"><div class="section_hero-offer"><h1 class="heading-style-h1 mobile-h1"><span class="text-span-green">Advanced AML </span>Scoring Built for Web3 Security</h1><div class="text-size-medium color-white-74 text-align-center mobile-regular">Automated wallet checks for sanctions, stolen funds, darknet exposure, fraud rings, and more</div></div><div class="spacer-large mobile-16"></div><div class="spacer-small"></div><div class="w-layout-hflex button-flex-cta"><a href="mailto:support@baltex.io" class="button-green-primary w-inline-block"><div class="text-block">Request more details</div></a></div><div class="button_widget-wrapper"><div class="button_widget"><div class="button_widget-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 29 29" fill="none" class="button_widget-icon"><path d="M18.3667 14.5C18.3667 16.6355 16.6355 18.3667 14.5 18.3667C12.3645 18.3667 10.6334 16.6355 10.6334 14.5C10.6334 12.3645 12.3645 10.6334 14.5 10.6334C16.6355 10.6334 18.3667 12.3645 18.3667 14.5Z" stroke="#38BDF8" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.666 2.97742C15.4007 2.90002 15.1005 2.90002 14.5 2.90002C13.8996 2.90002 13.5993 2.90002 13.3341 2.97742C12.9458 3.0907 12.6029 3.32288 12.3535 3.64127C12.1832 3.8588 12.0717 4.13756 11.8487 4.69508C11.5281 5.49651 10.6384 5.9092 9.81952 5.63634L9.08384 5.3912C8.56198 5.21725 8.30104 5.13027 8.04522 5.11537C7.66942 5.09347 7.2954 5.18177 6.96906 5.36941C6.74691 5.49715 6.55242 5.69164 6.16345 6.08061C5.75004 6.49402 5.54333 6.70073 5.41201 6.93668C5.21909 7.28333 5.13747 7.68095 5.17825 8.07557C5.206 8.34417 5.31457 8.61559 5.5317 9.15843C5.87175 10.0085 5.54461 10.9798 4.75953 11.4509L4.40185 11.6656C3.8542 11.9942 3.58038 12.1585 3.38148 12.3847C3.20547 12.5849 3.07275 12.8193 2.99166 13.0732C2.90002 13.3601 2.90002 13.6826 2.90002 14.3277C2.90002 15.0914 2.90002 15.4733 3.02198 15.8002C3.12974 16.0891 3.30501 16.3479 3.53317 16.5553C3.79139 16.7899 4.14245 16.9303 4.84452 17.2112C5.56201 17.4982 5.93144 18.2947 5.68707 19.0278L5.40977 19.8597C5.21769 20.4359 5.12165 20.724 5.11291 21.0071C5.10241 21.3475 5.18199 21.6846 5.34359 21.9843C5.478 22.2336 5.69276 22.4483 6.12225 22.8778C6.55174 23.3073 6.76649 23.522 7.01577 23.6565C7.3155 23.8181 7.65259 23.8976 7.99294 23.8871C8.27601 23.8784 8.56413 23.7824 9.14036 23.5903L9.81958 23.3639C10.6384 23.0909 11.5281 23.5036 11.8487 24.305C12.0717 24.8625 12.1832 25.1412 12.3535 25.3588C12.6029 25.6772 12.9458 25.9093 13.3341 26.0226C13.5993 26.1 13.8996 26.1 14.5 26.1C15.1005 26.1 15.4007 26.1 15.666 26.0226C16.0542 25.9093 16.3971 25.6772 16.6465 25.3588C16.8169 25.1412 16.9284 24.8625 17.1514 24.305C17.4719 23.5036 18.3616 23.091 19.1804 23.364L19.8592 23.5904C20.4354 23.7825 20.7235 23.8785 21.0066 23.8872C21.3469 23.8977 21.684 23.8182 21.9837 23.6566C22.233 23.5221 22.4478 23.3074 22.8773 22.8779C23.3068 22.4484 23.5215 22.2336 23.6559 21.9844C23.8175 21.6846 23.8971 21.3476 23.8866 21.0072C23.8779 20.7241 23.7818 20.436 23.5898 19.8598L23.3126 19.0284C23.0682 18.295 23.4378 17.4982 24.1555 17.2112C24.8576 16.9303 25.2087 16.7899 25.4669 16.5553C25.695 16.3479 25.8703 16.0891 25.9781 15.8002C26.1 15.4733 26.1 15.0914 26.1 14.3277C26.1 13.6826 26.1 13.3601 26.0084 13.0732C25.9273 12.8193 25.7946 12.5849 25.6186 12.3847C25.4197 12.1585 25.1458 11.9942 24.5982 11.6656L24.2401 11.4507C23.455 10.9796 23.1278 10.0084 23.4678 9.15833C23.6849 8.61551 23.7935 8.34407 23.8213 8.07547C23.862 7.68085 23.7804 7.28324 23.5875 6.93658C23.4562 6.70063 23.2495 6.49393 22.8361 6.08051C22.4471 5.69155 22.2526 5.49705 22.0305 5.36931C21.7041 5.18167 21.3301 5.09337 20.9543 5.11527C20.6985 5.13017 20.4375 5.21715 19.9157 5.3911L19.1805 5.63617C18.3616 5.90912 17.4719 5.49649 17.1514 4.69508C16.9284 4.13756 16.8169 3.8588 16.6465 3.64127C16.3971 3.32288 16.0542 3.0907 15.666 2.97742Z" stroke="#38BDF8" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="u-flex is-column is-8"><div class="text-size-regular text-weight-medium color-white">Private Exchange</div><div class="text-size-small color-white-52">Private Exchange afdafdsflkafklakfs</div></div><div class="button_widget-icon-wrapper is-send"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 26 26" fill="none" class="button_widget-icon"><path d="M9.75 6.5L16.25 13L9.75 19.5" stroke="currentColor" stroke-width="3.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88018_blur.png" loading="lazy" alt="" class="button_widget-blur"/><div class="calculator_token-wrapper"><div class="token_info-wrapper"><div class="u-flex is-row is-gap-10"><div class="calculator_token-icon-wrapper"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88045_image.png" loading="lazy" alt="" class="calculator_token-icon"/><div class="calculator_token-short-number">13</div></div><div class="u-flex is-column is-gap-5"><div class="text-size-regular text-weight-medium">Ether</div><div class="u-flex is-row is-gap-5"><div class="text-size-small">ETH<br/></div><div class="is-dot"></div><div class="text-size-small color-white-52">13 networks</div></div></div></div></div><div class="token_networks-list"><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="token_network-button"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88046_16.svg" loading="lazy" alt="" class="icon-20px"/><div>Solana</div></div><div class="check-networks"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 7 7" fill="none" class="svg"><path d="M0.5 0.5V1.4C0.5 2.66012 0.5 3.29018 0.745235 3.77148C0.96095 4.19484 1.30516 4.53905 1.72852 4.75476C2.20982 5 2.83988 5 4.1 5H6.5M6.5 5L5 3.5M6.5 5L5 6.5" stroke="white" stroke-opacity="0.3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><div class="by-center is-full-width"><a href="#" class="token_networks-hide w-inline-block"><div class="text-size-small">Hide</div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 10 6" fill="none" class="dropdown-icon is-grey"><path d="M1 4.99951L5 1L9 4.99951" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div></div></div></div></div></div></div></section><section class="section_real-swaps"><div class="container-default"><div class="flex-column flex-gap-20"><h2 class="heading-style-h2"><span class="text-span-green">We examine incoming wallet behaviour, not portfolio data,</span> so you get instant AML intelligence while maintaining full sovereignty over your assets.</h2><div class="text-size-medium color-white-74 text-align-center mobile-regular">Non-custodial AML intelligence that helps you approve clean transactions and block risky ones instantly.</div></div><div class="trust_brands-wrapper"><div class="w-layout-hflex home-logo-wrapper"><div class="w-layout-hflex clients-grid logo-animate"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802a_0923_Arbitrum_Logos_Primary_horizontal_RGB%201.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88034_full-sei-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802b_Clip%20path%20group.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802d_Clip%20path%20group-1.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88029_Group%201728279188.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802e_Group%201728279187.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802f_Layer_x0020_1.svg" loading="lazy" alt="" class="client-logo"/></div><div class="w-layout-hflex clients-grid logo-animate"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802a_0923_Arbitrum_Logos_Primary_horizontal_RGB%201.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88034_full-sei-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802b_Clip%20path%20group.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802d_Clip%20path%20group-1.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88029_Group%201728279188.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802e_Group%201728279187.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802f_Layer_x0020_1.svg" loading="lazy" alt="" class="client-logo"/></div><div class="w-layout-hflex clients-grid logo-animate"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802a_0923_Arbitrum_Logos_Primary_horizontal_RGB%201.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88034_full-sei-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802b_Clip%20path%20group.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802d_Clip%20path%20group-1.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88029_Group%201728279188.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802e_Group%201728279187.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba8802f_Layer_x0020_1.svg" loading="lazy" alt="" class="client-logo"/></div><div class="home-logo-left-gradient"></div><div class="home-logo-left-gradient right"></div></div><div class="w-layout-hflex home-logo-wrapper bottom"><div class="w-layout-hflex clients-grid logo-animate-alt"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88030_Layer_x0020_1-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88036_Unichain%20Lockup%20-%20Dark%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88034_full-sei-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88031_bnb-chain-full-binance-smart-chain-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88033_Layer_x0020_1-23-1.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88032_Layer_x0020_1-23-2.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88035_Group%201728279186-23.svg" loading="lazy" alt="" class="client-logo"/></div><div class="w-layout-hflex clients-grid logo-animate-alt"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88030_Layer_x0020_1-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88036_Unichain%20Lockup%20-%20Dark%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88034_full-sei-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88031_bnb-chain-full-binance-smart-chain-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88033_Layer_x0020_1-23-1.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88032_Layer_x0020_1-23-2.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88035_Group%201728279186-23.svg" loading="lazy" alt="" class="client-logo"/></div><div class="w-layout-hflex clients-grid logo-animate-alt"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88030_Layer_x0020_1-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88036_Unichain%20Lockup%20-%20Dark%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88034_full-sei-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88031_bnb-chain-full-binance-smart-chain-logo%201-23.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88033_Layer_x0020_1-23-1.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88032_Layer_x0020_1-23-2.svg" loading="lazy" alt="" class="client-logo"/><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69206c9a20c1819b4ba88035_Group%201728279186-23.svg" loading="lazy" alt="" class="client-logo"/></div><div class="home-logo-left-gradient"></div><div class="home-logo-left-gradient right"></div></div><div class="embed w-embed"><style>
+
+/* Animation for the first right to left marquee */
+@keyframes slide {
+  0% {
+    transform: translateX( calc(0% + 50px));
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.logo-animate {
+  animation: slide 35s infinite linear; /* Adjust the seconds for a slower or faster animation */
+}
+
+
+/* Animation for the second left to right marquee */
+@keyframes slidealt {
+  0% {
+    transform: translateX( calc(0% + 50px));
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.logo-animate-alt {
+  animation: slidealt 35s infinite linear; /* Adjust the seconds for a slower or faster animation */
+  animation-direction: reverse;
+}
+
+
+</style></div></div></div></section><section class="section_real-swaps"><div class="container-default"><div class="h2_wrapper"><h2 class="heading-style-h2 mobile-align-left">Capabilities at a Glance</h2></div><div class="u-grid is-real-swaps aml-grid"><div id="w-node-_193efbe8-5cfc-8e93-558c-96b78c861873-d8f486a5" class="real-swap_item is-second-type real-swap-position"><div class="u-flex is-column is-gap-20 text-width"><div class="heading-style-h3 mobile-width-100">Comprehensive Wallet Risk Intelligence</div><div class="text-size-medium text-weight-medium color-white-74 mobile-regular">Identify illicit exposure across sanctions, darknet markets, mixers, fraud rings, stolen funds, and high-risk clusters.</div></div><div class="swap-privately-image-container image-sanctions"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692efc7d9077b1c37d649198_img%20sanctions.png" loading="lazy" sizes="100vw" srcset="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692efc7d9077b1c37d649198_img%20sanctions-p-500.png 500w, https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692efc7d9077b1c37d649198_img%20sanctions.png 787w" alt="" class="image-affiliate-card"/></div></div><div id="w-node-_91dd0663-9948-a968-cfc4-98a0fbe041f8-d8f486a5" class="real-swap_item is-second-type real-swap-position"><div class="u-flex is-column is-gap-20 text-width mobile-width"><div class="heading-style-h3 text-width-mobile">Provenance &amp; Exposure Tracking</div><div class="text-size-medium text-weight-medium color-white-74 mobile-regular">Trace the origin of funds, uncover hidden links, and evaluate counterparties with forensic-grade precision</div></div><div class="swap-privately-image-container"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692400a3df2407a4d7efb409_coins.png" loading="lazy" sizes="100vw" srcset="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692400a3df2407a4d7efb409_coins-p-500.png 500w, https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692400a3df2407a4d7efb409_coins-p-800.png 800w, https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692400a3df2407a4d7efb409_coins-p-1080.png 1080w, https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692400a3df2407a4d7efb409_coins.png 1380w" alt="" class="image-4"/></div></div><div id="w-node-_91dd0663-9948-a968-cfc4-98a0fbe041f0-d8f486a5" class="real-swap_item is-five-type green-color-card"><div class="u-flex is-column is-gap-20"><div class="heading-style-h3 mobile-width-100 color-black-100">Reduce False Positives</div><div class="text-size-medium text-weight-medium color-black-74">Our models differentiate between legitimate activity and risky patterns for more accurate decision-making.</div></div></div><div id="w-node-fd142e38-0a0d-c59f-8be8-b0b23eb0977e-d8f486a5" class="real-swap_item is-five-type"><div class="u-flex is-column is-gap-20"><div class="heading-style-h3 mobile-width-100">Non-Custodial Architecture</div><div class="text-size-medium text-weight-medium color-white-74 mobile-regular">We analyze blockchain data without touching your crypto — your assets stay fully in your control.</div></div></div><div id="w-node-bf69c6dc-0801-50ec-3e5f-9138bc297576-d8f486a5" class="real-swap_item is-five-type blue-color-card"><div class="u-flex is-column is-gap-20"><div class="heading-style-h3 mobile-width-100 color-black-100">Investigations &amp; Forensics Ready</div><div class="text-size-medium text-weight-medium color-black-74">Generate detailed reports that support audits, compliance reviews, and regulatory requests.</div></div></div></div></div></section><section class="section-adavantegs old-version"><div class="container-default"><div class="h2_wrapper"><h2 class="heading-style-h2 mobile-align-left">Private Swap Advantages with Baltex</h2></div><div class="advantegs-u-grid advantegs-u-grid-1-rows"><div class="advantages-card advatages-card-color first-card"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69240cac8bc408404255d75b_compliance.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3">Variety of coins to exchange</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Quick, easy, secure exchanges for Bitcoin and more than 1,000 altcoins</div></div></div></div><div class="advantages-card advatages-card-color second-card"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692410ee1038fc544661d75f_link.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3">Adaptable infrastructure</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Composable services and versioned APIs that evolve with your product, not against it</div></div></div></div><div class="advantages-card advatages-card-color third-card"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692410eef7f1906dd1e83330_monero.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3">Speedy transactions</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Get any of Baltex’s 1,000+ supported cryptocurrencies in minutes</div></div></div></div></div></div></section><section class="section-adavantegs"><div class="container-default"><div class="h2_wrapper"><h2 class="heading-style-h2 mobile-align-left">What Baltex Brigns To The Table</h2></div><div class="advantegs-u-grid scroll-advantages-mobile"><div class="advantages-card advatages-card-color scroll-card"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69318119a8eb4c90450e2424_Union.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3 mobile-width-100">Machine-Learning Risk Scoring</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Our AML engine uses behavioral ML models to evaluate on-chain wallet patterns and detect anomalies with high precision</div></div></div></div><div class="advantages-card advatages-card-color scroll-card color-soft"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69318119e317344cc20f84fc_Group%201728279190.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3">Always-Up-to-Date Intelligence Layer</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">We enrich our risk database with live insights from global anti-fraud agencies, law-enforcement reports, and threat-intelligence feeds.</div></div></div></div><div class="advantages-card advatages-card-color scroll-card"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/693181192fa5b7288d5281da_Group%201728279278.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3">Dynamic Risk Models</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Baltex models adapt based on emerging threats, new laundering techniques, and updated intelligence — ensuring long-term accuracy.</div></div></div></div><div class="advantages-card advatages-card-color scroll-card color-soft"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69318119b163a12d67fe774c_SVGRepo_iconCarrier-1.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3 mobile-width-100">Behavioral Profiling for Every Address</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74 size-110">Analyze sender reputation through transaction history, flow typologies, exposure clusters, and ML-identified laundering patterns</div></div></div></div><div class="advantages-card advatages-card-color scroll-card"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/693181195bb293d8f265a719_Vector%203145.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3">Aggregated Fraud Intelligence System</div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Our system correlates blockchain analytics with external crime reports, sanction updates, and cross-chain data</div></div></div></div><div class="advantages-card advatages-card-color scroll-card color-soft"><div class="advantages-card-content"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/693181192e5508194fcfddcd_SVGRepo_iconCarrier.svg" loading="lazy" alt="" class="image-5"/><div class="w-layout-vflex advantages-card-content-text"><div class="heading-style-h3 mobile-width-100">Automated Flow Decisioning </div><div class="text-size-medium text-weight-medium mobile-regular color-white-74">Instant scoring helps you approve safe transactions and prevent high-risk funds from entering your ecosystem.</div></div></div></div></div></div></section><section class="section-subscribe"><div class="container-default"><div class="subscribe-frame"><div class="w-layout-vflex subscribe-text-flex flex-gap-20 width-50"><div class="heading-style-h2 color-black text-align-left">Subscribe to stay updated</div><div class="text-size-medium text-weight-medium mobile-regular color-black-74">Stay informed about feature rollouts, improvements, and key milestones in the development of Baltex AML Solution</div></div><div class="w-layout-vflex subscribe-form"><div class="code-embed-3 w-embed w-script"><style type="text/css">
+@import url("https://assets.mlcdn.com/fonts.css?version=1762785");
+
+* { box-sizing: border-box; }
+.sr-only {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+/* container */
+#mlb2-34121293.ml-form-embedContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: "Delight", Arial, Helvetica, sans-serif;
+}
+
+/* hide extra text block */
+#mlb2-34121293 .ml-form-embedContent { display: none; }
+
+/* body */
+#mlb2-34121293 .ml-form-embedBody { padding: 0; width: 100%; }
+#mlb2-34121293 .ml-form-formContent { margin: 0; }
+
+/* row */
+#mlb2-34121293 .ml-form-fieldRow {
+  margin: 0 0 12px;
+  width: 100%;
+  display: flex;
+ justify-content: flex-start;
+}
+
+/* pill email 530x88 */
+#mlb2-34121293 .ml-form-fieldRow input[type="email"] {
+  width: 530px !important;
+  max-width: 100% !important;
+  height: 88px !important;
+  background-color: #ffffff !important;
+  border-radius: 999px !important;
+  border: none !important;
+  padding: 0 32px !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+  color: #000000 !important;
+  outline: none;
+}
+#mlb2-34121293 .ml-form-fieldRow input::placeholder {
+  color: #777777 !important;
+}
+
+/* submit block */
+#mlb2-34121293 .ml-form-embedSubmit {
+  width: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* pill button 530x88 */
+#mlb2-34121293 .ml-form-embedSubmit button.primary {
+  width: 530px !important;
+  max-width: 100% !important;
+  height: 88px !important;
+  background-color: #22a9ff !important;
+  border-radius: 999px !important;
+  border: none !important;
+  padding: 0 32px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: #000000 !important;
+  cursor: pointer;
+  box-shadow: none;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
+}
+#mlb2-34121293 .ml-form-embedSubmit button.primary:hover {
+  background-color: #1a98ea !important;
+}
+
+/* hide loader */
+#mlb2-34121293 .ml-form-embedSubmit button.loading,
+#mlb2-34121293 .ml-form-embedSubmitLoad {
+  display: none !important;
+}
+
+/* success state */
+#mlb2-34121293 .ml-form-successBody {
+  padding: 8px 0;
+  text-align: center;
+}
+#mlb2-34121293 .ml-form-successContent h4 {
+  margin: 0 0 4px;
+  font-size: 24px;
+font-weight: 600;
+  color: #0c0c0c;
+}
+#mlb2-34121293 .ml-form-successContent p {
+  margin: 0;
+  font-size: 16px;
+font-weight: 500;
+  color: #0c0c0c;
+}
+
+/* mobile: pill stays full-width of card */
+@media (max-width: 560px) {
+  /* сам mailerlite-карточный wrapper */
+  #mlb2-34121293 .ml-form-embedWrapper {
+    border-radius: 24px;
+    margin: 0;               /* убираем внешние отступы, чтобы форма шла от края до края внутри карточки */
+    width: 100% !important;
+  }
+
+  /* выравнивающая обертка mailerlite */
+  #mlb2-34121293 .ml-form-align-center {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  /* ряд + группа инпута + блок кнопки — всё растягиваем */
+  #mlb2-34121293 .ml-form-fieldRow,
+  #mlb2-34121293 .ml-field-group,
+  #mlb2-34121293 .ml-form-embedSubmit {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 0 12px !important;
+    display: block !important;
+  }
+
+  /* сам инпут и кнопка — на всю ширину */
+  #mlb2-34121293 .ml-form-fieldRow input[type="email"],
+  #mlb2-34121293 .ml-form-embedSubmit button.primary {
+    width: 100% !important;
+    display: block !important;
+  }
+}
+
+
+</style>
+
+<div id="mlb2-34121293" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-34121293">
+  <div class="ml-form-align-center">
+    <div class="ml-form-embedWrapper embedForm">
+
+      <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+        <div class="ml-form-embedContent"></div>
+
+        <form class="ml-block-form"
+              action="https://assets.mailerlite.com/jsonp/1518596/forms/172935561731900740/subscribe"
+              method="post"
+              target="_blank">
+          <div class="ml-form-formContent">
+            <div class="ml-form-fieldRow ml-last-item">
+              <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                <input aria-label="email"
+                       aria-required="true"
+                       type="email"
+                       class="form-control"
+                       name="fields[email]"
+                       placeholder="Email"
+                       autocomplete="email">
+              </div>
+            </div>
+          </div>
+
+          <input type="hidden" name="ml-submit" value="1">
+
+          <div class="ml-form-embedSubmit">
+            <button type="submit" class="primary">Subscribe</button>
+            <button disabled="disabled" type="button" class="loading">
+              <div class="ml-form-embedSubmitLoad"></div>
+              <span class="sr-only">Loading...</span>
+            </button>
+          </div>
+
+          <input type="hidden" name="anticsrf" value="true">
+        </form>
+      </div>
+
+      <div class="ml-form-successBody row-success" style="display: none">
+        <div class="ml-form-successContent">
+          <h4>Thank you!</h4>
+          <p>You have successfully joined our subscriber list.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function ml_webform_success_34121293() {
+    var $ = ml_jQuery || jQuery;
+    $('.ml-subscribe-form-34121293 .row-success').show();
+    $('.ml-subscribe-form-34121293 .row-form').hide();
+  }
+</script>
+<script src="https://groot.mailerlite.com/js/w/webforms.min.js?v176e10baa5e7ed80d35ae235be3d5024" type="text/javascript"></script>
+<script>
+  fetch("https://assets.mailerlite.com/jsonp/1518596/forms/172935561731900740/takel");
+</script></div></div></div></div></section><section class="section_questions"><div class="container-default"><div class="questions_container"><div class="u-flex is-column is-questions-left"><div class="heading-style-h2 is-align-left is-mobile-padding-left">We&#x27;re here to answer all your questions</div><a href="mailto:support@baltex.io" class="button-secondary is-desktop w-inline-block"><div>Request more info</div></a></div><div class="accordion-container"><div class="cloneable__item"><div class="bz-component w-embed"><span class="frame__corner frame__corner--top-left"></span>
+      <span class="frame__corner frame__corner--bottom-right"></span>
+      <div class="bz-vertical"></div>
+      <div class="bz-horizontal"></div></div><div pb-id="AC02" pb-component="accordion" class="accordion"><div class="custom-css w-embed"><style>
+[pb-accordion-element="content"] {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+  /* Faster transitions */
+  transition: 
+    max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.15s ease-out,
+    visibility 0s linear 0.2s;
+  /* Optimize rendering */
+  will-change: max-height, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+[pb-accordion-element="content"].is-active-accordion {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  transition: 
+    max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.15s ease-out,
+    visibility 0s linear 0s;
+}
+
+[pb-accordion-element="arrow"] {
+  transition: transform 0.15s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate3d(0, 0, 0);
+}
+
+[pb-accordion-element="arrow"].is-active-accordion {
+  transform: rotate(180deg) translate3d(0, 0, 0);
+}
+
+[pb-accordion-element="plus"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[pb-accordion-element="plus"] svg {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate3d(0, 0, 0);
+}
+
+[pb-accordion-element="plus"] .vertical {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+[pb-accordion-element="plus"].is-active-accordion .vertical {
+  transform: scaleY(0);
+}
+
+[pb-accordion-element="plus"]:hover {
+  opacity: 0.8;
+}
+
+[pb-accordion-element="trigger"]:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+[pb-accordion-element="trigger"]:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [pb-accordion-element="content"],
+  [pb-accordion-element="arrow"],
+  [pb-accordion-element="plus"] svg,
+  [pb-accordion-element="plus"] .vertical {
+    transition: none;
+  }
+}
+</style></div><div pb-accordion-initial="none" pb-accordion-element="group" pb-accordion-single="true" class="accordion__wrapper"><div pb-accordion-element="accordion" class="accordion__item is-active-accordion"><button tabindex="0" aria-expanded="false" pb-accordion-element="trigger" role="button" class="accordion__item-header"><div class="accordion__title-wrapper"><div class="accordion_title">How does Baltex determine the risk level of an on-chain address?</div></div><div pb-accordion-element="plus" class="accordion_icon-wrapper"><div class="accordion_icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="plus-icon" aria-hidden="true">
+    <path class="horizontal" d="M5 12h14"></path>
+    <path class="vertical" d="M12 5v14"></path>
+  </svg></div></div></button><div pb-accordion-element="content" class="accordion__item-wrapper is-active-accordion"><div class="accordion__item-body"><div class="accordion__text">Baltex uses a multi-layer risk engine that combines machine-learning behavioral models, graph analysis, clustering heuristics, and exposure mapping. The system evaluates transaction history, flow patterns, network connections, and links to known illicit entities to generate a transparent and evidence-based risk score.</div></div></div></div><div pb-accordion-element="accordion" class="accordion__item is-active-accordion"><button tabindex="0" aria-expanded="false" pb-accordion-element="trigger" role="button" class="accordion__item-header"><div class="accordion__title-wrapper"><div class="accordion_title">How frequently is the intelligence database updated?</div></div><div pb-accordion-element="plus" class="accordion_icon-wrapper"><div class="accordion_icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="plus-icon" aria-hidden="true">
+    <path class="horizontal" d="M5 12h14"></path>
+    <path class="vertical" d="M12 5v14"></path>
+  </svg></div></div></button><div pb-accordion-element="content" class="accordion__item-wrapper is-active-accordion"><div class="accordion__item-body"><div class="accordion__text">Our intelligence layer is refreshed continuously using data from global anti-fraud agencies, sanctions authorities, cybersecurity partners, law-enforcement reports, and confirmed incident feeds. All new data passes through validation, deduplication, and attribution pipelines before being integrated into the core risk graph.</div></div></div></div><div pb-accordion-element="accordion" class="accordion__item is-active-accordion"><button tabindex="0" aria-expanded="false" pb-accordion-element="trigger" role="button" class="accordion__item-header"><div class="accordion__title-wrapper"><div class="accordion_title">Does the AML system require access to user assets or private keys?</div></div><div pb-accordion-element="plus" class="accordion_icon-wrapper"><div class="accordion_icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="plus-icon" aria-hidden="true">
+    <path class="horizontal" d="M5 12h14"></path>
+    <path class="vertical" d="M12 5v14"></path>
+  </svg></div></div></button><div id="accordion-2-content-1" pb-accordion-element="content" class="accordion__item-wrapper is-active-accordion"><div class="accordion__item-body"><div class="accordion__text">No. Baltex operates as a fully non-custodial analytics layer. The system never touches user funds or private credentials and relies exclusively on publicly available blockchain metadata, behavioral signatures, and external intelligence sources.</div></div></div></div><div pb-accordion-element="accordion" class="accordion__item is-active-accordion"><button tabindex="0" aria-expanded="false" pb-accordion-element="trigger" role="button" class="accordion__item-header"><div class="accordion__title-wrapper"><div class="accordion_title">Which networks and digital assets are supported?</div></div><div pb-accordion-element="plus" class="accordion_icon-wrapper"><div class="accordion_icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="plus-icon" aria-hidden="true">
+    <path class="horizontal" d="M5 12h14"></path>
+    <path class="vertical" d="M12 5v14"></path>
+  </svg></div></div></button><div id="accordion-2-content-1" pb-accordion-element="content" class="accordion__item-wrapper is-active-accordion"><div class="accordion__item-body"><div class="accordion__text">Baltex performs analytics across major L1 and L2 ecosystems and thousands of assets. Transaction data is normalized into a unified behavioral model, enabling consistent multi-chain risk scoring, cross-chain exposure detection, and tracking of laundering patterns involving DEXs, bridges, and mixer routes</div></div></div></div></div><div class="custom-code w-embed w-script"><script>
+class PBAccordion {
+  constructor() {
+    this.cleanupInitialState();
+    this.init();
+  }
+
+  cleanupInitialState() {
+    document.querySelectorAll('[pb-component="accordion"]').forEach(accordion => {
+      const group = accordion.querySelector('[pb-accordion-element="group"]');
+      if (!group) return;
+
+      const items = group.querySelectorAll('[pb-accordion-element="accordion"]');
+      items.forEach(item => {
+        const content = item.querySelector('[pb-accordion-element="content"]');
+        const trigger = item.querySelector('[pb-accordion-element="trigger"]');
+        const arrow = item.querySelector('[pb-accordion-element="arrow"]');
+        const plus = item.querySelector('[pb-accordion-element="plus"]');
+        
+        if (content) {
+          content.style.maxHeight = '0';
+          content.style.opacity = '0';
+          content.style.visibility = 'hidden';
+          content.style.display = 'none';
+        }
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        
+        item.classList.remove('is-active-accordion');
+        content?.classList.remove('is-active-accordion');
+        if (arrow) arrow.classList.remove('is-active-accordion');
+        if (plus) plus.classList.remove('is-active-accordion');
+      });
+
+      const initial = group.getAttribute('pb-accordion-initial');
+      if (initial && initial !== 'none') {
+        const initialItem = items[parseInt(initial) - 1];
+        if (initialItem) {
+          this.openAccordion(initialItem);
+        }
+      }
+    });
+  }
+
+  init() {
+    document.querySelectorAll('[pb-component="accordion"]').forEach(accordion => {
+      const group = accordion.querySelector('[pb-accordion-element="group"]');
+      if (!group) return;
+      group.addEventListener('click', (e) => this.handleClick(e, group));
+    });
+  }
+
+  handleClick(event, group) {
+    const accordionItem = event.target.closest('[pb-accordion-element="accordion"]');
+    if (!accordionItem) return;
+
+    const isOpen = accordionItem.classList.contains('is-active-accordion');
+    const isSingle = group.getAttribute('pb-accordion-single') === 'true';
+
+    if (isSingle) {
+      group.querySelectorAll('[pb-accordion-element="accordion"]').forEach(item => {
+        if (item !== accordionItem && item.classList.contains('is-active-accordion')) {
+          this.closeAccordion(item);
+        }
+      });
+    }
+
+    if (isOpen) {
+      this.closeAccordion(accordionItem);
+    } else {
+      this.openAccordion(accordionItem);
+    }
+  }
+
+  openAccordion(item) {
+    const trigger = item.querySelector('[pb-accordion-element="trigger"]');
+    const content = item.querySelector('[pb-accordion-element="content"]');
+    const arrow = item.querySelector('[pb-accordion-element="arrow"]');
+    const plus = item.querySelector('[pb-accordion-element="plus"]');
+
+    content.style.visibility = 'visible';
+    content.style.display = 'block';
+    
+    content.offsetHeight;
+
+    const contentHeight = content.scrollHeight;
+    
+    requestAnimationFrame(() => {
+      content.style.maxHeight = `${contentHeight}px`;
+      content.style.opacity = '1';
+      trigger.setAttribute('aria-expanded', 'true');
+      item.classList.add('is-active-accordion');
+      content.classList.add('is-active-accordion');
+      if (arrow) arrow.classList.add('is-active-accordion');
+      if (plus) plus.classList.add('is-active-accordion');
+    });
+
+    content.addEventListener('transitionend', () => {
+      if (item.classList.contains('is-active-accordion')) {
+        content.style.maxHeight = 'none';
+      }
+    }, { once: true });
+  }
+
+  closeAccordion(item) {
+    const trigger = item.querySelector('[pb-accordion-element="trigger"]');
+    const content = item.querySelector('[pb-accordion-element="content"]');
+    const arrow = item.querySelector('[pb-accordion-element="arrow"]');
+    const plus = item.querySelector('[pb-accordion-element="plus"]');
+
+    content.style.maxHeight = `${content.scrollHeight}px`;
+    content.style.display = 'block';
+
+    content.offsetHeight;
+
+    requestAnimationFrame(() => {
+      content.style.maxHeight = '0';
+      content.style.opacity = '0';
+      trigger.setAttribute('aria-expanded', 'false');
+      item.classList.remove('is-active-accordion');
+      content.classList.remove('is-active-accordion');
+      if (arrow) arrow.classList.remove('is-active-accordion');
+      if (plus) plus.classList.remove('is-active-accordion');
+    });
+
+    content.addEventListener('transitionend', () => {
+      if (!item.classList.contains('is-active-accordion')) {
+        content.style.visibility = 'hidden';
+        content.style.display = 'none';
+      }
+    }, { once: true });
+  }
+}
+
+// Initialize
+new PBAccordion();
+</script></div></div></div></div></div></div></section></div><footer class="footer"><div class="container-default"><div class="w-layout-vflex footer-flex-container"><div class="w-layout-hflex footer-flex-content"><div class="w-layout-vflex footer-social-container"><div class="w-layout-vflex footer-container-flex"><img loading="lazy" src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/692444e54043c2e69f39f654_logo%20footer.svg" alt=""/><div class="social-flex-link display-none"><a href="https://t.me/baltexio" target="_blank" class="footer-cta-social-link w-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 46 38" fill="none" class="cta_social-svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.12789 16.3229C15.3417 10.972 23.4861 7.44431 27.5612 5.73992C39.1964 0.873551 41.6141 0.0282113 43.1899 0.000297622C43.5365 -0.00584168 44.3115 0.08053 44.8134 0.490111C45.2373 0.835953 45.3539 1.30314 45.4097 1.63103C45.4655 1.95893 45.535 2.70589 45.4798 3.28954C44.8493 9.95123 42.121 26.1174 40.7331 33.5786C40.1458 36.7357 38.9893 37.7943 37.8698 37.8979C35.4368 38.123 33.5892 36.281 31.2327 34.7277C27.5453 32.2971 25.4621 30.784 21.8827 28.4122C17.7462 25.6712 20.4278 24.1646 22.7851 21.7025C23.4021 21.0582 34.1221 11.2534 34.3296 10.3639C34.3555 10.2527 34.3796 9.83802 34.1346 9.61907C33.8896 9.40012 33.5281 9.47499 33.2672 9.53454C32.8973 9.61895 27.0065 13.5342 15.5948 21.2802C13.9227 22.4348 12.4082 22.9973 11.0513 22.9678C9.55533 22.9353 6.67775 22.1173 4.53857 21.4181C1.91478 20.5604 -0.170564 20.107 0.0110228 18.6505C0.105604 17.8918 1.14456 17.116 3.12789 16.3229Z" fill="currentColor" class="path"></path></svg></a><a href="https://x.com/intent/follow?screen_name=baltexio" target="_blank" class="footer-cta-social-link w-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 46 46" fill="none" class="cta_social-svg"><path d="M0 0L17.519 25.5938L0.371057 45.5H4.17031L19.197 28.0446L31.1455 45.5H45.5L27.1968 18.7627L43.3483 0H39.5608L25.5166 16.3048L14.3545 0H0ZM4.5367 2.39474H13.0967L40.9633 43.1053H32.4033L4.5367 2.39474Z" fill="currentColor"></path></svg></a><a href="https://www.reddit.com/r/Baltex/" target="_blank" class="footer-cta-social-link w-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 44 40" fill="none" class="cta_social-svg"><path d="M27.2185 5.77681C27.6888 7.84845 29.4786 9.39172 31.6159 9.39172C34.1111 9.39172 36.1339 7.28926 36.1339 4.69586C36.1339 2.10246 34.1111 0 31.6159 0C29.4341 0 27.6146 1.60712 27.191 3.7448C23.5371 4.15208 20.684 7.37292 20.684 11.2762C20.684 11.285 20.684 11.2916 20.684 11.3004C16.7103 11.4744 13.0818 12.65 10.2011 14.5059C9.13144 13.6451 7.78852 13.1321 6.33122 13.1321C2.83412 13.1321 0 16.0778 0 19.7125C0 22.3499 1.49119 24.6219 3.64538 25.672C3.85508 33.3113 11.8639 39.4558 21.7155 39.4558C31.5671 39.4558 39.5865 33.3047 39.7856 25.6588C41.9229 24.6021 43.4014 22.3367 43.4014 19.7147C43.4014 16.08 40.5673 13.1343 37.0702 13.1343C35.6192 13.1343 34.2826 13.6429 33.2151 14.4971C30.3089 12.628 26.6403 11.4524 22.6263 11.296C22.6263 11.2894 22.6263 11.285 22.6263 11.2784C22.6263 8.48249 24.6259 6.16208 27.2185 5.78121V5.77681ZM9.94694 23.8888C10.0528 21.5023 11.5779 19.6707 13.3508 19.6707C15.1238 19.6707 16.4794 21.6058 16.3735 23.9923C16.2676 26.3787 14.9437 27.2461 13.1687 27.2461C11.3937 27.2461 9.84103 26.2752 9.94694 23.8888ZM30.0823 19.6707C31.8573 19.6707 33.3824 21.5023 33.4862 23.8888C33.5921 26.2752 32.0374 27.2461 30.2645 27.2461C28.4915 27.2461 27.1656 26.3809 27.0597 23.9923C26.9538 21.6058 28.3073 19.6707 30.0823 19.6707ZM27.9726 29.4102C28.3051 29.4454 28.517 29.8043 28.3878 30.1257C27.2969 32.8358 24.7212 34.7401 21.7155 34.7401C18.7098 34.7401 16.1362 32.8358 15.0433 30.1257C14.9141 29.8043 15.1259 29.4454 15.4584 29.4102C17.4071 29.2055 19.5147 29.0932 21.7155 29.0932C23.9163 29.0932 26.0218 29.2055 27.9726 29.4102Z" fill="currentColor"></path></svg></a><a href="https://discord.gg/CWk4mwQhDa" target="_blank" class="footer-cta-social-link w-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 46 36" fill="none" class="cta_social-svg"><path d="M39.1943 3.94197C35.2571 0.593216 29.0287 0.0255614 28.7621 0.00514137C28.3486 -0.031613 27.9545 0.213418 27.7845 0.61772C27.7691 0.642222 27.6338 0.973014 27.4831 1.48758C30.0873 1.95314 33.2866 2.88834 36.1805 4.78733C36.6442 5.08953 36.7872 5.73478 36.5012 6.22484C36.3119 6.54747 35.9912 6.72307 35.6589 6.72307C35.4812 6.72307 35.2996 6.66998 35.1373 6.5638C30.1607 3.30081 23.9478 3.13745 22.75 3.13745C21.5522 3.13745 15.3354 3.30081 10.3627 6.5638C9.89903 6.87009 9.28855 6.71899 9.00263 6.22893C8.71285 5.73478 8.85581 5.09362 9.31946 4.78733C12.2134 2.89242 15.4127 1.95314 18.0169 1.49166C17.8662 0.973015 17.7309 0.646307 17.7193 0.61772C17.5455 0.213418 17.1552 -0.0397802 16.7379 0.00514137C16.4713 0.0255614 10.2429 0.593216 6.25161 3.98689C4.16903 6.02473 0 17.9332 0 28.2286C0 28.4124 0.0463655 28.588 0.131369 28.7473C3.00603 34.0889 10.8534 35.4856 12.6423 35.5469C12.6501 35.5469 12.6616 35.5469 12.6732 35.5469C12.9901 35.5469 13.2876 35.3876 13.473 35.1181L15.2813 32.4881C10.4013 31.1567 7.90918 28.8943 7.76622 28.7595C7.35666 28.3797 7.31802 27.7181 7.68122 27.2853C8.04055 26.8524 8.66648 26.8115 9.07604 27.1913C9.134 27.2485 13.7242 31.365 22.75 31.365C31.7913 31.365 36.3815 27.2322 36.4278 27.1913C36.8374 26.8156 37.4594 26.8524 37.8226 27.2893C38.182 27.7222 38.1433 28.3797 37.7338 28.7595C37.5908 28.8943 35.0987 31.1567 30.2187 32.4881L32.027 35.1181C32.2124 35.3876 32.5099 35.5469 32.8268 35.5469C32.8384 35.5469 32.8499 35.5469 32.8577 35.5469C34.6466 35.4856 42.494 34.0889 45.3686 28.7473C45.4536 28.588 45.5 28.4124 45.5 28.2286C45.5 17.9332 41.331 6.02474 39.1943 3.94197ZM16.3207 24.0468C14.4081 24.0468 12.8587 22.1764 12.8587 19.8649C12.8587 17.5534 14.4081 15.683 16.3207 15.683C18.2332 15.683 19.7826 17.5534 19.7826 19.8649C19.7826 22.1764 18.2332 24.0468 16.3207 24.0468ZM29.1793 24.0468C27.2668 24.0468 25.7174 22.1764 25.7174 19.8649C25.7174 17.5534 27.2668 15.683 29.1793 15.683C31.0919 15.683 32.6413 17.5534 32.6413 19.8649C32.6413 22.1764 31.0919 24.0468 29.1793 24.0468Z" fill="currentColor"></path></svg></a></div></div></div><div class="w-layout-vflex footer-link-container"><div class="w-layout-vflex company-content"><h1 class="text-size-medium text-weight-medium">Company</h1><div class="w-layout-vflex footer-content-link"><a href="https://baltex.ladesk.com/591982-About-BaltEX" target="_blank" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Legal</h1></a><a href="https://baltex.io/blog" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Learn</h1></a></div></div><div class="w-layout-vflex support-content"><div class="w-layout-vflex company-content"><h1 class="text-size-medium text-weight-medium">Support</h1><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/support/glossary/a" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Glossary</h1></a><a href="https://baltex.io/support/faq" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">FAQ</h1></a><a href="https://baltex.io/support/how-it-works" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">How it Works</h1></a><a href="https://baltex.io/support/contact-us" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Contact us</h1></a><a href="https://baltex.ladesk.com/" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Help center</h1></a></div></div></div><div class="w-layout-vflex legal-content"><div class="w-layout-vflex company-content"><h1 class="text-size-medium text-weight-medium">Legal</h1><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/support/faq#kyc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">KYC/AML</h1></a><a href="https://baltex.io/legal/terms-of-services" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Terms of services</h1></a><a href="https://baltex.io/legal/privacy-policy" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Privacy policy</h1></a><a href="https://baltex.io/legal/risk-disclosure" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Risk Disclosure</h1></a></div></div></div><div class="w-layout-vflex social-content"><div class="w-layout-vflex company-content"><h1 class="text-size-medium text-weight-medium">Social</h1><div class="w-layout-vflex footer-content-link"><a href="https://www.trustpilot.com/review/baltex.io" target="_blank" class="trustpilot-wrapper w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ac2e3d60f795e8d98c20_trustpilot.svg" loading="lazy" alt=""/><div>Trustpilot</div></a></div></div></div></div></div><div class="vector-gap"><img loading="lazy" src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69244ad74c405d4bed605b9d_%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%20%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C.svg" alt=""/></div><div class="w-layout-hflex partners-footer-container"><a href="https://antikyc.io/listings/baltex" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace286ddade7acccaed3_ANTIKYC.IO%201.svg" loading="lazy" alt=""/></a><a href="https://blockchair.com/awesome/swap-exchanges/baltex" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace21f88d2c4b6be2f53_blockchair.logo.mono.ondark%201.svg" loading="lazy" alt=""/></a><a href="https://e-mon.cc/exchanger/1136" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace29137343d622eb512_e-mon%201.svg" loading="lazy" alt=""/></a><a href="https://wellcrypto.io" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace2c2f9c6b49ac9e46a_wellcrypto%201.svg" loading="lazy" alt=""/></a><a href="https://kursoff.biz/en/exchangers/baltex" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace28696bc5393a3907e_1%20k%20logo%201.svg" loading="lazy" alt=""/></a><a href="https://changerella.com/ru/exchangers/baltex" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace2e4cc5eeba22b1cf2_changerella_white%201.svg" loading="lazy" alt=""/></a><a href="https://crypto.ru/baltex/" target="_blank" class="partners-footer-link w-inline-block"><img src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69c3ace281ca610732d57b21_Crypto_id6-m4rfMs_1%201.svg" loading="lazy" alt=""/></a></div><div class="vector-gap"><img loading="lazy" src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69244ad74c405d4bed605b9d_%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%20%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C.svg" alt=""/></div><div class="w-layout-vflex container-footer-morelink"><h1 class="text-size-medium text-weight-medium">Exchange</h1><div class="w-layout-hflex name-link-flex"><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/btc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Bitcoin(BTC)</h1></a><a href="https://baltex.io/currencies/xrp" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange XRP(XRP)</h1></a><a href="https://baltex.io/currencies/trx" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange TRON(TRX)</h1></a><a href="https://baltex.io/currencies/arb" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Arbitrum(ARB)</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/eth" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Ethereum(ETH)</h1></a><a href="https://baltex.io/currencies/ton" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Toncoin(TON)</h1></a><a href="https://baltex.io/currencies/avax" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Avalanche(AVAX)</h1></a><a href="https://baltex.io/currencies/op" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Optimism(OP)</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Tether(USDT)</h1></a><a href="https://baltex.io/currencies/usdc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange USD Coin(USDC)</h1></a><a href="https://baltex.io/currencies/shib" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Shiba Inu(SHIB)</h1></a><a href="https://baltex.io/currencies/pol" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Polygon(POL)</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/bnbbsc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Binance Coin(BNB)</h1></a><a href="https://baltex.io/currencies/doge" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Dogecoin(DOGE)</h1></a><a href="https://baltex.io/currencies/pepe" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Pepe(PEPE)</h1></a><a href="https://baltex.io/currencies/sui" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Sui(SUI)</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/sol" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Solana(SOL)</h1></a><a href="https://baltex.io/currencies/ada" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Cardano(ADA)</h1></a><a href="https://baltex.io/currencies/near" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange NEAR Protocol(NEAR)</h1></a><a href="https://baltex.io/currencies/sei" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Exchange Sei(SEI)</h1></a></div></div></div></div><div class="w-layout-vflex container-footer-morelink"><h1 class="text-size-medium text-weight-medium">Exchange pairs</h1><div class="w-layout-hflex name-link-flex"><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/btc-to-eth" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">BTC to ETH</h1></a><a href="https://baltex.io/currencies/bnbbsc-to-eth" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">BNB to ETH</h1></a><a href="https://baltex.io/currencies/usdterc20-to-btc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">USDT to BTC</h1></a><a href="https://baltex.io/currencies/sol-to-eth" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">SOL to ETH</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/eth-to-btс" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">ETH to BTC</h1></a><a href="https://baltex.io/currencies/bnbbsc-to-sol" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">BNB to SOL</h1></a><a href="https://baltex.io/currencies/usdterc20-to-eth" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">USDT to ETH</h1></a><a href="https://baltex.io/currencies/btc-to-ltc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">BTC to LTC</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/arb-to-eth" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">ETH to ARB</h1></a><a href="https://baltex.io/currencies/pol-to-sol" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">POL to SOL</h1></a><a href="https://baltex.io/currencies/usdttrc20-to-trx" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">USDT to TRX</h1></a><a href="https://baltex.io/currencies/btc-to-xmr" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">BTC to XMR</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/eth-to-ethbase" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">ETH to Base</h1></a><a href="https://baltex.io/currencies/ton-to-sol" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">TON to SOL</h1></a><a href="https://baltex.io/currencies/usdtarb-to-usdcarb" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">USDT to USDC</h1></a><a href="https://baltex.io/currencies/eth-to-xmr" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">ETH to XMR</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/eth-to-sol" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">ETH to SOL</h1></a><a href="https://baltex.io/currencies/sol-to-arb" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">SOL to ARB</h1></a><a href="https://baltex.io/currencies/sol-to-btc" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">SOL to BTC</h1></a><a href="https://baltex.io/currencies/sol-to-xmr" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">SOL to XMR</h1></a></div></div></div></div><div class="w-layout-vflex container-footer-morelink"><h1 class="text-size-medium text-weight-medium">Cross-chain Bridges</h1><div class="w-layout-hflex name-link-flex"><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/avax-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge AVAX to USDT</h1></a><a href="https://baltex.io/currencies/inj-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge INJ to USDT</h1></a><a href="https://baltex.io/currencies/tia-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge TIA to USDT</h1></a><a href="https://baltex.io/currencies/fil-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge FIL to USDT</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/ada-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge ADA to USDT</h1></a><a href="https://baltex.io/currencies/stx-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge STX to USDT</h1></a><a href="https://baltex.io/currencies/icp-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge ICP to USDT</h1></a><a href="https://baltex.io/currencies/dot-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge DOT to USDT</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/doge-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge DOGE to USDT</h1></a><a href="https://baltex.io/currencies/apt-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge APT to USDT</h1></a><a href="https://baltex.io/currencies/kas-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge KAS to USDT</h1></a><a href="https://baltex.io/currencies/link-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge LINK to USDT</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/shib-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge SHIB to USDT</h1></a><a href="https://baltex.io/currencies/sui-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge SUI to USDT</h1></a><a href="https://baltex.io/currencies/rune-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge RUNE to USDT</h1></a><a href="https://baltex.io/currencies/jup-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge JUP to USDT</h1></a></div></div><div class="w-layout-vflex company-content"><div class="w-layout-vflex footer-content-link"><a href="https://baltex.io/currencies/near-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge NEAR to USDT</h1></a><a href="https://baltex.io/currencies/sei-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge SEI to USDT</h1></a><a href="https://baltex.io/currencies/pepe-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge PEPE to USDT</h1></a><a href="https://baltex.io/currencies/tao-to-usdterc20" class="footer-link-button color-white-74 w-inline-block"><h1 class="text-size-regular text-weight-medium">Bridge TAO to USDT</h1></a></div></div></div></div><div class="vector-gap"><img loading="lazy" src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/69244ad74c405d4bed605b9d_%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%20%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C.svg" alt=""/></div><div class="w-layout-hflex footer-description"><h1 class="text-size-regular text-weight-medium">© 2026 Baltex. All rights reserved.</h1><h1 class="text-size-regular text-weight-medium color-white-74">baltex.io</h1></div></div></div></footer><div class="code-embed w-embed w-script"><script>
+	document.addEventListener('DOMContentLoaded', () => {
+    const calculatorWrapper = document.querySelector('.calculator-wrapper');
+    const sendButton = document.querySelector('.widget-choose-wrapper.is-send');
+    const getButton = document.querySelector('.widget-choose-wrapper.is-get');
+
+    if (sendButton && calculatorWrapper) {
+        sendButton.addEventListener('click', () => {
+            calculatorWrapper.classList.remove('is-get'); // Удаляем противоположный класс
+            calculatorWrapper.classList.add('is-send');
+        });
+    }
+
+    if (getButton && calculatorWrapper) {
+        getButton.addEventListener('click', () => {
+            calculatorWrapper.classList.remove('is-send'); // Удаляем противоположный класс
+            calculatorWrapper.classList.add('is-get');
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Находим ВСЕ кнопки закрытия
+    const closeButtons = document.querySelectorAll('.calculator-open_close-wrapper');
+    // 2. Находим целевой элемент-калькулятор (допустим, он один на странице)
+    const calculatorWrapper = document.querySelector('.calculator-wrapper');
+
+    if (calculatorWrapper) {
+        // 3. Перебираем все найденные кнопки
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // При клике на любую из кнопок:
+                calculatorWrapper.classList.remove('is-send');
+                calculatorWrapper.classList.remove('is-get');
+            });
+        });
+    }
+
+    // ПРИМЕЧАНИЕ: Если кнопок закрытия много, и на странице много калькуляторов, 
+    // и каждая кнопка закрывает СВОЙ калькулятор, логика внутри цикла будет такой:
+    /*
+    closeButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Ищем ближайшего предка с классом .calculator-wrapper от места клика
+            const parentCalculator = event.currentTarget.closest('.calculator-wrapper');
+            if (parentCalculator) {
+                parentCalculator.classList.remove('is-send');
+                parentCalculator.classList.remove('is-get');
+            }
+        });
+    });
+    */
+});
+</script>
+<script>
+// 1. Выбираем все элементы, которые будут получать/терять класс
+const tokenWrappers = document.querySelectorAll('.calculator_token-wrapper');
+
+// 2. Определяем функцию для удаления 'is-active' со ВСЕХ .calculator_token-wrapper
+function removeActiveClass() {
+  tokenWrappers.forEach(wrapper => {
+    wrapper.classList.remove('is-active');
+  });
+}
+
+// 3. Добавляем слушатели событий на каждый .calculator_token-wrapper
+tokenWrappers.forEach(wrapper => {
+  // === 3A. Логика КЛИКА для ПОКАЗА/TOGGLE (при клике на .token_info-wrapper) ===
+  const tokenInfoWrapper = wrapper.querySelector('.token_info-wrapper');
+  
+  if (tokenInfoWrapper) {
+    tokenInfoWrapper.addEventListener('click', () => {
+      const parentWrapper = wrapper; 
+      const isActive = parentWrapper.classList.contains('is-active');
+
+      // 1. Сначала удаляем класс со ВСЕХ элементов
+      removeActiveClass();
+
+      // 2. Затем добавляем класс обратно, если он не был активен (Toggle)
+      if (!isActive) {
+        parentWrapper.classList.add('is-active');
+      }
+    });
+  }
+  
+  // === 3B. Логика КЛИКА для СКРЫТИЯ (при клике на .token_networks-hide) ===
+  const hideButton = wrapper.querySelector('.token_networks-hide');
+
+  if (hideButton) {
+    hideButton.addEventListener('click', (event) => {
+      // Это очень важно! Останавливаем всплытие события.
+      // Иначе клик по кнопке скроет список, но событие тут же
+      // всплывет до .token_info-wrapper и снова его покажет.
+      event.stopPropagation();
+      
+      // Просто удаляем класс 'is-active' с родителя.
+      // Так как это кнопка скрытия, нам не нужно проверять другие элементы.
+      wrapper.classList.remove('is-active');
+    });
+  }
+});
+</script>
+<style>
+    .calculator_token-wrapper {
+        user-select: none;
+    }
+    /* Основное состояние блока - скрыто */
+    .calculator-wrapper .calculator-open {
+        opacity: 0;
+        visibility: hidden;
+        /* 1. Добавляем плавный переход */
+        /* Плавность применяется к свойствам opacity и visibility (visibility нельзя анимировать напрямую, но его можно переключать с задержкой) */
+        transition: opacity 0.3s ease, visibility 0.3s ease; 
+    }
+
+    /* 2. Состояние при активации - видимо */
+    .calculator-wrapper.is-send .calculator-open.is-send {
+        opacity: 1;
+        visibility: visible;
+    }
+    .calculator-wrapper.is-get .calculator-open.is-get {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .calculator_token-wrapper .token_networks-list {
+        /* Изначально скрываем и готовим к переходу */
+        max-height: 0; /* Высота 0 - скрывает элемент */
+        opacity: 0;   /* Прозрачность 0 - скрывает содержимое */
+        overflow: hidden; /* Скрывает содержимое, выходящее за max-height */
+        
+        /* Добавляем transition для плавного изменения */
+        transition: max-height 0.3s ease-out, opacity 0.3s ease-in;
+        
+        /* Сохраняем display: flex, но он неактивен, пока max-height: 0 */
+        display: flex; 
+        
+        /* Важно: это нужно для того, чтобы transition сработал */
+        /* Вы можете добавить здесь padding, если он нужен */
+        padding: 0 0 0 2rem; 
+    }
+
+    .calculator_token-wrapper.is-active .token_networks-list {
+        /* Применяем класс is-active, чтобы показать элемент */
+        max-height: 200px; /* Установите достаточно большую высоту (больше, чем реальное содержимое) */
+        opacity: 1; /* Делаем видимым */
+        
+        /* Снова добавляем нужный padding при активном состоянии */
+        /* padding: 10px; */ 
+    }
+</style></div></div><script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69206c9a20c1819b4ba8800a" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/js/webflow.schunk.36b8fb49256177c8.js" type="text/javascript" integrity="sha384-4abIlA5/v7XaW1HMXKBgnUuhnjBYJ/Z9C1OSg4OhmVw9O3QeHJ/qJqFBERCDPv7G" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/69206c9a20c1819b4ba8800a/js/webflow.f8eff882.0183859e3a7fa9e4.js" type="text/javascript" integrity="sha384-Do8PbbJo+CjjY411QYUa8xu0CjLPNi3TE/YjSU1z/yawo7HowiwAorBKB++Z6CR9" crossorigin="anonymous"></script><style>
+/* Основной хедер */
+.header.header-test {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(0);
+}
+
+/* Скрытый хедер */
+.header.header-test.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+</style>
+
+<script>
+// Начальное значение скролла
+let lastScroll = 0;
+
+// Подключаем твой хедер по классу
+const header = document.querySelector('.header.header-test');
+
+// После какого расстояния вниз прятать хедер
+const hideAfter = 400; // px
+
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+
+  // Если скроллим вверх → показываем хедер
+  if (currentScroll < lastScroll) {
+    header.classList.remove('hide');
+  } 
+  // Если вниз → скрываем, но только после hideAfter px
+  else {
+    if (currentScroll > hideAfter) {
+      header.classList.add('hide');
+    }
+  }
+
+  lastScroll = currentScroll;
+});
+</script>
+</body></html>

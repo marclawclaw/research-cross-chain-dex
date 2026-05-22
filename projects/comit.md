@@ -32,7 +32,7 @@ This is itself architecturally significant: COMIT relied entirely on timelock re
 | `comit-network/xmr-btc-swap`        | BTC-XMR adaptor-signature implementation | Unmaintained (per repo notice) | last release 2024-11-15 (v1.0.0-rc.1) | (high, exact count not fetched) |
 | `comit-network/nectar` (subdir of comit-rs) | Custodial maker daemon            | Archived with comit-rs | 2021-03-23 | n/a   |
 
-The original COMIT team has moved to other projects; xmr-btc-swap maintenance has shifted to community-led `eigenwallet/core`, which the upstream notice flags has "introduced breaking changes at the network level" ([github.com/comit-network/xmr-btc-swap](https://github.com/comit-network/xmr-btc-swap) :: accessed 2026-05-19, already cited in [[patterns/atomic-swaps-vs-middle-chain]]).
+The original COMIT team has moved to other projects; xmr-btc-swap maintenance has shifted to community-led `eigenwallet/core`, which the upstream notice flags has "introduced breaking changes at the network level" ([github.com/comit-network/xmr-btc-swap](https://github.com/comit-network/xmr-btc-swap) :: accessed 2026-05-19, already cited in [[patterns/atomic-swaps-vs-middle-chain]]). See [[projects/eigenwallet]] for the active fork's current status, fork lineage, network-level breaking changes (v2.0.0 collaborative `tx_refund_early` co-signing, v4.0.0 cancel-timelock reduction), and adoption metrics (>3,000 mainnet swaps via the GUI in 2023, 2 live mainnet makers on 2026-05-22).
 
 ## RFC series (specifications)
 

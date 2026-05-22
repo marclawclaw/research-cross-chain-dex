@@ -42,6 +42,7 @@ Secret Network is a Cosmos SDK-based L1 that enables programmable privacy for sm
 - **SNIP-20 standard:** A privacy-preserving token standard (analogous to ERC-20) where balances and transfers are encrypted by default.
 - **IBC integration:** Secret Network connects to the Cosmos ecosystem via IBC, enabling private cross-chain messaging and asset transfers.
 - **Ethereum bridge:** A bidirectional bridge (Secret Ethereum Bridge) allows ERC-20 assets to be wrapped as privacy-preserving SNIP-20 tokens on Secret.
+- **Monero bridge:** The Secret Monero Bridge (launched August 2021) enables XMR holders to convert Monero into sXMR, a SNIP-20 representation, and access Secret DeFi (e.g., SecretSwap). The bridge uses a multi-signature Monero wallet operated by consensus nodes running over the I2P anonymous network. Each node operator is unaware of the identity or location of other operators, mitigating single-point censorship.
 
 ## Key behaviours
 
@@ -50,6 +51,7 @@ Secret Network is a Cosmos SDK-based L1 that enables programmable privacy for sm
 - [[patterns/viewing-keys]] — selective disclosure via user-derived keys
 - [[patterns/private-tokens]] — SNIP-20 privacy-preserving token standard
 - [[patterns/cross-chain-privacy]] — IBC and bridge-based private asset wrapping
+- [[patterns/monero-bridge]] — bridging the strongest privacy coin into a programmable privacy ecosystem
 
 ## Architecture decisions
 
@@ -77,6 +79,41 @@ Secret Network is a Cosmos SDK-based L1 that enables programmable privacy for sm
 - **Low DeFi traction:** Despite being live since 2020, TVL remains low (~$8M) compared to mainstream DeFi protocols. Privacy DeFi has not found product-market fit at scale.
 - **Regulatory uncertainty:** Privacy-preserving smart contracts face the same regulatory headwinds as privacy coins; exchanges have delisted SCRT in some jurisdictions.
 - **Upgrade complexity:** TEE-based systems require remote attestation and key rotation on upgrades, adding operational complexity.
+
+## Secret Monero Bridge
+
+The Secret Monero Bridge is a specialised cross-chain bridge connecting Monero (XMR) to Secret Network. It is notable as one of the few attempts to bridge the strongest privacy-focused L1 (Monero) into a programmable privacy ecosystem.
+
+### How it works
+
+1. User deposits XMR to a multi-signature Monero wallet controlled by bridge operators.
+2. Bridge operators verify the deposit and mint sXMR (a SNIP-20 token) on Secret Network.
+3. User can use sXMR in Secret DeFi (e.g., SecretSwap for private AMM trading, liquidity provision, yield farming).
+4. To withdraw, user burns sXMR on Secret Network; bridge operators release XMR from the multi-sig wallet to the user's Monero address.
+
+### Architecture
+
+- **Multi-signature Monero wallet:** The bridge custodies XMR in a multi-sig wallet. Consensus is reached among multiple signature node operators (MSCNOs).
+- **I2P network layer:** MSCNOs communicate and operate over the I2P anonymous peer-to-peer network. Each operator is hidden from the others, making the bridge resistant to censorship and operator collusion at the network level.
+- **Secret contracts:** sXMR is a SNIP-20 token, so balances and transfers are encrypted by default on Secret Network.
+- **Bidirectional:** Supports both XMR -> sXMR and sXMR -> XMR conversions.
+
+### Controversies and limitations
+
+- **Trusted operator set:** Despite I2P anonymisation, the bridge relies on a trusted set of operators controlling the multi-sig wallet. This is not a trustless bridge; operators could collude or be compromised.
+- **Poor UX at launch:** The mainnet release (August 2021) required users to provide an email address and use Discord for support tickets, which the Monero community found antithetical to privacy principles.
+- **Monero community scepticism:** The bridge was met with significant scepticism from the Monero community, who viewed the requirement for email/Discord and the trusted operator model as undermining Monero's privacy guarantees. Many users stated they would not use the bridge in its current form.
+- **Unclear current status:** As of 2025-2026, the bridge's operational status is unclear. The GitHub repository (maxkoda-cpu/Secret-Monero-Bridge) has seen limited recent activity, and community forum posts question whether the bridge is still maintained.
+- **No slashing or economic security:** Unlike Thorchain or Serai, there is no bonded collateral or slashing mechanism to penalise misbehaving bridge operators. Security relies entirely on social trust and I2P anonymisation.
+
+### Sources
+
+- [Secret Monero Bridge GitHub](https://github.com/maxkoda-cpu/Secret-Monero-Bridge) — accessed 2026-05-22
+- [Secret Monero Bridge Devpost](https://devpost.com/software/secret-monero-bridge) — accessed 2026-05-22
+- [Bitcoin Insider: Secret Monero Bridge Launch](https://www.bitcoininsider.org/article/123189/secret-network-announces-launch-secret-monero-bridge-mainnet) — accessed 2026-05-22
+- [Monero Observer: Bridge Tutorial Series](https://monero.observer/secret-code-podcast-shares-secret-monero-bridge-tutorial-series/) — accessed 2026-05-22
+- [Monero Observer: Bridge Controversy](https://monero.observer/secret-network-monero-bridge-controversy/) — accessed 2026-05-22
+- [Secret Network Forum: Bridge Status Discussion](https://forum.scrt.network/t/secret-network-monero-bridge/7752) — accessed 2026-05-22
 
 ## Sources
 

@@ -8,7 +8,7 @@ updated: 2026-05-22
 | Project | Privacy Mechanism | Programmable | Cross-Chain | Stablecoin | TVL / Market Cap | Validator Count | Key Risk |
 |---------|------------------|--------------|-------------|------------|------------------|-----------------|----------|
 | [[projects/haven]] | Ring signatures + stealth addresses | No (transfers only) | No (native only) | xUSD (privacy stablecoin) | ~$5.5M XHV / ~$1.2M xUSD | PoW miners | Low liquidity, depeg risk |
-| [[projects/secret-network]] | TEE (Intel SGX) | Yes (secret contracts) | Yes (IBC + Ethereum bridge) | SNIP-20 tokens (sSCRT, sETH) | ~$8M TVL / ~$45M market cap | ~70 validators | TEE vulnerabilities, hardware centralisation |
+| [[projects/secret-network]] | TEE (Intel SGX) | Yes (secret contracts) | Yes (IBC + Ethereum bridge + [[patterns/monero-bridge|Monero bridge]]) | SNIP-20 tokens (sSCRT, sETH, sXMR) | ~$8M TVL / ~$45M market cap | ~70 validators | TEE vulnerabilities, hardware centralisation, trusted Monero bridge operators |
 | [[projects/serai]] | TSS + threshold signatures | Yes (Substrate runtime) | Yes (native bridging) | No native stablecoin | [NOT FOUND] | [NOT FOUND] | Signer federation trust |
 | [[projects/thorchain]] | Transparent (public ledger) | Limited (native swaps) | Yes (native bridging) | No native stablecoin | ~$300M TVL | ~100 validators | Node bond centralisation |
 | [[projects/wormhole]] | Transparent | No (messaging only) | Yes (attestation bridge) | No | N/A (messaging protocol) | N/A | Guardian set trust |

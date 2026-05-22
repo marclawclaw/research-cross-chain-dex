@@ -30,9 +30,9 @@ with stronger anonymity guarantees.
 - [x] [[projects/secret-network]] :: complete (2026-05-22) :: TEE-based private smart contracts on Cosmos SDK; SNIP-20 tokens, IBC integration, SGX trust assumptions
 - [x] [[projects/lez-positioning]] :: complete (2026-05-19)
 - [x] [[summary]] :: complete (2026-05-19)
-- [x] Patterns: [[patterns/signer-federation-trust]], [[patterns/middle-chain-swap-settlement]], [[patterns/tss-custody-vault]], [[patterns/slip-based-fees]], [[patterns/attestation-bridge]], [[patterns/lock-mint-bridging]], [[patterns/atomic-swaps-vs-middle-chain]], [[patterns/instant-swap-aggregator]]
+- [x] Patterns: [[patterns/signer-federation-trust]], [[patterns/middle-chain-swap-settlement]], [[patterns/tss-custody-vault]], [[patterns/slip-based-fees]], [[patterns/attestation-bridge]], [[patterns/lock-mint-bridging]], [[patterns/atomic-swaps-vs-middle-chain]], [[patterns/instant-swap-aggregator]], [[patterns/ring-signatures]], [[patterns/offshore-banking-crypto]], [[patterns/collateralised-synthetic-assets]], [[patterns/privacy-stablecoin]], [[patterns/tee-based-privacy]], [[patterns/encrypted-smart-contracts]], [[patterns/viewing-keys]], [[patterns/private-tokens]], [[patterns/cross-chain-privacy]], [[patterns/monero-bridge]]
 - [x] Trust-model deep dives: [[patterns/serai-trust-model]], [[patterns/thorchain-trust-model]], [[patterns/wormhole-trust-model]]
-- [x] Metrics: [[metrics/swap-volume]]
+- [x] Metrics: [[metrics/swap-volume]], [[metrics/privacy-protocol-comparison]]
 
 ## Research questions
 

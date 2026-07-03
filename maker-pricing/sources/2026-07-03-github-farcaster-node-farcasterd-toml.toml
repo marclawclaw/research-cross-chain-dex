@@ -1,0 +1,125 @@
+# Farcasterd configuration
+# configures farcasterd specific behaviors such as auto-funding swaps or
+# auto-restoring checkpoints
+
+[farcasterd]
+# Set this to false if you only want manual restore. Defaut to true
+auto_restore = true
+# Sets the port where Farcaster will accept new peer connections through a
+# listening peerd. Default to 7067
+bind_port = 7067
+# Sets the binding ip for the listening peerd launched by Farcaster. Default to
+# 0.0.0.0
+bind_ip = "0.0.0.0"
+
+# Defines auto-funding
+[farcasterd.auto_funding]
+# Set this to true if you want to enable auto-funding, default to false
+# if set to true you need to register the parameter for the networks you
+# want to support: mainnet, testnet, or local
+enable = false
+
+# Auto-funding testnet parameters
+[farcasterd.auto_funding.testnet]
+# The bitcoin node to use to auto-send funds when swap funding is required
+# the node should have a wallet with spendable funds
+bitcoin_rpc = "http://localhost:18334"
+# Optional: the path to the cookie file to connect to the bitcoin node.
+# Default if {`bitcoin_rpc_user`, `bitcoin_rpc_pass`} tuple is provided too.
+bitcoin_cookie_path = "~/.bitcoin/testnet3/.cookie"
+# Optional: the RPC user to connect to the bitcoin node
+# Ignored if `bitcoin_cookie_path` is provided too.
+# bitcoin_rpc_user = "rpcuser"
+# Optional: the RPC password to the bitcoin node
+# Ignored if `bitcoin_cookie_path` is provided too.
+# bitcoin_rpc_pass = "rpcpass"
+# The monero wallet to use to auto-send funds when swap funding is required
+# the wallet should have spendable funds
+monero_rpc_wallet = "http://localhost:38084"
+
+# Default mainnet parameters for bitcoin and monero
+[swap.bitcoin.mainnet]
+safety = 7
+finality = 6
+min_amount = "0.00001 btc"
+max_amount = "0.01 btc"
+[swap.monero.mainnet]
+finality = 20
+min_amount = "0.001 xmr"
+max_amount = "2 xmr"
+
+# Swap parameter for the Bitcoin blockchain
+[swap.bitcoin.testnet]
+# Avoid broadcasting a transaction if a race can happen in # blocks
+#
+# E.g. if the safety is set to 3 and the the cancel transaction becomes
+# broadcastable in 4 blocks we are safe and we do publish buy, if it becomes
+# broadcastable in 3 blocks or less we do not publish the buy as the safety is
+# not respected.
+safety = 3
+# Number of confirmations required to consider a transaction final. Must be
+# smaller than safety.
+finality = 1
+# The minimum acceptable amount of bitcoin to trade
+min_amount = "0.00001 btc"
+# The maximum acceptable amount of bitcoin to trade
+max_amount = "1 btc"
+
+# Swap parameter for the Monero blockchain
+[swap.monero.testnet]
+# Number of confirmations required to consider a transaction final
+finality = 1
+# The minimum acceptable amount of monero to trade
+min_amount = "0.001 xmr"
+# The maximum acceptable amount of monero to trade
+max_amount = "20 xmr"
+
+# Defines grpc options
+[grpc]
+# Set this to true to enable the grpc daemon
+enable = true
+# If enabled, also requires a port for grpc clients to connect to
+bind_port = 50051
+# If enabled, where to bind the grpc service. Defaults to 127.0.0.1
+# The grpc interface allow full management of the node, you probably want to
+# keep it only accessible on your local network
+bind_ip = "127.0.0.1"
+
+# Syncers configuration
+# configures the Bitcoin and Monero syncers for the three
+# networks.
+
+# Mainnet daemons
+[syncers.mainnet]
+# Electrum Server used by the Bitcoin syncer
+electrum_server = "ssl://blockstream.info:700"
+# Monero daemon used by the Monero syncer
+monero_daemon = "http://node.community.rino.io:18081"
+# Monero Wallet RPC used by the Monero syncer
+# Point to local running wallet
+monero_rpc_wallet = "http://localhost:18083"
+# Optional: the monero light wallet server to use instead of the monero rpc wallet
+# monero_lws = "http://localhost:38884"
+
+# Testnet/stagenet daemons
+[syncers.testnet]
+# Electrum Server used by the Bitcoin syncer on testnet
+electrum_server = "ssl://blockstream.info:993"
+# Monero daemon used by the Monero syncer on stagenet
+monero_daemon = "http://stagenet.community.rino.io:38081"
+# Monero Wallet RPC used by the Monero syncer on stagenet
+# Point to local running wallet
+monero_rpc_wallet = "http://localhost:38083"
+# Optional: the monero light wallet server to use instead of the monero rpc wallet
+# monero_lws = "http://localhost:38884"
+
+# Local development daemons, null by default
+[syncers.local]
+# Electrum Server used by the Bitcoin syncer on regtest
+electrum_server = "tcp://localhost:50001"
+# Monero daemon used by the Monero syncer on regtest
+monero_daemon = "http://localhost:18081"
+# Monero Wallet RPC used by the Monero syncer on regtest
+monero_rpc_wallet = "http://localhost:18083"
+# Optional: the monero light wallet server to use instead of the monero rpc wallet
+# monero_lws = "http://localhost:38884"

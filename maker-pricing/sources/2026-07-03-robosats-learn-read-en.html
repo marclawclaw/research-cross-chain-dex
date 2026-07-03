@@ -1,0 +1,660 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>How to Use - Learn RoboSats</title>
+<meta name="description" content="Guide: How to use RoboSats. A complete walkthrough RoboSats P2P Exchange">
+
+
+  <meta name="author" content="Reckless_Satoshi">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Learn RoboSats">
+<meta property="og:title" content="How to Use">
+<meta property="og:url" content="http://0.0.0.0:4000/read/en/">
+
+
+  <meta property="og:description" content="Guide: How to use RoboSats. A complete walkthrough RoboSats P2P Exchange">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://0.0.0.0:4000/read/en/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "RoboSats",
+      "url": "http://0.0.0.0:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Learn RoboSats Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="preload" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" as="style" onload="this.onload=null;this.rel='stylesheet'"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/" style="white-space: nowrap;">
+          Learn RoboSats
+          <span class="site-subtitle">A Simple and Private Lightning P2P Exchange</span>
+        </a>
+        <ul class="visible-links" id="navigation" style="overflow: visible;">
+        </ul>
+
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg xmlns="http://www.w3.org/2000/svg" style="width:26px;height:26px;vertical-align:middle;fill:currentColor" viewBox="0 0 512 512"><path d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z"/></svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+         <select name="language" id="language">
+          </select>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script src="/utils/mastheadHelper.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const languageStored = localStorage.getItem('language') || 'en';
+    /* load the dropdown menu and get the element for later use */
+    const languageDropdown = loadDropDownMenu(languageStored);
+
+    const currentUrl = window.location.href;
+    /* get navigation file depending on localstorage, default navigation file in English */
+    let navigationFile = getNavigationFile(languageStored);
+
+    /* generate the navigation menu */
+    generateNavigationMenu(navigationFile);
+
+  /* match the page with the selected language, if the page is a tutorial or read page, do nothing */
+  if(!currentUrl.includes('/watch/') && !currentUrl.includes('/read/')) {
+    languageDropdown.value = languageStored;
+    matchPageWithSelection(languageStored, currentUrl);
+  }
+
+  languageDropdown.addEventListener('change', (event) => {
+    const language = event.target.value;
+    localStorage.setItem('language', language);
+    matchPageWithSelection(language,currentUrl);
+  });
+});
+</script>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+  
+    
+      
+      
+      
+      
+    
+      
+      
+      
+      
+    
+    
+      
+
+
+
+
+
+
+<nav class="nav__list">
+  <h3 class="nav__title" style="padding-left: 0;"><img id="side-icon-verybig" src="/assets/vector/chalkboard-user.svg"/>How to use</h3>
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">Toggle menu</label>
+  <ul class="nav__items">
+    
+
+      <li>
+        
+          <a href="/watch/en/"><span class="nav__sub-title"><span class="side-bar-item"><img id="side-icon-big" src="/assets/vector/circle-play.svg"/>Watch</span></span></a>
+        
+
+        
+        <ul>
+          
+            <li><a href="/watch/en/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:21px" src="/assets/vector/english.svg"/> English</span></a></li>
+          
+            <li><a href="/watch/es/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/spanish.svg"/> Español</span></a></li>
+          
+            <li><a href="/watch/de/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/german.svg"/> Deutsch</span></a></li>
+          
+            <li><a href="/watch/pt/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/portuguese.svg"/> Português</span></a></li>
+          
+            <li><a href="/watch/fr/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/french.svg"/> Français</span></a></li>
+          
+            <li><a href="/watch/pl/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/polish.svg"/> Polski</span></a></li>
+          
+            <li><a href="/watch/ru/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/russian.svg"/> Русский</span></a></li>
+          
+        </ul>
+        
+      </li>
+    
+
+      <li>
+        
+          <a href="/watch/en/"><span class="nav__sub-title"><span class="side-bar-item"><img id="side-icon-big" src="/assets/vector/readme.svg"/>Read</span></span></a>
+        
+
+        
+        <ul>
+          
+            <li><a href="/read/en/" class="active"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:21px" src="/assets/vector/english.svg"/> English</span></a></li>
+          
+            <li><a href="/read/es/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/spanish.svg"/> Español</span></a></li>
+          
+            <li><a href="/read/de/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/german.svg"/> Deutsch</span></a></li>
+          
+            <li><a href="/read/ru/"><span class="side-bar-item">&nbsp;&nbsp;<img style="width:22px;height:13px" src="/assets/vector/russian.svg"/> Русский</span></a></li>
+          
+        </ul>
+        
+      </li>
+    
+  </ul>
+</nav>
+
+    
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How to Use">
+    <meta itemprop="description" content="Guide: How to use RoboSats. A complete walkthrough RoboSats P2P Exchange">
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="http://0.0.0.0:4000/read/en/" class="u-url" itemprop="url">How to Use
+</a>
+          </h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><svg style="width:22px;height:16px;vertical-align:middle;fill:currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M256 0v128h128L256 0zM224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM272 416h-160C103.2 416 96 408.8 96 400C96 391.2 103.2 384 112 384h160c8.836 0 16 7.162 16 16C288 408.8 280.8 416 272 416zM272 352h-160C103.2 352 96 344.8 96 336C96 327.2 103.2 320 112 320h160c8.836 0 16 7.162 16 16C288 344.8 280.8 352 272 352zM288 272C288 280.8 280.8 288 272 288h-160C103.2 288 96 280.8 96 272C96 263.2 103.2 256 112 256h160C280.8 256 288 263.2 288 272z"/></svg> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#how-to-use-v050">How to Use (v0.5.0)</a><ul><li><a href="#how-to-buy-bitcoins-using-robosats-fastest-kyc-free-sats-in-the-west">How To Buy Bitcoins Using RoboSats: Fastest KYC Free Sats In The West</a></li><li><a href="#learn-how-to-use-robosats-p2p-exchange">Learn How To Use RoboSats P2P Exchange</a></li><li><a href="#welcome-to-my-robo-garage">Welcome to my Robo Garage</a></li></ul></li><li><a href="#how-to-use-v010">How to Use (v0.1.0)</a></li><li><a href="#user-generation-home-page">User Generation Home Page</a><ul><li><a href="#recovering-a-robot">Recovering a robot</a></li></ul></li><li><a href="#trade">Trade</a><ul><li><a href="#exploring-the-order-book">Exploring the Order Book</a></li><li><a href="#walkthrough-1-taking-an-order-as-a-buyer">Walkthrough-1: Taking an order as a buyer</a></li><li><a href="#walkthrough-2-making-an-order-as-a-seller">Walkthrough-2: Making an order as a seller</a></li></ul></li><li><a href="#collaborative-cancellation">Collaborative cancellation</a></li><li><a href="#disputes">Disputes</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h2 id="how-to-use-v050">How to Use (v0.5.0)</h2>
+
+<p><img src="https://user-images.githubusercontent.com/97640728/218118681-520e7fa6-52e9-4740-b488-1d294f833de6.png" alt="image" /></p>
+<h3 id="how-to-buy-bitcoins-using-robosats-fastest-kyc-free-sats-in-the-west"><a href="https://www.athena-alpha.com/how-to-buy-bitcoins-using-robosats/" target="_blank">How To Buy Bitcoins Using RoboSats: Fastest KYC Free Sats In The West</a></h3>
+<p>Athena Alpha’s full guide walks you through the full buying process step-by-step. It also answers any extra FAQs you might have and helps outline how brand new Bitcoin Beginners can get the deposit needed to make their first trade.</p>
+
+<p><img src="https://github.com/RoboSats/robosats/assets/64638670/0f73e57d-a7c4-454f-a5df-1e038e039af3" alt="sharerobosats1" /></p>
+<h3 id="learn-how-to-use-robosats-p2p-exchange"><a href="https://bitcoiner.guide/robosats/" target="_blank">Learn How To Use RoboSats P2P Exchange</a></h3>
+<p>QnA’s guide explains the importance of noKYC Bitcoin, breaks down some RoboSats jargon, gives a full feature explanation and a step by step guide to completing your first trade with RoboSats.</p>
+
+<p><img src="https://i0.wp.com/satoshisjournal.com/wp-content/uploads/2023/03/robosats.jpg" alt="image2" /></p>
+<h3 id="welcome-to-my-robo-garage"><a href="https://satoshisjournal.com/welcome-to-my-robo-garage/" target="_blank">Welcome to my Robo Garage</a></h3>
+<p>Will Schoellkopf’s guide published in Satoshi’s Journal is a real-world RoboSats example that isn’t edited to exclude missteps or bumps in the road on his quest to privately buy bitcoin. If you make it to the end, you will bear witness to the game theory of truly trading Bitcoin peer-to-peer. Join him on his journey down the RoboSats rabbit hole as he welcomes you to his new Robo Garage!</p>
+
+<h2 id="how-to-use-v010">How to Use (v0.1.0)</h2>
+<p>Full tutorial in tweets by @simplestBTCbook</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Enjoy this detailed new <a href="https://twitter.com/RoboSats">@RoboSats</a> Tutorial! <a href="https://t.co/CiizGINQ4f">pic.twitter.com/CiizGINQ4f</a></p>&mdash; SimplestBitcoinBook -Get ur 🔑&#39;s into Cold Storage (@SimplestBTCBook) <a href="https://twitter.com/SimplestBTCBook/status/1584103026733633537">October 23, 2022</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>Read full tweet thread without clutter and tracking in <a href="https://nitter.net/SimplestBTCBook/status/1584103026733633537">Nitter</a></p>
+
+<p>RoboSats is focused on user friendliness. The platform is totally self-explanatory, so one could say a tutorial is really not necessary. However, it really helps to feel comfortable when trading if you already know what are the next steps to come so nothing surprises you. After all, bitcoin p2p exchanges are very intimidating! Fear no more, RoboSats keeps it really simple and you simply cannot do things wrong! :D</p>
+
+<p>This document has two complete walkthroughs: 1) as a buyer that takes an order and; 2) as a seller that makes an order. Given that the platform explains to the user exactly everything in the menus, we are going to dedicate some lines to some tricks and give tips for safe trading in between.</p>
+
+<h2 id="user-generation-home-page">User Generation Home Page</h2>
+<p>RoboSats help users preserve their privacy by using newly generated avatars in every trade. Avatars are super easy to generate!</p>
+<div align="center">
+<img src="/assets/images/how-to-use/homepage-1.png" width="370" />
+</div>
+
+<p>RoboSats welcomes you right away with your unique robot avatar. The robot is deterministically generated based on the token you see below it. This token is all you need to recover the avatar in the future, so make sure to <strong>back it up safely!</strong></p>
+
+<p>The tokens are generated in your own browser. However, if you do not trust your machine randomness, you can also input your own entropy token. <em>Note that low entropy tokens are not valid.</em></p>
+
+<p>I was really not happy of being “HomelessCash”! :D So I just click on the dice icon to generate a new token and tap “Generate avatar” to get a new one</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/homepage-2.png" width="370" />
+</div>
+
+<p>Ah, “JoyfulPain”, so much better!! :)
+The token will live in your browser memory for some time, so you still might have a chance to copy it later by tapping in the profile icon in the bottom left corner. However, your browser will forget your token if you refresh or close it!</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/homepage-3.png" width="370" />
+</div>
+
+<p>It is best to write it down in paper… but that’s a lot of work!! Most often it is good enough to simply copy it to clipboard and save it somewhere else. <strong>If your browser crashes, your phone battery dies, or you lose connection during trading, you will need the token to log in again and continue with the trade!</strong></p>
+
+<h3 id="recovering-a-robot">Recovering a robot</h3>
+<p>To recover a backed-up token, simply replace the token in the textbox and tap “Generate Robot”. The site will greet you with “We found your Robot avatar. Welcome back!”</p>
+
+<h2 id="trade">Trade</h2>
+
+<p>In RoboSats you can make new orders or take orders made by others. To be an <em>order maker</em> simply click on “Create Order” in the homepage. To take an order, click on “View Book” so you can explore the orders created by other robots.</p>
+
+<h3 id="exploring-the-order-book">Exploring the Order Book</h3>
+
+<p>We click on “View book” and have a look at the orders in the book page.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/book-desktop.png" />
+</div>
+
+<p>On a desktop browser, you can see at a glance all of the revelant information about the orders so you can decide which one to take. By default, the book will show “ANY” type of order (buy and sell) and “ANY” currency. Use the drop down menus at the top to select your preferences.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/book-phone.png" width="370" />
+</div>
+
+<p>On a smartphone, however, not all of the columns fit on the screen. The nicknames, the type of order, the payment method and the exchange rate are hidden by default. You can tap on any column and tap “Show columns” to select what columns to make visible.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/book-show-columns.png" width="230" />
+</div>
+
+<p>Another trick is to do a long tap or a swipe:</p>
+<ul>
+  <li>On Avatar: you get Nickname and Activity status.</li>
+  <li>On Amount: you get whether the maker is a seller or a buyer.</li>
+  <li>On Currency: you get the preferred payment methods.</li>
+  <li>On premium: you get the current exchange rate.
+Example of long tapping/swiping above the currency:</li>
+</ul>
+
+<div align="center">
+<img src="/assets/images/how-to-use/book-tap-1.png" width="370" />
+</div>
+
+<p>Example of long tapping/swiping above the premium:</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/book-tap-2.png" width="370" />
+</div>
+
+<p>You can also tap on any order to see the full order page:</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/order-page-1.png" width="370" />
+</div>
+
+<p>Every order has an expiration counter. By default, in RoboSats v0.1.0 new orders will stay public in the book for 24 hours.</p>
+
+<h3 id="walkthrough-1-taking-an-order-as-a-buyer">Walkthrough-1: Taking an order as a buyer</h3>
+
+<p>When you are decided for an order to take simply tap the “Take Order” button. You will see the contract box. Follow the contract box indications until you complete the trade! :)</p>
+
+<p>First thing is to lock a small fidelity bond (just 3% of the trade amount by default), so the seller knows you can be trusted. The satoshis in this bond will just freeze in your wallet. If you try to cheat or cancel unilaterally, you will lose the satoshis locked in the bond.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-1.png" width="370" />
+</div>
+
+<p>Scan or copy the invoice into your lightning wallet. It might show as a payment that is on transit, freeze or even seemingly break your wallet. You should always check on the RoboSats website whether the bond has been locked (your wallet will probably not tell you! Check <a href="https://github.com/RoboSats/robosats/issues/44">wallet compatibility list</a>)</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-2.png" width="370" />
+</div>
+
+<p>As soon as our bond is locked, RoboSats will ask you to provide a lightning invoice to send you the satoshis. Generate an invoice with the exact amount in your lightning wallet and submit it.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-3.png" width="370" />
+</div>
+
+<p>While you are submitting your payout invoice, the seller is asked to lock the trade escrow hold invoice. If you are faster than him, you would have to wait. Otherwise, you would already be able to chat with him.</p>
+
+<p>There is a time limit of 3 hours to submit the invoice (buyer) and lock the trade escrow (seller). If the time runs out, the order will expire and the robot who did not follow with the contract obligations will lose the bond. This is a mechanism that helps prevent fake order spamming, wasting time of counterparts and DDOSing the order book.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-4.png" width="370" />
+</div>
+
+<p>As soon as the seller locks the satoshis, it is safe to send the fiat currency! As a buyer, you will have to ask the seller for the details to send fiat. Only share the strictly needed information about yourself to not compromise your privacy. Remember, in RoboSats v0.1.0 this chat is memoryless, so the conversation will be lost if you refresh the browser.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-5.png" width="370" />
+</div>
+
+<p>There is a time limit of 24 hours to complete the fiat exchange. If the time runs out, the order will expire and a dispute will be opened automatically. To avoid order expiration, <strong>use always instant fiat payment methods</strong>. For example, sending cash by ordinary mail is slow and will always trigger a dispute in v0.1.0. In the future longer expiry times will be possible.</p>
+
+<p>As soon as you have sent the fiat, you should tap on “Confirm fiat sent” button. After that, the seller will have to confirm the fiat was received. As soon as he confirms the trade is finished and you will be paid out to your lightning wallet. You might see that it is “sending satoshis to buyer” but usually it is so fast you will simply see this screen. Enjoy your sats!</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-6.png" width="370" />
+</div>
+
+<p>Rating the platform and leaving tips for improvement in our Telegram group or Github Issues is super appreciated!</p>
+
+<h3 id="walkthrough-2-making-an-order-as-a-seller">Walkthrough-2: Making an order as a seller</h3>
+
+<p>It might happen that there are no active orders for the positioning and currency you want. In this case, there is no orders to SELL bitcoin for GBP.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/book-no-orders.png" width="370" />
+</div>
+
+<p>We can create the order exactly has we want it. But mind that you need to publish an order that others want to take too!</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/maker-page.png" width="370" />
+</div>
+
+<p>In the maker page you are only required to enter the currency, order type (buy/sell) and amount. However, it is best practice to specify the payment methods you allow. It might be also helpful to set a premium/discount for your order to be taken faster. Remember that as a seller you can incentivze buyers to take your order by lowering the premium. If there are too many buyers, however, you can increase the premium to have a trading profit. Alternatively, you can set a fixed amount of Satoshis.</p>
+
+<p><em>Limits: in Robosats v0.1.0 an order cannot be smaller than 20,000 Satoshis. It cannot be larger than 4,000,000 Satoshis in order to avoid lightning routing failures. This limit will be increased in the future.</em></p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-7.png" width="370" />
+</div>
+
+<p>You have to copy or scan the invoice with your lightning wallet in order to lock your fidelity maker bond (just 1% of the trade amount)). By locking this bond, the takers know you can be trusted and are committed to follow with this trade. In your wallet it might show as a payment that is on transit, freeze or even seemingly break your wallet. You should always check on the RoboSats website whether the bond has been locked (your wallet will probably not tell you! Check <a href="https://github.com/RoboSats/robosats/issues/44">wallet compatibility list</a>)</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-8.png" width="370" />
+</div>
+
+<p>Your order will be public for 24 hours. You can check the time left to expiration by checking the “Order” tab. It can be canceled at any time without penalty before it is taken by another robot. Keep the contract tab open to be notified <a href="https://github.com/RoboSats/robosats/raw/main/frontend/static/assets/sounds/taker-found.mp3">with this sound</a>. It might be best to do this on a desktop computer and turn on the volume, so you do not miss when your order is taken. It might take long! Maybe you even forget! You can also enable telegram notifications by pressing “Enable Telegram Notification” and then pressing “Start” in the chat. You will receive a welcome message as confirmation of the enabled notifications. Another message will be sent once a taker for your order is found.</p>
+
+<p><em>Note: If you forget your order and a robot takes it and locks his fidelity bond, you risk losing your own fidelity bond by not fulfilling the next contract steps.</em></p>
+
+<p>In the contract tab you can also see how many other orders are public for the same currency. You can also see how well does your premium ranks among all other orders for the same currency.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-9.png" width="370" />
+</div>
+
+<p>Hurray, someone took the order! They have 4 minutes to lock a taker fidelity bond, if they do not proceed, your order will be made public again automatically.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-10.png" width="370" />
+</div>
+
+<p>As soon as the taker locks the bond, you will have to lock the trade escrow. This is a lightning hold invoice and will also freeze in your wallet. It will be released only when you confirm you received the fiat payment or if there is a dispute between you and the taker.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-11.png" width="370" />
+</div>
+
+<p>Once you lock the trade escrow and the buyer submit the payout invoice it is safe to send fiat! Share with the buyer the minimal information needed to send you fiat. Remember, in RoboSats v0.1.0 this chat is memoryless, so the conversation will be lost if you refresh the browser.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-12.png" width="370" />
+</div>
+
+<p>The buyer has just confirmed he did his part! Now check until the fiat is in your account.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-13.png" width="370" />
+</div>
+
+<p>By confirming that you received the fiat, the escrow will be charged and sent to the buyer. So only do this once you are 100% sure the fiat is with you!</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-14.png" width="370" />
+</div>
+
+<p>All done!! :D</p>
+
+<h2 id="collaborative-cancellation">Collaborative cancellation</h2>
+
+<p>After the trade escrow has been posted and before the buyer confirms he sent the fiat it is possible to cancel the order. It might just happen that you both do not have a common way to send and receive fiat after all. You can agree to tap on the “Collaborative cancel” button. After the “Fiat sent” button is pressed by the buyer, the only way to cancel an order is by opening a dispute and involving the staff.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-15.png" width="370" />
+</div>
+
+<p>This is totally not recommended, one of the two traders would lose his fidelity bond except in exceptional cases (up to the discretion of the staff)</p>
+
+<h2 id="disputes">Disputes</h2>
+
+<p>Misunderstandings happen. But also, there might be people willing to try to scam others. In this case <em>MakeshiftSource875</em> thought he could get away by not confirming he received the fiat, as if he was going to be able to keep the satoshis.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-16.png" width="370" />
+</div>
+
+<p>This is in fact not possible, as a dispute will be automatically open at expiration. However, if you know something fishy is going on, you should open a dispute.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-17.png" width="370" />
+</div>
+
+<p>In RoboSats v0.1.0 the dispute pipeline is not fully implemented in the web. Therefore, most contact and resolution has to happen through alternative methods. Be sure to send a contact method to the staff. You will have to write down full statement of facts, remember that the staff cannot read your private chat to judge about what happened. It is useful to send images/screenshots. For maximum privacy, these can be encrypted via PGP key and uploaded into any anonymous file sharing system.</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-18.png" width="370" />
+</div>
+
+<p>Once the staff has resolved the dispute, the final order status will display the resolution. Make sure to check on the contact method provided to the staff. If you are a dispute winner, the staff will ask you again for a lightning network invoice to send the payout+bond (Your old invoice is probably expired!)</p>
+
+<div align="center">
+<img src="/assets/images/how-to-use/contract-box-19.png" width="370" />
+</div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://reddit.com/r/robosats" rel="nofollow noopener noreferrer"><i class="fa-brands fa-reddit-square" aria-hidden="true"></i> Reddit</a></li>
+        
+      
+        
+          <li><a href="https://t.me/robosats" rel="nofollow noopener noreferrer"><i class="fa-brands fa-telegram" aria-hidden="true"></i> Telegram</a></li>
+        
+      
+        
+          <li><a href="https://github.com/RoboSats/robosats" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="mailto:robosats-social@protonmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">
+  &copy; 2026 RoboSats. Powered by
+  <a href="https://bitcoin.org/bitcoin.pdf" rel="nofollow">
+    <svg style="width:20px;height:20px;vertical-align:middle;fill:currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zm-141.651-35.33c4.937-32.999-20.191-50.739-54.55-62.573l11.146-44.702-27.213-6.781-10.851 43.524c-7.154-1.783-14.502-3.464-21.803-5.13l10.929-43.81-27.198-6.781-11.153 44.686c-5.922-1.349-11.735-2.682-17.377-4.084l.031-.14-37.53-9.37-7.239 29.062s20.191 4.627 19.765 4.913c11.022 2.751 13.014 10.044 12.68 15.825l-12.696 50.925c.76.194 1.744.473 2.829.907-.907-.225-1.876-.473-2.876-.713l-17.796 71.338c-1.349 3.348-4.767 8.37-12.471 6.464.271.395-19.78-4.937-19.78-4.937l-13.51 31.147 35.414 8.827c6.588 1.651 13.045 3.379 19.4 5.006l-11.262 45.213 27.182 6.781 11.153-44.733a1038.209 1038.209 0 0 0 21.687 5.627l-11.115 44.523 27.213 6.781 11.262-45.128c46.404 8.781 81.299 5.239 95.986-36.727 11.836-33.79-.589-53.281-25.004-65.991 17.78-4.098 31.174-15.792 34.747-39.949zm-62.177 87.179c-8.41 33.79-65.308 15.523-83.755 10.943l14.944-59.899c18.446 4.603 77.6 13.717 68.811 48.956zm8.417-87.667c-7.673 30.736-55.031 15.12-70.393 11.292l13.548-54.327c15.363 3.828 64.836 10.973 56.845 43.035z"/>
+    </svg>
+    Bitcoin
+  </a>
+  &amp;
+  <a href="https://lightning.network/lightning-network-paper.pdf" rel="nofollow">
+    <svg style="width:20px;height:20px;vertical-align:middle;fill:currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+      <path d="M240.5 224H352C365.3 224 377.3 232.3 381.1 244.7C386.6 257.2 383.1 271.3 373.1 280.1L117.1 504.1C105.8 513.9 89.27 514.7 77.19 505.9C65.1 497.1 60.7 481.1 66.59 467.4L143.5 288H31.1C18.67 288 6.733 279.7 2.044 267.3C-2.645 254.8 .8944 240.7 10.93 231.9L266.9 7.918C278.2-1.92 294.7-2.669 306.8 6.114C318.9 14.9 323.3 30.87 317.4 44.61L240.5 224z"/>
+    </svg>
+    Lightning
+  </a>
+  .
+</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
+

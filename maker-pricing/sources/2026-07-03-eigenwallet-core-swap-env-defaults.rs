@@ -1,0 +1,180 @@
+use crate::config::RefundPolicy;
+use crate::env::{Mainnet, Testnet};
+use anyhow::{Context, Result};
+use libp2p::Multiaddr;
+use rust_decimal::Decimal;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
+use swap_fs::{system_config_dir, system_data_dir};
+use url::Url;
+
+/*
+Here's the GPG signature of the donation address.
+
+Signed by the public key present in `utils/gpg_keys/binarybaron_and_einliterflasche.asc`
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+4A1tNBcsxhQA7NkswREXTD1QGz8mRyA7fGnCzPyTwqzKdDFMNje7iHUbGhCetfVUZa1PTuZCoPKj8gnJuRrFYJ2R2CEzqbJ is our donation address (signed by binarybaron)
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCAAdFiEEBRhGD+vsHaFKFVp7RK5vCxZqrVoFAmjxV4YACgkQRK5vCxZq
+rVrFogv9F650Um1TsPlqQ+7kdobCwa7yH5uXOp1p22YaiwWGHKRU5rUSb6Ac+zI0
+3Io39VEoZufQqXqEqaiH7Q/08ABQR5r0TTPtSLNjOSEQ+ecClwv7MeF5CIXZYDdB
+AlEOnlL0CPfA24GQMhfp9lvjNiTBA2NikLARWJrc1JsLrFMK5rHesv7VHJEtm/gu
+We5eAuNOM2k3nAABTWzLiMJkH+G1amJmfkCKkBCk04inA6kZ5COUikMupyQDtsE4
+hrr/KrskMuXzGY+rjP6NhWqr/twKj819TrOxlYD4vK68cZP+jx9m+vSBE6mxgMbN
+tBVdo9xFVCVymOYQCV8BRY8ScqP+YPNV5d6BMyDH9tvHJrGqZTNQiFhVX03Tw6mg
+hccEqYP1J/TaAlFg/P4HtqsxPBZD6x3IdSxXhrJ0IjrqLpVtKyQlTZGsJuNjFWG8
+LKixaxxR7iWsyRZVCnEqCgDN8hzKZIE3Ph+kLTa4z4mTNEYyWUNeKRrFrSxKvEOK
+KM0Pp53f
+=O/zf
+-----END PGP SIGNATURE-----
+*/
+pub const DEFAULT_DEVELOPER_TIP_ADDRESS_MAINNET: &str = "4A1tNBcsxhQA7NkswREXTD1QGz8mRyA7fGnCzPyTwqzKdDFMNje7iHUbGhCetfVUZa1PTuZCoPKj8gnJuRrFYJ2R2CEzqbJ";
+pub const DEFAULT_DEVELOPER_TIP_ADDRESS_STAGENET: &str = "54ZYC5tgGRoKMJDLviAcJF2aHittSZGGkFZE6wCLkuAdUyHaaiQrjTxeSyfvxycn3yiexL4YNqdUmHuaReAk6JD4DQssQcF";
+
+pub const DEFAULT_MIN_BUY_AMOUNT: f64 = 0.002f64;
+pub const DEFAULT_MAX_BUY_AMOUNT: f64 = 0.02f64;
+pub const DEFAULT_SPREAD: f64 = 0.02f64;
+
+pub const KRAKEN_PRICE_TICKER_WS_URL: &str = "wss://ws.kraken.com";
+pub const BITFINEX_PRICE_TICKER_WS_URL: &str = "wss://api-pub.bitfinex.com/ws/2";
+pub const KUCOIN_PRICE_TICKER_REST_URL: &str = "https://api.kucoin.com/api/v1/bullet-public";
+pub const EXOLIX_PRICE_TICKER_REST_URL: &str = "https://exolix.com/api/v2/rate";
+
+pub fn default_rendezvous_points() -> Vec<Multiaddr> {
+    vec![
+        "/dns4/discovery.eigenwallet.org/tcp/443/wss/p2p/12D3KooWGRvf7qVQDrNR5nfYD6rKrbgeTi9x8RrbdxbmsPvxL4mw".parse().unwrap(),
+        "/onion3/3xl2zfur4tpebogsrgn3l7l2illzkhwi3755jplmycmn4q77nxsrl6qd:8888/p2p/12D3KooWGRvf7qVQDrNR5nfYD6rKrbgeTi9x8RrbdxbmsPvxL4mw".parse().unwrap(),
+        "/dns4/rendezvous.atomicworld.fun/tcp/443/wss/p2p/12D3KooWMc39w7bZz4RLmJKuUiK9YkbKoEHACZWcL71XNns5dPuD".parse().unwrap(),
+        "/onion3/m2iuwp3fvdlqtlqqaz3egrzjl5uehmdhjgmzhznvjoudljl2xzjaomyd:8890/p2p/12D3KooWMc39w7bZz4RLmJKuUiK9YkbKoEHACZWcL71XNns5dPuD".parse().unwrap(),
+        "/dns4/dht.stealthswap.ninja/tcp/443/wss/p2p/12D3KooWGjcxdpsEWspGGwkQJ9BRJQjtBQFsLk36zJxrXSBPQWov".parse().unwrap(),
+        "/onion3/m6rboz5lv4wxldgybgox4pr4s6xci3h2exi5nogxaox762xji2gokuad:8891/p2p/12D3KooWGjcxdpsEWspGGwkQJ9BRJQjtBQFsLk36zJxrXSBPQWov".parse().unwrap(),
+        "/dns4/discovery2.eigenwallet.org/tcp/443/wss/p2p/12D3KooWA6cnqJpVnreBVnoro8midDL9Lpzmg8oJPoAGi7YYaamE".parse().unwrap(),
+        "/onion3/av2jauifny7dgpvzhsnhra3cwivf6ofaefxvwhhuh5y7hsolabehhaad:8888/p2p/12D3KooWA6cnqJpVnreBVnoro8midDL9Lpzmg8oJPoAGi7YYaamE".parse().unwrap(),
+    ]
+}
+
+pub fn default_electrum_servers_mainnet() -> Vec<Url> {
+    vec![
+        Url::parse("tcp://electrum.eigenwallet.org:22293")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://electrum.blockstream.info:50002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://bitcoin.stackwallet.com:50002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://b.1209k.com:50002").expect("default electrum server url to be valid"),
+        Url::parse("ssl://mainnet.foundationdevices.com:50002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("tcp://bitcoin.lu.ke:50001").expect("default electrum server url to be valid"),
+        Url::parse("ssl://electrum.coinfinity.co:50002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("tcp://electrum1.bluewallet.io:50001")
+            .expect("default electrum server url to be valid"),
+        Url::parse("tcp://electrum2.bluewallet.io:50001")
+            .expect("default electrum server url to be valid"),
+        Url::parse("tcp://electrum3.bluewallet.io:50001")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://btc-electrum.cakewallet.com:50002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("tcp://bitcoin.aranguren.org:50001")
+            .expect("default electrum server url to be valid"),
+    ]
+}
+
+pub fn default_electrum_servers_testnet() -> Vec<Url> {
+    vec![
+        Url::parse("ssl://blackie.c3-soft.com:57006")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://v22019051929289916.bestsrv.de:50002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("tcp://v22019051929289916.bestsrv.de:50001")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://electrum.blockstream.info:60002")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://blockstream.info:993").expect("default electrum server url to be valid"),
+        Url::parse("tcp://testnet.aranguren.org:51001")
+            .expect("default electrum server url to be valid"),
+        Url::parse("ssl://testnet.aranguren.org:51002")
+            .expect("default electrum server url to be valid"),
+    ]
+}
+
+pub trait GetDefaults {
+    fn get_config_file_defaults() -> Result<Defaults>;
+}
+
+pub struct Defaults {
+    pub config_path: PathBuf,
+    pub data_dir: PathBuf,
+    pub listen_address_tcp: Multiaddr,
+    pub electrum_rpc_urls: Vec<Url>,
+    pub price_ticker_ws_url_kraken: Url,
+    pub price_ticker_ws_url_bitfinex: Url,
+    pub price_ticker_rest_url_kucoin: Url,
+    pub price_ticker_rest_url_exolix: Url,
+    pub bitcoin_confirmation_target: u16,
+    pub use_mempool_space_fee_estimation: bool,
+    pub developer_tip: Decimal,
+    pub refund_policy: RefundPolicy,
+}
+
+impl GetDefaults for Mainnet {
+    fn get_config_file_defaults() -> Result<Defaults> {
+        let defaults = Defaults {
+            config_path: default_asb_config_dir()?
+                .join("mainnet")
+                .join("config.toml"),
+            data_dir: default_asb_data_dir()?.join("mainnet"),
+            listen_address_tcp: Multiaddr::from_str("/ip4/0.0.0.0/tcp/9939")?,
+            electrum_rpc_urls: default_electrum_servers_mainnet(),
+            price_ticker_ws_url_kraken: Url::parse(KRAKEN_PRICE_TICKER_WS_URL)?,
+            price_ticker_ws_url_bitfinex: Url::parse(BITFINEX_PRICE_TICKER_WS_URL)?,
+            price_ticker_rest_url_kucoin: Url::parse(KUCOIN_PRICE_TICKER_REST_URL)?,
+            price_ticker_rest_url_exolix: Url::parse(EXOLIX_PRICE_TICKER_REST_URL)?,
+            bitcoin_confirmation_target: 1,
+            use_mempool_space_fee_estimation: true,
+            developer_tip: Decimal::ZERO,
+            refund_policy: RefundPolicy::default(),
+        };
+
+        Ok(defaults)
+    }
+}
+
+impl GetDefaults for Testnet {
+    fn get_config_file_defaults() -> Result<Defaults> {
+        let defaults = Defaults {
+            config_path: default_asb_config_dir()?
+                .join("testnet")
+                .join("config.toml"),
+            data_dir: default_asb_data_dir()?.join("testnet"),
+            listen_address_tcp: Multiaddr::from_str("/ip4/0.0.0.0/tcp/9839")?,
+            electrum_rpc_urls: default_electrum_servers_testnet(),
+            price_ticker_ws_url_kraken: Url::parse(KRAKEN_PRICE_TICKER_WS_URL)?,
+            price_ticker_ws_url_bitfinex: Url::parse(BITFINEX_PRICE_TICKER_WS_URL)?,
+            price_ticker_rest_url_kucoin: Url::parse(KUCOIN_PRICE_TICKER_REST_URL)?,
+            price_ticker_rest_url_exolix: Url::parse(EXOLIX_PRICE_TICKER_REST_URL)?,
+            bitcoin_confirmation_target: 1,
+            use_mempool_space_fee_estimation: true,
+            developer_tip: Decimal::ZERO,
+            refund_policy: RefundPolicy::default(),
+        };
+
+        Ok(defaults)
+    }
+}
+
+fn default_asb_config_dir() -> Result<PathBuf> {
+    system_config_dir()
+        .map(|dir| Path::join(&dir, "asb"))
+        .context("Could not generate default config file path")
+}
+
+fn default_asb_data_dir() -> Result<PathBuf> {
+    system_data_dir()
+        .map(|dir| Path::join(&dir, "asb"))
+        .context("Could not generate default config file path")
+}

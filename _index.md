@@ -52,6 +52,7 @@ with stronger anonymity guarantees.
 - [x] Patterns: [[patterns/signer-federation-trust]], [[patterns/middle-chain-swap-settlement]], [[patterns/tss-custody-vault]], [[patterns/slip-based-fees]], [[patterns/attestation-bridge]], [[patterns/lock-mint-bridging]], [[patterns/atomic-swaps-vs-middle-chain]], [[patterns/instant-swap-aggregator]], [[patterns/ring-signatures]], [[patterns/offshore-banking-crypto]], [[patterns/collateralised-synthetic-assets]], [[patterns/privacy-stablecoin]], [[patterns/tee-based-privacy]], [[patterns/encrypted-smart-contracts]], [[patterns/viewing-keys]], [[patterns/private-tokens]], [[patterns/cross-chain-privacy]], [[patterns/monero-bridge]]
 - [x] Trust-model deep dives: [[patterns/serai-trust-model]], [[patterns/thorchain-trust-model]], [[patterns/wormhole-trust-model]]
 - [x] Metrics: [[metrics/swap-volume]], [[metrics/privacy-protocol-comparison]]
+- [x] **Maker pricing research** :: complete (2026-07-03) :: [[maker-pricing/_index]] — how makers configure pricing in 6 P2P DEX/atomic-swap protocols (Bisq, Haveno, Komodo DeFi, RoboSats, eigenwallet, Farcaster). Cross-protocol comparison: [[maker-pricing/metrics/maker-pricing-parameters]]
 
 ## Research questions
 

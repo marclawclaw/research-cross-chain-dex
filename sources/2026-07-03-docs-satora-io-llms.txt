@@ -1,0 +1,75 @@
+# Satora Swaps Docs
+
+## Docs
+
+- [Hash Time-Locked Contracts (HTLC)](https://docs.satora.io/advanced/htlc.md): How HTLCs enable trustless atomic swaps
+- [Swap State Machine](https://docs.satora.io/advanced/state-machine.md): Understanding swap states and transitions
+- [Get the delegate cosigner public key.](https://docs.satora.io/api-reference/delegate/cosigner-pk.md): Clients need this key when preparing delegate PSBTs so the backend can participate in the batch ceremony as a cosigner.
+- [Settle a delegated batch.](https://docs.satora.io/api-reference/delegate/settle.md): The client prepares and signs delegate PSBTs (intent + forfeits), then POSTs them here. The backend reconstructs the `Delegate` struct and runs the full Ark batch ceremony on the client's behalf.
+- [Get available EVM tokens from 1inch for supported chains](https://docs.satora.io/api-reference/evm-tokens.md)
+- [Get supported EVM chains](https://docs.satora.io/api-reference/evm-tokens/chains.md)
+- [Health check endpoint](https://docs.satora.io/api-reference/health.md)
+- [Return the current cached Median Time Past (MTP) and tip height.](https://docs.satora.io/api-reference/mtp.md)
+- [Get a quote for swapping BTC to/from EVM tokens](https://docs.satora.io/api-reference/quote.md): Specify exactly one of source_amount or target_amount. Amounts are in the smallest unit of the respective token (satoshis for BTC, raw units for EVM tokens).
+- [Return the configured support agent npubs.](https://docs.satora.io/api-reference/support-agents.md)
+- [Return all supported swap pairs with their limits (in satoshis) and base fee percentages.](https://docs.satora.io/api-reference/swap-pairs.md)
+- [Collaboratively refund spendable VTXOs.](https://docs.satora.io/api-reference/swap/arkade-evm/id/collab-refund.md): The client builds an offchain transaction (ark_tx + checkpoints) spending the VHTLC via the `refund_script` leaf, signs as sender, and sends the partially-signed PSBTs here. The server cosigns as receiver and returns the countersigned PSBTs. The client then submits to Arkade for the server (3rd) sig…
+- [Collaboratively refund recoverable VTXOs via the delegate batch flow.](https://docs.satora.io/api-reference/swap/arkade-evm/id/collab-refund-delegate.md): The client prepares delegate PSBTs (intent_proof + forfeits) spending the VHTLC via the `refund_script` leaf, signs as sender, and sends the partially-signed PSBTs here. The server cosigns as receiver and returns the countersigned PSBTs. The client then calls `/api/delegate/settle` to complete the b…
+- [Create a chain-agnostic Arkade-to-EVM swap.](https://docs.satora.io/api-reference/swap/arkade/evm.md)
+- [Create a new Arkade-to-Lightning swap.](https://docs.satora.io/api-reference/swap/arkade/lightning.md): Flow: 1. User provides a Lightning invoice they want paid 2. Server creates a Boltz submarine swap 3. User funds the Arkade VHTLC (returned in response) 4. Server claims the Arkade VHTLC and funds the Boltz VHTLC 5. Boltz pays the Lightning invoice
+- [Create a new Bitcoin (on-chain) to Arkade swap request](https://docs.satora.io/api-reference/swap/bitcoin/arkade.md): The user provides an on-chain BTC amount to swap and receives Arkade VTXOs. Flow: 1. User sends BTC to the Taproot HTLC address returned 2. After 1 confirmation, server creates Arkade VHTLC for user 3. User claims Arkade VHTLC with secret, revealing it 4. Server claims on-chain BTC with the revealed…
+- [Create a chain-agnostic Bitcoin-to-EVM swap.](https://docs.satora.io/api-reference/swap/bitcoin/evm.md)
+- [Create a chain-agnostic EVM-to-Arkade swap.](https://docs.satora.io/api-reference/swap/evm/arkade.md)
+- [Create a chain-agnostic EVM-to-Bitcoin swap.](https://docs.satora.io/api-reference/swap/evm/bitcoin.md)
+- [Create a chain-agnostic EVM-to-Lightning swap.](https://docs.satora.io/api-reference/swap/evm/lightning.md): Flow: 1. User provides their Lightning invoice (they want to receive BTC) 2. Server prepares Boltz submarine swap to pay the invoice 3. User funds EVM HTLCErc20 with tokens 4. Server pays Lightning invoice via Boltz (gets preimage) 5. Server claims EVM HTLCErc20 using preimage
+- [Get swap status and details by ID](https://docs.satora.io/api-reference/swap/id.md)
+- [Claims an EVM-targeted swap gaslessly via the HTLCCoordinator contract.](https://docs.satora.io/api-reference/swap/id/claim-gasless.md): Supports Arkade-to-EVM, Lightning and Bitcoin-to-EVM swaps. The server submits `coordinator.redeemAndExecute` on the client's behalf, using the client's EIP-712 signature and secret.
+- [Collaboratively refund an EVM HTLC before timelock expiry.](https://docs.satora.io/api-reference/swap/id/collab-refund-evm.md): The client signs a coordinator-level `CollabRefund` EIP-712 message authorizing the refund parameters. The server cosigns with an HTLC-level `Refund` signature (as claimAddress, waiving the timelock) and submits the transaction on-chain.
+- [Get EIP-712 parameters for collaborative EVM HTLC refund.](https://docs.satora.io/api-reference/swap/id/collab-refund-evm/params.md): Returns the addresses, amounts, and struct fields the client needs to construct and sign the `CollabRefund` EIP-712 typed data. The client signs this, then POSTs the signature to the collab-refund-evm endpoint.
+- [Fund an EVM-sourced swap gaslessly via Permit2.](https://docs.satora.io/api-reference/swap/id/fund-gasless.md): The server submits the `executeAndCreateWithPermit2` transaction on the depositor's behalf, pulling tokens via the depositor's Permit2 signature. If an EIP-2612 permit is provided, the server first submits that to approve the Permit2 contract.
+- [Returns the gasless claim data for an EVM-targeted swap.](https://docs.satora.io/api-reference/swap/id/redeem-and-swap-calldata.md): For non-WBTC targets: fetches fresh 1inch DEX calldata with `receiver = destination`. For WBTC-direct targets: returns only the gasless fee and calls_hash (no DEX data).
+- [Returns calldata to refund an expired EVM-to-Arkade HTLC via the coordinator.](https://docs.satora.io/api-reference/swap/id/refund-and-swap-calldata.md): Two modes: - `mode=swap-back` (default): calls `refundAndExecute` — refund WBTC from expired HTLC, swap   WBTC → source token via 1inch, sweep to caller. - `mode=direct`: calls `refundTo` — refund WBTC directly to caller (no DEX).
+- [Returns structured data for funding an EVM-to-BTC swap via Permit2.](https://docs.satora.io/api-reference/swap/id/swap-and-lock-calldata-permit2.md): Instead of pre-encoded calldata, this returns the individual components so the SDK can construct the Permit2 EIP-712 signature and `executeAndCreateWithPermit2` calldata client-side.
+- [Create a new Lightning-to-Arkade swap.](https://docs.satora.io/api-reference/swap/lightning/arkade.md): Flow: 1. User pays the Lightning invoice returned 2. Server receives BTC via Boltz and creates Arkade VHTLC for user 3. User claims Arkade VHTLC with secret, revealing it 4. Server claims Boltz VHTLC with the revealed secret
+- [Create a chain-agnostic Lightning-to-EVM swap.](https://docs.satora.io/api-reference/swap/lightning/evm.md)
+- [Recover swaps by deriving user_id keys from an Xpub](https://docs.satora.io/api-reference/swap/recover.md): This endpoint allows clients to recover their swap history after importing a mnemonic. The client provides an Xpub they used to derive `user_id`s, and the server derives `user_id` keys at m/9419/121923/<index> from the requested start index until the server-owned gap limit or scan cap is reached.
+- [Get list of available tokens for swaps.](https://docs.satora.io/api-reference/tokens.md): Optionally pass `source_chain` + `source_token` **or** `target_chain` + `target_token` to filter the response to valid counterparty tokens.
+- [Return the current git tag and commit hash.](https://docs.satora.io/api-reference/version.md)
+- [Create a new VTXO swap](https://docs.satora.io/api-reference/vtxo-swap.md)
+- [Estimate fee for VTXO swap](https://docs.satora.io/api-reference/vtxo-swap/estimate.md)
+- [Get VTXO swap by ID](https://docs.satora.io/api-reference/vtxo-swap/id.md)
+- [API, SDK & Iframe](https://docs.satora.io/api-sdk.md): Integrate Satora Swaps into your application using our TypeScript SDK, REST API, or iframe embed
+- [BTC → EVM](https://docs.satora.io/create-swaps/btc-to-evm.md): Swap any BTC variant (Lightning, on-chain, Arkade) to any ERC-20 token on supported EVM chains
+- [USDT to Lightning](https://docs.satora.io/create-swaps/evm-to-btc.md): Buying BTC with USDC or USDT
+- [Lightning ↔ Arkade](https://docs.satora.io/create-swaps/lightning-arkade.md): Swap between Lightning and Arkade VTXOs in both directions for instant, low-fee Bitcoin transfers.
+- [Onchain → Arkade](https://docs.satora.io/create-swaps/onchain-to-arkade.md): Create a swap from on-chain Bitcoin to Arkade VTXOs for instant, low-fee transactions.
+- [Onchain → tBTC](https://docs.satora.io/create-swaps/onchain-to-tbtc.md): Swap on-chain Bitcoin (L1) to tBTC on Ethereum or Arbitrum.
+- [Buttons](https://docs.satora.io/design/buttons.md): Button system - variants, states, and sizing
+- [Logo, Motto & Colors](https://docs.satora.io/design/logo-colors.md): Satora logo usage, brand motto, and color palette
+- [Media Kit](https://docs.satora.io/design/media.md): Official logos, icons, and assets for press and partner use
+- [Textfields & Inputs](https://docs.satora.io/design/textfields-inputs.md): Input styles, focus states, and field patterns
+- [Typography & Spacing](https://docs.satora.io/design/typography.md): Font families, type scale, spacing tokens, and icon usage
+- [Gasless & Fees](https://docs.satora.io/faq/gasless-and-fees.md): Questions about gasless execution and fee structure
+- [General](https://docs.satora.io/faq/general.md): General questions about Satora Swaps
+- [Integration](https://docs.satora.io/faq/integration.md): Questions about integrating the Satora Swaps SDK
+- [Cookie Policy](https://docs.satora.io/faq/legal/lendasat/cookies.md): Cookie Policy for Lendasat
+- [Impressum](https://docs.satora.io/faq/legal/lendasat/impressum.md): Company information for Lendasat
+- [Privacy Policy](https://docs.satora.io/faq/legal/lendasat/privacy.md): Privacy Policy for Lendasat
+- [Terms of Service](https://docs.satora.io/faq/legal/lendasat/terms.md): Lendasat Terms of Service
+- [Security](https://docs.satora.io/faq/security.md): Questions about Satora Swaps security and fund safety
+- [Troubleshooting](https://docs.satora.io/faq/troubleshooting.md): Common issues and how to resolve them
+- [Getting Started](https://docs.satora.io/getting-started.md): Quick start guide for developers integrating Satora Swaps
+- [Error Codes](https://docs.satora.io/handle-failures/error-codes.md): Complete reference of all API and SDK error codes with solutions.
+- [Recover Swaps from Seed](https://docs.satora.io/handle-failures/recover-swaps-from-seed.md): Restore and recover pending swaps using your mnemonic seed phrase.
+- [Refund EVM HTLC](https://docs.satora.io/handle-failures/refund-evm-htlc.md): Refund tokens locked in an EVM HTLC smart contract when a swap fails or times out.
+- [Refund Onchain HTLC](https://docs.satora.io/handle-failures/refund-onchain-htlc.md): Refund funds locked in an onchain Bitcoin HTLC when a swap fails or times out.
+- [Welcome to Satora Swaps](https://docs.satora.io/index.md): Instant, trustless Bitcoin to EVM token swaps with Lightning Network, Arkade, and on-chain support
+- [Get Exchange Rate](https://docs.satora.io/quotes-rates/exchange-rate.md): Retrieve current exchange rates and quotes for swap pairs
+- [Supported Tokens & Pairs](https://docs.satora.io/quotes-rates/supported-tokens.md): List of supported tokens and trading pairs
+- [React Native Setup](https://docs.satora.io/setup/react-native.md): Configure the Satora Swaps SDK for React Native with persistent storage using MMKV.
+- [Setup](https://docs.satora.io/setup/setup.md): Initialize the SDK and verify API connectivity
+- [Key Management & Mnemonic](https://docs.satora.io/setup/wallet-mnemonic.md): Self-custodial key setup and management
+
+## OpenAPI Specs
+
+- [openapi](https://docs.satora.io/openapi.json)

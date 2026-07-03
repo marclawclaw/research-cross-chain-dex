@@ -1,0 +1,281 @@
+\section{BTC to XMR atomic swaps}\label{old_protocol}
+
+\input{schemas/old_tranasction_schem}
+
+The protocol described in this section is largely based on the work of Gugger\cite{gugger2020}.
+We highlight key differences between the original and our instantiation of it\cite{xmr-btc-comit} throughout.
+
+\subsection{Situation}
+Alice and Bob have agreed to a trade in which Alice will send $\xmr$ to Bob, and Bob will send $\btc$ to Alice.
+They require this exchange to be atomic, i.e. the change of ownership of one asset should effectively imply the change of ownership of the other.
+Additionally, should the exchange not come to fruition, they expect any committed assets to be returned to them.
+
+
+\subsection{Overview}
+
+\subsubsection{Happy path}
+After exchanging a set of addresses, keys, zero-knowledge proofs and signatures, Bob locks up $\btc$ in a Point Time Locked Contract (PTLC)\cite{PTLC} locked using point $\Spend{a}{btc}$ by publishing $\lock{btc}$.
+Being a PTLC, the output is also spendable in an alternative manner after time $\expiry{1}$.
+
+% TODO: Add PTLC output diagram
+
+Alice subsequently locks up $\xmr$ in a shared output with public spend key $\Spend{a}{xmr} + \Spend{b}{xmr}$ and public view key $\View{a}$ + $\View{b}$ by publishing $\lock{xmr}$.
+The relationship between $\Spend{a}{xmr}$ and $\Spend{a}{btc}$ is that they share the same secret key $\s{a}$ despite being points on different elliptic curve groups.
+The same relationship applies to $\Spend{b}{xmr}$ and $\Spend{b}{btc}$.
+This output will be owned by the party with knowledge of both $\s{a}$ and $\s{b}$.
+
+Bob notices the publication of $\lock{xmr}$ and sends to Alice an adaptor signature\cite{one-time-ves} $\encsig{redeem}{\Spend{a}{btc},B}$ which she is able to combine with $\s{a}$ producing $\signature{redeem}{B}$.
+Provided there is enough time until $\expiry{1}$, she then publishes a $\redeem$ signed with $\signature{redeem}{B}$ and her own $\signature{redeem}{A}$.
+Broadcasting this transaction moves $\btc$ to an address owned by Alice.
+
+Finally, Bob sees $\redeem$ on the blockchain.
+He finds $\signature{redeem}{B}$ in the witness stack and combines it with $\encsig{redeem}{\Spend{a}{btc},B}$ to learn $\s{a}$.
+With knowledge of both $\s{a}$ and $\s{b}$, Bob is the de facto owner of $\xmr$, which he is able to move to a different address of his at any time.
+
+\subsubsection{Cancel}
+
+Once Bob has published $\lock{btc}$, if time $\expiry{1}$ is reached, either party can elect to publish $\cancel$, diverging from the ``happy path''.
+The transaction $\cancel$ was constructed in such a way that it will only be mined after time $\expiry{1}$.
+The use of transaction-level timelocks is one of the ways in which this protocol deviates from the original\cite{gugger2020}.
+
+\paragraph{Refund:}
+
+With $\cancel$ confirmed on the blockchain, Bob should immediately publish $\refund$ to reclaim his $\btc$ (minus some fees).
+
+Alice would then spot $\refund$ on the Bitcoin blockchain, giving her access to $\signature{refund}{A}$.
+Combining $\signature{refund}{A}$ with $\encsig{refund}{\Spend{b}{btc},A}$ would leak $\s{b}$ to her.
+Knowing $\s{a}$ and $\s{b}$, Alice would effectively reclaim control over $\xmr$, which she could eventually move back to one of her wallet addressess.
+
+\paragraph{Punish:}
+
+Should Bob remain inactive after $\cancel$ is published, Alice still has a way to get compensation for the failed swap.
+After time $\expiry{2}$, Alice can punish Bob for not triggering the refund path in time by publishing $\punish$.
+With this transaction Alice claims $\btc$.
+The $\xmr$ remains locked forever, but from Alice's perspective it is as if the trade went through.
+
+The existence of $\punish$ therefore incentivises Bob to publish $\refund$ as soon as possible.
+Either way, Alice, the party who has no agency on whether refund will occur or not, remains protected.
+
+\subsection{Off-chain preparation}\label{preparation}
+
+As hinted at in the previous section, before Alice and Bob can go on-chain they must exchange some data.
+
+For simplicity we assume a fixed $\fee$ for all Bitcoin transactions that must be signed by both parties.
+In practice, the best way to handle transaction fees would be to adopt a Child-pays-for-parent (CPFP)\cite{cpfp} strategy, so that the parties do not have to commit to a particular fee rate ahead of time.
+
+\subsubsection{Key generation}\label{sec:btc-key-gen}
+
+% TODO: Use commitment scheme
+
+Firstly, they engage in a key generation protocol, as shown in \cref{fig:key_gen_protocol}.
+
+Alice sends to Bob a Bitcoin public key $\A$; a Monero private view key $\view{a}$; a Monero public spend key $\Spend{a}{xmr}$; a Bitcoin public key $\Spend{a}{btc}$; and a Discrete Logarithm Equality (DLEQ) $\dleq{\s{a}}$ proof between $\Spend{a}{xmr}$ and $\Spend{a}{btc}$.
+The characteristics of this kind of proof will be explained in greater detail in \cref{DLEQ}.
+
+Similarly, Bob sends to Alice a Bitcoin public key $\B$; a Monero private view key $\view{b}$; a Monero public spend key $\Spend{b}{xmr}$; a Bitcoin public key $\Spend{b}{btc}$; and a DLEQ proof $\dleq{\s{b}}$ between $\Spend{b}{xmr}$ and $\Spend{b}{btc}$.
+
+If either party receives an invalid DLEQ proof, they must abort the protocol.
+
+\begin{figure}[ht]
+  \centering
+  \begin{mdframed}
+    \begin{center}
+      \scalebox{0.8}{\procedure{$\Pi_{\kgen}$}{
+        \alice \< \< \bob \\
+        a \sample \ZZ_q; \A \gets a G \< \< \\
+        \view{a} \sample \ZZ_p \\
+        \s{a} \sample \ZZ_p \\
+        \Spend{a}{btc} \gets \s{a} G; \Spend{a}{xmr} \gets \s{a} H \\
+        \dleq{\s{a}} \gets \Pdleq{(G, \Spend{a}{btc})}{(H, \Spend{a}{xmr})}{\s{a}} \\
+        \< \sendmessageright*{(\A, \view{a}, \Spend{a}{btc}, \Spend{a}{xmr}, \dleq{\s{a}})} \< \\
+        \< \< \Vdleq{(G, \Spend{a}{btc})}{(H, \Spend{a}{xmr})}{\dleq{\s{a}}} \stackrel{?}{=} 1 \\
+        \< \< b \sample \ZZ_q; \B \gets b G \< \< \\
+        \< \< \view{b} \sample \ZZ_p \\
+        \< \< \s{b} \sample \ZZ_p \\ 
+        \< \< \Spend{b}{btc} \gets \s{b} G; \Spend{b}{xmr} \gets \s{b} H \\
+        \< \< \dleq{\s{b}} \gets \Pdleq{(G, \Spend{b}{btc})}{(H, \Spend{b}{xmr})}{\s{b}} \\
+        \< \sendmessageleft*{(\B, \view{b}, \Spend{b}{xmr}, \Spend{b}{btc}, \dleq{\s{b}})} \< \\
+        \Vdleq{(G, \Spend{b}{btc})}{(H, \Spend{b}{xmr})}{\dleq{\s{b}}} \stackrel{?}{=} 1 \\
+        \pcreturn (a, \A, \B, \view{a}, \view{b}, \s{a}) \< \< \pcreturn (b, \A, \B, \view{a}, \view{b}, \s{b}) \\
+      }}
+    \end{center}
+  \end{mdframed}
+  \caption{Key generation protocol.}
+  \label{fig:key_gen_protocol}
+\end{figure}
+
+\subsubsection{Address exchange}
+
+Additionally, Alice sends to Bob two Bitcoin addresses $\address{redeem}{A}$ and $\address{punish}{A}$; and Bob sends to Alice one Bitcoin address $\address{refund}{B}$.
+The $\btc$ will end up in one of these depending on the protocol execution.
+
+\subsubsection{Expiries}
+
+The value of the two timelocks $\expiry{1}$ and $\expiry{2}$ must be confirmed before Alice and Bob can sign any transactions.
+Timelock $\expiry{1}$ determines how long Alice will have to publish and confirm $\lock{xmr}$, and safely redeem $\lock{btc}$.
+Timelock $\expiry{2}$ determines how long Bob has to refund his bitcoin after $\cancel$ is published by either party.
+
+In this protocol we only use relative timelocks because they create consistent windows of action no matter when $\lock{btc}$ and $\cancel$ are included in a block. 
+
+\subsubsection{Signing phase}\label{sec:btc-signing-phase}
+
+This phase is a pre-requisite to Bob being able to lock up the bitcoin safely.
+It also ensures that Alice can safely lock up the monero herself, once she has confirmed that the bitcoin is on the blockchain.
+
+Before either party can start signing the Bitcoin transactions, Bob must define what $\lock{btc}$ looks like.
+Given what they both already know, they can construct the PTLC output: one which can be spent by providing signatures for $\A$ and $\B$.
+Bob builds the rest of the transaction using a Bitcoin wallet which will contribute the necessary inputs and outputs.
+This is the first step of the signing protocol, which is depicted in \cref{fig:signing_protocol}.
+Bob sends the unsigned $\lock{btc}$ to Alice, alongside the signatures $\signature{cancel}{B}$ and $\signature{punish}{B}$.
+He can safely share these signatures with Alice because $\lock{btc}$ remains unpublished and unsigned.
+
+With $\lock{btc}$ Alice computes the signatures $\signature{cancel}{A}$ and $\signature{punish}{A}$.
+She also computes the adaptor signature $\encsig{refund}{\Spend{b}{btc},A}$, which Bob would need to decrypt if he ever wants to refund his bitcoin.
+Using the corresponding decrypted signature $\signature{refund}{A}$ to publish $\refund$ would leak $\s{b}$ to Alice, allowing her to refund her own monero.
+Alice sends back $\signature{cancel}{A}$ and $\encsig{refund}{\Spend{b}{btc},A}$ to Bob.
+
+All that remains is for Bob to compute his own $\signature{cancel}{B}$.
+
+\begin{figure}[tp]
+  \centering
+  \begin{mdframed}
+    \begin{center}
+      \scalebox{0.55}{\procedure{$\Pi_{\sig}(\A, \B, \btc, \expiry{1}, \expiry{2}, \fee)$}{
+        \alice(a, \Spend{b}{btc}) \< \< \bob(b) \\
+        \< \< \pccomment{Generating the Bitcoin lock transaction} \\
+        \< \< \txoutput{lock}{btc} \gets \buildtxout(\A + \B, \btc) \\
+        \< \< \lock{btc} \gets \begin{subprocedure} \dbox{
+            \procedure{${\wallet{\bitcoin}.\tiny\fundrawtransaction{\txoutput{\tiny lock}{\tiny btc}}}$}{
+              {\tiny tx \gets \fundrawtransaction{\txoutput{\tiny lock}{\tiny btc}}} \\
+              \tiny\pcreturn \tiny tx}}
+        \end{subprocedure} \\
+        \< \< \pccomment{Signing the cancel transaction} \\
+        \< \< \txoutput{cancel}{btc} \gets \buildtxout(\A + \B, \btc - \fee) \\
+        \< \< \cancel \gets \buildtx(\lock{btc}, \txoutput{cancel}{btc}, \expiry{1}) \\
+        \< \< \signature{cancel}{B} \gets \ecdsa.\sig(b, \cancel) \\
+        \< \< \pccomment{Signing the punish transaction} \\
+        \< \< \txoutput{punish}{btc} \gets \buildtxout(\address{punish}{A}, \btc - 2 \cdot \fee) \\
+        \< \< \punish \gets \buildtx(\lock{btc}, \txoutput{punish}{btc}, \expiry{2}) \\
+        \< \< \signature{punish}{B} \gets \ecdsa.\sig(b, \punish) \\
+        \< \sendmessageleft*{\lock{btc}, \signature{cancel}{B}, \signature{punish}{B}} \< \\
+        \pccomment{Signing the cancel transaction} \\
+        \txoutput{cancel}{btc} \gets \buildtxout(\A + \B, \btc - \fee) \\
+        \cancel \gets \buildtx(\lock{btc}, \txoutput{cancel}{btc}, \expiry{1}) \\
+        \signature{cancel}{A} \gets \ecdsa.\sig(a, \cancel) \\
+        \pccomment{Generating adaptor signature for refund transaction} \\
+        \txoutput{refund}{btc} \gets \buildtxout(\address{refund}{B}, \btc - 2 \cdot \fee) \\
+        \refund \gets \buildtx(\cancel, \txoutput{refund}{btc}, \cdot) \\
+        \encsig{refund}{\Spend{b}{btc},A} \gets \ecdsa.\enc\sig(a, \Spend{b}{btc}, \refund) \\
+        \pccomment{Signing the punish transaction} \\
+        \txoutput{punish}{btc} \gets \buildtxout(\address{punish}{A}, \btc - 2 \cdot \fee) \\
+        \punish \gets \buildtx(\lock{btc}, \txoutput{punish}{btc}, \expiry{2}) \\
+        \signature{punish}{A} \gets \ecdsa.\sig(a, \punish) \\
+        \< \sendmessageright*{\signature{cancel}{A}, \encsig{refund}{\Spend{b}{btc},A}} \< \\
+        \< \< \pccomment{Signing the refund transaction} \\
+        \< \< \txoutput{refund}{btc} \gets \buildtxout(\address{refund}{B}, \btc - 2 \cdot \fee) \\
+        \< \< \refund \gets \buildtx(\cancel, \txoutput{refund}{btc}, \cdot) \\
+        \< \< \signature{refund}{B} \gets \ecdsa.\sig(b, \refund) \\
+        \pcreturn ((\cancel, \signature{cancel}{A}, \signature{cancel}{B}), \< \< \pcreturn ((\cancel, \signature{cancel}{A}, \signature{cancel}{B}), \\
+        \pcreturnspace (\punish, \signature{punish}{A}, \signature{punish}{B})) \< \< \pcreturnspace (\refund, \encsig{refund}{\Spend{b}{btc},A}, \signature{refund}{B}), \\
+        \< \< \pcreturnspace \lock{btc})
+      }}
+    \end{center}
+  \end{mdframed}
+  \caption{Signing protocol. Both parties must verify the signatures received, but this is left out for clarity.}
+  \label{fig:signing_protocol}
+\end{figure}
+
+\subsection{On-chain protocol}\label{sec:on-chain-protocol}
+
+In \cref{preparation} we have explained how Alice and Bob set the stage for the swap to take place.
+The sequence diagram in \cref{fig:onchain_seq} shows the rest of the steps towards a successful atomic swap.
+
+With the ability to broadcast signed versions of $\cancel$ and $\refund$ to take his coins back, Bob can now proceed by publishing $\lock{btc}$.
+He uses his Bitcoin wallet to sign each input and broadcasts it to the network.
+
+Alice finds $\lock{btc}$ on the blockchain by using the transaction ID which can be deterministically computed from $\lock{bitcoin}$.
+With enough confirmations on it to consider it irreversible and sufficient time until $\expiry{1}$, Alice publishes $\lock{xmr}$.
+The only requirement on this transaction is that it must pay $\xmr$ to the address corresponding to the public spend key $\Spend{a}{xmr} + \Spend{b}{xmr}$ and the public view key $\View{a} + \View{b}$.
+Bob does not need to know any other details, because the parties do not need to sign transactions depending on $\lock{xmr}$ ahead of time.
+
+Bob finds $\lock{xmr}$ on the blockchain by leveraging his knowledge of the private view key $\view{a} + \view{b}$.
+In Monero, only parties with knowledge of the private view key are privy to transactions involving the matching address. Once Bob considers that $\lock{xmr}$ has garnered enough confirmations, he proceeds by sending $\encsig{redeem}{\Spend{a}{btc},B}$ to Alice.
+This adaptor signature can be decrypted by Alice to grant her the ability to redeem $\btc$.
+
+On receiving $\encsig{redeem}{\Spend{a}{btc},B}$ Alice first verifies that what she has received is useful to her by executing  $\ecdsa.\enc\verify(\B, \Spend{a}{btc}, \redeem, \encsig{redeem}{\Spend{a}{btc},B})$.
+This ensures that the adaptor signature commits to a valid signature on $\B$ for the transaction $\redeem$, encrypted by $\Spend{a}{btc}$.
+With knowledge of $\s{a}$ Alice decrypts it by calling $\ecdsa.\dec(\s{a}, \encsig{redeem}{\Spend{a}{btc},B})$, obtaining $\signature{redeem}{B}$.
+
+Alice now has the means to publish $\redeem$, but she must only do so if there is enough time to confirm the transaction before $\expiry{1}$.
+Otherwise, Bob could front-run her transaction with $\cancel$, ensuring his refund of $\btc$ and still finding $\redeem$ in the mempool, with which he would be able to also claim the $\xmr$.
+Assuming there is enough time, she goes ahead and publishes $\redeem$, claiming $\btc$.
+
+Finally, Bob can use the information obtained by the publication of $\redeem$ to claim the $\xmr$.
+He takes the transaction from the blockchain, extracts the signature $\signature{redeem}{B}$ from it and calls $\ecdsa.\rec(\signature{redeem}{B}, \encsig{redeem}{\Spend{a}{btc},B})$ to obtain $\s{a}$.
+As the sole owner of both $\s{a}$ and $\s{b}$, Bob is the only one capable of moving $\xmr$ to a different address.
+He does so at his own convenience, so that he can safely forget $\s{a} + \s{b}$.
+
+\begin{figure}[ht]
+  \centering
+  \begin{mdframed}
+    \begin{center}
+      \scalebox{0.65}{\begin{sequencediagram}
+        \newinst{xmr}{Monero}
+        \newinst[4]{a}{Alice}
+        \newinst[2]{b}{Bob}
+        \newinst[4]{btc}{Bitcoin}
+
+        \mess{b}{$\lock{btc}$}{btc}
+        \begin{call}
+          {a}
+          {look for $\lock{btc}$}
+          {btc}{$\lock{btc}$}
+        \end{call}
+        \mess{a}{$\lock{xmr}$}{xmr}
+        \begin{call}
+          {b}
+          {look for $\lock{xmr}$}
+          {xmr}{$\lock{xmr}$}
+        \end{call}
+        \postlevel
+        \mess{b}{$\encsig{redeem}{\Spend{a}{btc},B}$}{a}
+        \postlevel
+        \begin{call}
+          {a}
+          {$\ecdsa.\dec\sig(\s{a}, \encsig{redeem}{\Spend{a}{btc},B})$}
+          {a}
+          {$\signature{redeem}{B}$}
+        \end{call}
+        \mess{a}{$\redeem$}{btc}
+        \begin{call}
+          {b}
+          {look for signature in $\redeem$}
+          {btc}{$\signature{redeem}{B}$}
+        \end{call}
+        \postlevel
+        \begin{call}
+          {b}
+          {$\ecdsa.\rec(\signature{redeem}{B}, \encsig{redeem}{\Spend{a}{btc},B})$}
+          {b}
+          {$\s{a}$}
+        \end{call}
+        \mess{b}{redeem using $\s{a} + \s{b}$}{xmr}
+      \end{sequencediagram}}
+    \end{center}
+  \end{mdframed}
+  \caption{Happy path on-chain protocol.}
+  \label{fig:onchain_seq}
+\end{figure}
+
+\subsection{Cross-chain DLEQ proof}\label{DLEQ}
+
+The key generation phase depicted in \cref{fig:key_gen_protocol} shows both Alice and Bob producing a so-called \textit{cross-curve} DLEQ proof.
+This construct is used to non-interactively prove in zero-knowledge that the public key pair $(\Spend{a}{btc}, \Spend{a}{xmr})$ has a common secret key $\s{a}$, and that the public key pair $(\Spend{b}{btc}, \Spend{b}{xmr})$ has a common secret key $\s{b}$.
+Without these proofs, there would be no guarantee that the adaptor signatures $\encsig{redeem}{\Spend{a}{btc},B}$ and $\encsig{refund}{\Spend{b}{btc},A}$ which they later exchange actually commit to the expected signature-secret pairs.
+
+Conventionally, this kind of proof can only be constructed for points on the same elliptic curve.
+The idea of proving discrete logarithm equality across different groups comes from \cite{mrl-10}.
+The algorithm proposed in \cite{mrl-10} is used in the original protocol by Gugger, but we elect to use something simpler based on the original idea so that it can be argued secure by the composition of sigma protocols\cite{berry}.
+
+We built an experimental implementation of this proof\cite{x-curve-dleq-comit} to support our proof-of-concept implementation of this protocol\cite{xmr-btc-comit}.
+We also contributed to a more general and efficient implementation of the same proof\cite{sigma-fun} which we intend to use in the future.

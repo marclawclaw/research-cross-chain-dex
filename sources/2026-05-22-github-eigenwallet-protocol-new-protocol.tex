@@ -1,0 +1,146 @@
+\section{XMR to BTC atomic swaps}\label{new_protocol}
+
+In the section above we described an atomic swap protocol between Bitcoin and Monero. 
+
+That protocol is appropriate for a use case in which the Service Provider (SP) is in the role of Alice, i.e. she offers buying XMR for BTC to her customers. 
+Following the protocol as defined in \cref{old_protocol}, offering that kind of trade, allows the SP to lock up $\xmr$ (by publishing $\lock{xmr}$) only after the other party has locked up $\btc$ (by publishing $\lock{btc}$). 
+This is safe for the SP as she knows that she will either be able to redeem (publish $\redeem$) or refund.
+
+However, using that protocol to swap in the \textit{opposite} direction is not feasible i.e. an SP should not offer buying BTC for XMR.
+The problem is that an SP (in the role of Bob) could be easily attacked: the taker (in the role of Bob) could agree on a trade with the SP, make him lock up funds on Bitcoin and then bail out at no cost. 
+The SP could always refund his locked up BTC after some time, but he would have to pay for transaction fees to do so.
+The taker's ability to make the SP incur in transaction fees without penalty would expose the SP to running out of funds over time, which is why we refer to this as a \textit{draining attack}.
+
+We need a different protocol to allow an SP to offer BTC/XMR buy trades, since the original makes it a hard requirement for the party holding BTC to move first.
+In the following sections we propose a new protocol which instead requires the party holding XMR to move first.
+This depends on the development of adaptor signatures based on Monero's ring signature scheme, which is a work-in-progress and whose details are left out of the scope of this work.
+
+\subsection{Protocol definition}
+
+\input{schemas/xmr_schema.tex}
+\input{schemas/btc_schema.tex}
+
+\cref{fig:xmr_protocol} and \cref{fig:btc_protocol} show the transaction schema for Monero and Bitcoin respectively.
+These diagrams are used to illustrate the relationships between different transactions on the same blockchain.
+Transactions are represented as rectangles with rounded corners.
+Transaction outputs are depicted as boxes inside transactions. 
+The value of the output is written inside the output box and their spending conditions are written above and below arrows coming out of the output. 
+For example, $x_A$ means the output holds $x$ coins owned by party $A$ and $(x_A \land x_B)$ means the output of amount $x$ is controlled by party $A$ and $B$.
+
+
+With regard to the spending conditions, we define the following convention: the public keys of all required signatures are listed \textit{below} the arrow; other conditions, such as timelocks, appear \textit{above} the arrow.
+
+\subsection{Creating Monero transactions}\label{xmr_create_transactions}
+
+The transaction schema for Monero can be found in Figure \ref{fig:xmr_protocol}. 
+Below we describe the naive 5-step protocol to create all transactions. 
+An optimized implementation could reduce the number of steps by combining messages, but we refrain from doing so in the interest of clarity.  
+
+\textbf{Step 1: } To construct the locking transaction \textit{$\txFundShortXmr{}$} the parties need to exchange some keys: 
+Alice shares with Bob a public spend key $\xmrpk{A}$ and her private view key $\xmrvsk{A}$, as well as her funding source $tid_A$.
+Bob shares with Alice his public spend key $\xmrpk{B}$ and his private view key $\xmrvsk{B}$.
+They can now create \textit{$\txFundShortXmr{}$} locally with input $tid_A$ and an output with public spend key  $\xmrpk{A} + \xmrpk{B}$, private view key $\xmrvsk{A} + \xmrvsk{B}$.
+Notably, Alice does not sign the transaction yet. 
+%(To simplify things, Alice could use the monero-wallet-rpc \textit{transfer} API\footnote{\url{https://www.getmonero.org/resources/developer-guides/wallet-rpc.html\#transfer}} to create a raw unsigned transaction and send this to Bob). 
+Both parties now have a local copy of an unsigned \textit{$\txFundShortXmr{}$} which requires one signature from each party to spend its output.
+
+\textbf{Step 2: } Both parties create the refund transaction \textit{$\txRefundShortXmr{}$} which spends from \textit{$\txFundShortXmr{}$} and returns the funds back to Alice.
+Notably, they do not create the redeem transaction $\txTakeShortXmr{}$ in the same way, because they do not have to exchange any signatures on it. 
+The key idea is that Bob will learn $\xmrsk{A}$ later on if Alice publishes $\txRedeemShortBtc{}$, allowing him to construct, sign and publish the redeem transaction $\txTakeShortXmr{}$ by himself.
+
+\textbf{Step 3: }
+Like in \cref{sec:btc-signing-phase} for the old protocol, adaptor signatures are used but this time on Bitcoin \textit{and} Monero. 
+Alice generates a keypair $(\xmrrsk{A},\xmrrpk{A})$ and constructs a DLEQ proof for it for the same reasons presented in \cref{DLEQ}.
+She sends $\xmrrpk{A}$ to Bob, which he uses as the encryption key to generate an adaptor signature on the refund transaction \textit{$\txRefundShortXmr{}$}.
+Bob sends this adaptor signature to Alice.
+If she were to ever publish \textit{$\txRefundShortXmr{}$} she would need to use this adaptor signature, leaking $\xmrrsk{A}$ to Bob.
+This would allow him to execute an emergency refund on Bitcoin if Alice were misbehaving by attempting to take both the bitcoin and the monero.
+
+\textbf{Steps 4+5: }Alice could now sign the locking transaction \textit{$\txFundShortXmr{}$} and publish it on the Monero blockchain with the assurance that she could get her funds back at any point by publishing \textit{$\txFundShortXmr{}$}. 
+But these steps are not carried out until the two parties have collaborated on creating the Bitcoin transactions.
+
+\subsection{Creating transactions for Bitcoin}\label{btc_create_transactions}
+
+The transaction schema for Bitcoin can be found in Figure \ref{fig:btc_protocol}. 
+
+\textbf{Step 1: } To prepare the locking transaction $\txFundShortBtc{}$, Alice shares a public key $pk_A$ with Bob. Bob shares his funding source $tid_B$ with Alice as well as a public key $pk_B$. 
+Both parties can now create $\txFundShortBtc{}$ which spends from $tid_B$ into a multisignature output requiring two signatures: one for $pk_A$ and another one for $pk_B$.
+
+\textbf{Step 2: } Knowing $\txFundShortBtc{}$, both parties can construct $\txRefundShortBtc{}$, a transaction which returns the bitcoin back to Bob after time $t_1$. 
+They also construct $\txRedeemShortBtc{}$. 
+This transaction sets the stage for Alice to be able to take the bitcoin.
+It can be spent in two ways: (1) Alice can claim the coins after time $t_2$ by providing signatures for $pk_A$ and $pk_B$, and (2) Bob can still refund if he learns Alice's refund secret $\xmrrsk{A}$ and uses it with his own public key $pk_B$. 
+Bob would learn $\xmrrsk{A}$ if Alice publishes $\txRefundShortBtc{}$, using the adaptor signature generated in step 3 of the Monero transaction creation protocol above.
+
+\textbf{Step 3: } Having constructed $\txRedeemShortBtc{}$, both parties can create $\txTakeShortBtc{}$, which spends from it and can be published after time $t_2$ giving the funds to Alice.
+
+\textbf{Step 4: } For safety purposes, transactions are signed in reverse order of publication.
+To that end, Alice and Bob collaboratively sign $\txTakeShortBtc{}$.
+Only Bob sends his signature to Alice because she is the one that would care to publish this transaction, since it benefits her.
+There is no need to create $\txEmergencyRefundShortBtc$ which would require a signature from $\xmrrpk{A}$ and $pk_B$. Bob will be able to create and sign this transaction by himself if the situation allows.
+
+\textbf{Step 5: } Alice and Bob sign $\txRefundShortBtc$ collaboratively.
+Only Alice shares her signature with Bob because he is the only one interested in ever being able to take his bitcoin back.
+Bob also generates an adaptor signature on $\txRedeemShortBtc$ for his public key $pk_B$ encrypted under $\xmrpk{A}$ and sends it to Alice.
+This adaptor signature ensures the atomicity of the swap: if Alice publishes $\txRedeemShortBtc$ she will need to decrypt and use the adaptor signature, leaking $\xmrsk{A}$, which he would use to take the monero.
+
+\textbf{Step 6+7: } Bob is now ready to sign and publish $\txFundShortBtc$.
+He still must wait for Alice to lock her monero first by publishing $\txFundShortXmr$, finishing steps 4 and 5 of \cref{xmr_create_transactions}.
+Once Alice has committed her funds to the Monero blockchain, Bob is safe to do the same on Bitcoin.
+
+\subsection{Protocol execution}
+The content of this section is still work-in-progress. Hence we do not delve deeper into the cryptography which is needed to create adaptor signatures on Monero. 
+Instead, we continue describing things on a high level.
+
+\subsubsection{Scenario}
+The motivation behind this protocol is to allow the party holding XMR and wanting BTC to move first. 
+In this scenario, Alice holds XMR and wants to receive BTC. Conversely, Bob holds BTC and wants to receive XMR.
+
+After successfully building and signing transactions following the steps outlined in \cref{xmr_create_transactions} and \cref{btc_create_transactions}, Alice and Bob are ready to go on-chain.
+
+\subsubsection{Happy path}
+
+Alice publishes her locking transaction $\txFundShortXmr$ knowing that she can always receive her funds back by cancelling the swap and publishing $\txRefundShortXmr$. 
+Once Bob is happy with the amount of confirmations on $\txFundShortXmr$ he follows suit and publishes the locking transaction on Bitcoin $\txFundShortBtc$. 
+Given sufficient confirmations on $\txFundShortBtc$ and enough time until $t_1$, Alice publishes the redeem transaction $\txRedeemShortBtc$. In doing so, she leaks $\xmrsk{A}$ to Bob.
+Alice cannot immediately claim the bitcoin for herself but has to wait until time $t_2$. 
+In the meantime, Bob has until time $t_2$ to safely take the monero by using $\xmrsk{A}$ to create and sign $\txTakeShortXmr$, and publishing it on the blockchain. 
+Once time $t_2$ is reached. Alice can finally take the bitcoin by publishing $\txTakeShortBtc$, completing the atomic swap. 
+
+\subsubsection{One party is unresponsive}
+
+At any point in time during the execution phase either party could become inactive. 
+In order to prevent money loss, both parties have mechanisms at their disposal to refund. 
+
+For instance, Alice could publish her locking transaction $\txFundShortXmr$ and then see that Bob never moves forward with the publication of his locking transaction $\txFundShortBtc$. 
+As depicted in \cref{fig:xmr_protocol}, $\txRefundShortXmr$ requires signatures on $\xmrpk{A}$ and $\xmrpk{B}$.
+Alice can use her own secret key $\xmrsk{A}$ to produce one of the signatures, and decrypt Bob's adaptor signature using $\xmrrsk{A}$ to produce the other.
+She would then publish $\txRefundShortXmr$, taking back her monero.
+
+Similarly, if Bob does publish $\txFundShortBtc$, but Alice fails to continue by publishing $\txRedeemShortBtc$ before time $t_1$, Bob can then take his bitcoin by publishing $\txRefundShortBtc$, since he either has or can produce or the signatures needed for it to be valid. 
+
+
+\subsubsection{Alice tries to cheat}
+
+There exists an edge case in which Alice can attempt to take both assets. 
+This is possible after both parties have published their respective locking transactions $\txFundShortXmr$ and $\txFundShortBtc$. 
+Alice may attempt to redeem the bitcoin by publishing $\txRedeemShortBtc$ \textit{and} refund the monero by publishing $\txRefundShortXmr$. 
+Fortunately, the publication of $\txRefundShortXmr$ would leak $\xmrsk{A}$ to Bob which would allow him to create, sign and publish $\txEmergencyRefundShortBtc$ to execute an emergency refund, at least until time $t_2$.
+The result would be equivalent to having executed a \textit{normal} refund. 
+Bob therefore remains protected, but this possibility imposes a strong requirement for him to stay online at all times.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

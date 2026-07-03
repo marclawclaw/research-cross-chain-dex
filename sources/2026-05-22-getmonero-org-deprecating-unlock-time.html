@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang=en>
+
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+     Deprecating Monero's Custom Transaction Unlock Time | Monero - secure, private, untraceable
+    </title>
+  <meta name="description" content="
+  Announcing the deprecation of Monero's Custom Transaction Unlock Time feature
+  ">
+	<meta name="keywords" content="monero, xmr, bitmonero, cryptocurrency">
+
+    <meta property="og:title" content="
+    
+    Blog: Deprecating Monero's Custom Transaction Unlock Time
+    " />
+    <meta property="og:description" content="
+    Announcing the deprecation of Monero's Custom Transaction Unlock Time feature
+    ">
+    <!-- If the page specifies a dedicated image which is not an SVG file, we use that one. Otherwise we use the classic Monero logo -->
+    <meta property="og:image" content="https://www.getmonero.org/press-kit/symbols/monero-symbol-on-white-480.png">
+    <meta property="og:site_name" content="getmonero.org, The Monero Project">
+    <meta property="og:url" content="https://www.getmonero.org/2026/05/10/deprecating-unlock-time.html">
+    <meta property="og:type" content="website">
+    <meta http-equiv="onion-location" content="http://monerotoruzizulg5ttgat2emf4d6fbmiea25detrmmy7erypseyteyd.onion/2026/05/10/deprecating-unlock-time.html" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/meta/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/meta/favicon-16x16.png">
+        <link rel="manifest" href="/meta/manifest.json">
+        <link rel="mask-icon" href="/meta/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="theme-color" content="#ffffff">
+
+    <link href="/css/custom.css" rel="stylesheet">
+	
+    
+    <meta name="msapplication-config" content="/ietemplates/ieconfig.xml">
+
+  <!-- Feed autodetection -->
+  <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Monero">
+
+  </head>
+
+
+  <body>
+    <div class="page-wrapper">
+        <div class="mob-nav">
+              <input class="burger-check" id="mobile-burger" type="checkbox"><label for="mobile-burger" class="burger"></label>
+
+        <div class="slide-in-nav">
+             <div class="container slide-in">
+                 <div class="row">
+                     <div class="col-xs-12 dropdown text-center nav-item">
+                      <label for="drop1">Get Started<div class="arrow-down"></div></label>
+                      <input class="burger-checkdropdown" id="drop1" type="checkbox" tabindex="0">
+                      <div class="dropdown-content">
+                          <a href="/get-started/what-is-monero/">What is Monero?</a>
+                          <a href="/get-started/accepting/">Accepting</a>
+                          <a href="/get-started/contributing/">Contributing</a>
+                          <a href="/get-started/mining/">Mining</a>
+                          <a href="/get-started/faq/">FAQ</a>
+                  </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                    <div class="col-xs-12 dropdown nav-item">
+                      <a href="/downloads/">Downloads</a>
+                    </div>
+                 </div>
+                 <div class="row">
+                    <div class="col-xs-12 dropdown nav-item">
+                      <a href="/blog/">Blog</a>
+                    </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-xs-12 dropdown text-center nav-item">
+                    <label for="drop2">Community<div class="arrow-down"></div></label>
+                    <input class="burger-checkdropdown" id="drop2" type="checkbox" tabindex="0">
+                    <div class="dropdown-content">
+                      <a href="/community/workgroups/">Workgroups</a>
+                      <a href="/community/hangouts/">Hangouts</a>
+                      <a href="/community/sponsorships/">Sponsorships</a>
+                      <a href="/community/merchants/">Merchants & Exchanges</a>
+                    </div>
+                  </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-xs-12 dropdown text-center nav-item">
+                    <label for="drop3">Resources<div class="arrow-down"></div></label>
+                    <input class="burger-checkdropdown" id="drop3" type="checkbox" tabindex="0">
+                    <div class="dropdown-content">
+                      <a href="/resources/about/">About</a>
+                      <a href="/resources/roadmap/">Roadmap</a>
+                      <a href="/resources/research-lab/">Research Lab</a>
+                      <a href="/resources/moneropedia/">Moneropedia</a>
+                      <a href="/resources/user-guides/">User Guides</a>
+                      <a href="/resources/developer-guides/">Developer Guides</a>
+                      <a href="/resources/tools/">Tools</a>
+                      <a href="/library/">Library</a>
+                      <a href="/press-kit/">Press Kit</a>
+                    </div>
+                  </div>
+               </div>
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="text-center nav-item mob">
+                            <a href="https://ccs.getmonero.org">Community Crowdfunding</a> 
+                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="text-center nav-item mob">
+                            <a href="https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md">Vulnerability Response</a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+          
+        </div>
+       </div>
+       
+        <div class="desktop-nav">
+            <nav class="container">
+            <div class="topnav">
+              <div class="row middle-xs">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <a href="/"><img src="/img/monero-logo.png" width="500" height="135" alt="Monero Logo" class="monero-logo"></a>
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-8 topnav-list end-xs">
+                      <div class="row end-xs middle-xs">
+                         <div class="col-md-12">
+                          <a href="https://ccs.getmonero.org" class="top-link">Community Crowdfunding</a>
+                          <a href="https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md" class="top-link">Vulnerability Response</a>
+                          <div href="#" class="dropdown top-link language-change">
+                            <input class="burger-checkdropdown" id="langdrop" type="checkbox" tabindex="0">
+                            <label for="langdrop"><img src="/img/language.png" width="500" height="500" alt="Language selector icon" class="icon-language"/>English
+                           <div class="arrow-down"></div></label>
+                            <div class="dropdown-content text-center">
+                              
+                                
+                              
+                                
+                                  
+                                    <a href="/es/2026/05/10/deprecating-unlock-time.html" >Español</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/it/2026/05/10/deprecating-unlock-time.html" >Italiano</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/pl/2026/05/10/deprecating-unlock-time.html" >Polski</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/fr/2026/05/10/deprecating-unlock-time.html" >Français</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/ar/2026/05/10/deprecating-unlock-time.html" >العربية</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/ru/2026/05/10/deprecating-unlock-time.html" >Русский</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/de/2026/05/10/deprecating-unlock-time.html" >Deutsch</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/nl/2026/05/10/deprecating-unlock-time.html" >Nederlands</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/pt-br/2026/05/10/deprecating-unlock-time.html" >Português do Brasil</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/tr/2026/05/10/deprecating-unlock-time.html" >Türkçe</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/zh-cn/2026/05/10/deprecating-unlock-time.html" >简体中文</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/zh-tw/2026/05/10/deprecating-unlock-time.html" >繁體中文 臺灣</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/nb-no/2026/05/10/deprecating-unlock-time.html" >Norsk</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/el/2026/05/10/deprecating-unlock-time.html" >ελληνική</a>
+                                  
+                                
+                              
+                            </div>
+                          </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="botnav white-nav">
+                <input class="burger-check" id="burger-check" type="checkbox"><label for="burger-check" class="burger"></label>
+                <div class="row between-xs nav-items">
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop1">Get Started<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop1" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/get-started/what-is-monero/">What is Monero?</a>
+                              <a href="/get-started/accepting/">Accepting</a>
+                              <a href="/get-started/contributing/">Contributing</a>
+                              <a href="/get-started/mining/">Mining</a>
+                              <a href="/get-started/faq/">FAQ</a>
+                        </div>
+                    </div>
+                    <div class="col dropdown nav-item">
+                          <a href="/downloads/">Downloads</a>
+                    </div>
+                    <div class="col dropdown nav-item">
+                         <a href="/blog/">Blog</a>
+                    </div>
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop2">Community<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop2" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/community/workgroups/">Workgroups</a>
+                              <a href="/community/hangouts/">Hangouts</a>
+                              <a href="/community/sponsorships/">Sponsorships</a>
+                              <a href="/community/merchants/">Merchants & Exchanges</a>
+                        </div>
+                    </div>
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop3">Resources<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop3" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/resources/about/">About</a>
+                              <a href="/resources/roadmap/">Roadmap</a>
+                              <a href="/resources/research-lab/">Research Lab</a>
+                              <a href="/resources/moneropedia/">Moneropedia</a>
+                              <a href="/resources/user-guides/">User Guides</a>
+                              <a href="/resources/developer-guides/">Developer Guides</a>
+                              <a href="/resources/tools/">Tools</a>
+                              <a href="/library/">Library</a>
+                              <a href="/press-kit/">Press Kit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        </div>
+        <div class="mob bot-nav white-nav">
+            <div class="row center-xs middle-xs">
+                <div class="col-xs-6">
+                    <a href="/"><img src="/img/monero-logo.png" width="500" height="135" alt="Monero Logo" class="monero-logo"></a>
+                </div>
+                <div class="dropdown col-xs-6 text-center mob-language-change">
+                <input class="burger-checkdropdown" id="moblangdrop" type="checkbox" tabindex="0">
+                <label for="moblangdrop"><img src="/img/language.png" width="500" height="500" alt="Lang" class="icon-language"/><div class="arrow-down"></div></label>
+                               <div class="mob dropdown-content text-center">
+                               <p class="mob-lang-change mob-lang-selected">English</p>
+                               
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/es/2026/05/10/deprecating-unlock-time.html" >Español</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/it/2026/05/10/deprecating-unlock-time.html" >Italiano</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/pl/2026/05/10/deprecating-unlock-time.html" >Polski</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/fr/2026/05/10/deprecating-unlock-time.html" >Français</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/ar/2026/05/10/deprecating-unlock-time.html" >العربية</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/ru/2026/05/10/deprecating-unlock-time.html" >Русский</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/de/2026/05/10/deprecating-unlock-time.html" >Deutsch</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/nl/2026/05/10/deprecating-unlock-time.html" >Nederlands</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/pt-br/2026/05/10/deprecating-unlock-time.html" >Português do Brasil</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/tr/2026/05/10/deprecating-unlock-time.html" >Türkçe</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/zh-cn/2026/05/10/deprecating-unlock-time.html" >简体中文</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/zh-tw/2026/05/10/deprecating-unlock-time.html" >繁體中文 臺灣</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/nb-no/2026/05/10/deprecating-unlock-time.html" >Norsk</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/el/2026/05/10/deprecating-unlock-time.html" >ελληνική</a>
+                                  
+                                
+                              
+                            </div>
+                          </div>
+            </div>     
+        </div>    
+
+        
+
+<div class="site-wrap post">
+    
+    <section class="container">
+            <div class="row">
+                <!-- left two-thirds block-->
+                <div class="left two-thirds col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="info-block">
+                               <h2>Deprecating Monero's Custom Transaction Unlock Time</h2> 
+                                <p class="author">Posted by: Justin Berman (j-berman)</p>
+                                <p class="post-date">May 10, 2026</p>
+                                <p>Please be advised, the <a href="https://www.getmonero.org/resources/moneropedia/unlocktime.html">Custom Transaction Unlock Time feature</a> is set to be deprecated at consensus with FCMP++. There is already a relay rule in place today that prevents nodes from accepting and relaying transactions with a Custom Unlock Time to the transaction pool (<a href="https://github.com/monero-project/monero/pull/9151">source</a>). This is a formal announcement that the feature would be deprecated altogether with the FCMP++ fork, and <strong>new</strong> transactions with Custom Unlock Time set would not be able to enter the chain even if a miner mines them.</p>
+
+<p><strong>All transactions created after June 1, 2026, and with an Unlock Time set to unlock after the FCMP++ fork, would unlock immediately when the FCMP++ fork block hits the chain.</strong></p>
+
+<p>If we see a large influx of <strong>new</strong> Unlock Time transactions created between now and June 1, 2026, the feature may be deprecated earlier than June 1, 2026. Deprecating avoids complications with the FCMP++ wallet integration, enabling a smoother wallet experience for all users. Note that a FCMP++ fork date is not set at the time this is written.</p>
+
+<p>This change <strong>will not</strong> affect transactions <strong>already created</strong>. If you, a user, created a transaction in the past with an Unlock Time set to a future date (even years from today), then you are <strong>not</strong> affected by this change. Your transaction will unlock based on the Unlock Time you set when you created the transaction. This change will <strong>only</strong> affect <strong>new</strong> transactions.</p>
+
+<h3 id="why-deprecate">Why Deprecate?</h3>
+
+<p>The feature has caused a number of security, privacy, and fungibility issues over the years, and its known benefits do not outweigh its significant cons. Deprecating the feature has been discussed and supported for many years (see <a href="https://github.com/monero-project/research-lab/issues/78">here</a>, <a href="https://github.com/monero-project/research-lab/issues/125">here</a>, <a href="https://www.reddit.com/r/Monero/comments/1amomjj/timelocks_let_us_finally_retire_a_rarely_used_and/">here</a>, and <a href="https://www.reddit.com/r/Monero/comments/1kgttsa/comment/mr3ioa0/">here</a>). <a href="https://github.com/monero-project/research-lab/issues/78#issuecomment-925312477">Merchant software has neglected to check the Unlock Time on received Monero, and incorrectly assumed that the Monero received is spendable, leading to losses</a>. <a href="https://thecharlatan.ch/Monero-Unlock-Time-Privacy/">Transactions with Custom Unlock Time stick out in the chain like a sore thumb,  harming both privacy and fungibility</a>. And the feature provides <a href="https://github.com/monero-project/research-lab/issues/78#issuecomment-924622985">no known major benefit</a> that is not achievable through some other means (for example, see Time-Lock Puzzles described in the <a href="https://eprint.iacr.org/2020/1441.pdf">PayMo paper</a>).</p>
+
+<p>It is a common misconception that Monero's Unlock Time is useful for known atomic swap or payment channel protocols. To date, no scheme has been specified that utilizes Monero's Unlock Time feature. Bitcoin's Hash Time Locked Contracts (HTLCs), for example, have unique capabilities that render them useful in atomic swap and payment channel protocols, that Monero's Unlock Time feature does not have.</p>
+
+<p>FCMP++ capable wallets are slated to keep a rolling cache of locked Monero outputs, so that wallets will be able to construct FCMP++ transactions without revealing any identifying information about their own outputs to nodes. See more on the design <a href="https://github.com/monero-project/research-lab/issues/78#issuecomment-2415324570">here</a>. The Unlock Time feature presents a Denial of Service vector because the cache could grow unbounded. Deprecating the feature now enables releasing FCMP++ capable wallets with no concern for this attack vector, enabling a smoother wallet experience for all users.</p>
+
+                                <hr>
+                                <p id="post-meta">Post tags <i class="fa fa-tags"></i>: <a href="/blog/tags/announcements.html">Announcements</a>, <a href="/blog/tags/community.html">Community</a></p>
+                    </div>
+                </div>
+                <!-- end left two-thirds block-->
+                
+                <!-- right one-third block-->
+                <div class="right one-third col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="sidebar col-sm-12 col-xs-12">   
+                            <div class="info-block">
+                                <div class="row center-xs">
+                                    <div class="col"><h2>Recent Posts</h2></div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/11/monero-GUI-0.18.5.0-released.html">Monero GUI 0.18.5.0 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/11/monero-0.18.5.0-released.html">Monero 0.18.5.0 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/10/deprecating-unlock-time.html">Deprecating Monero's Custom Transaction Unlock Time</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/03/04/monero-GUI-0.18.4.7-released.html">Monero GUI 0.18.4.7 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                            </div>
+                            <div class="info-block">
+                                <div class="row center-xs">
+                                    <div class="col">
+                                        <h2>Popular Tags</h2>
+                                    </div>
+                                </div>
+                                    
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/monero missives.html">Monero Missives</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/community.html">Community</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/conferences.html">Conferences</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/exchanges.html">Exchanges</a></p>
+                                         </div>
+                                     </div>
+                                     
+
+
+                            </div>
+                        </div> 
+                </div>
+                <!-- end right one-third block-->
+            </div>
+        </section>
+    </div>
+
+    <footer class="container-fluid">
+            <div class="container">
+                <div class="row around-xs footer-wrapper">
+                     <div class="col-sm-3 col-xs-6">
+                         <h3>Resources</h3>
+                            <ul class="list-unstyled">
+                                <li><a class="white" href="/resources/about/">About Monero</a></li>
+                                <li><a class="white" href="/resources/moneropedia/">Moneropedia</a></li>
+                                <li><a class="white" href="/resources/developer-guides/">Developer Guides</a></li>
+                                <li><a class="white" href="/resources/user-guides/">User Guides</a></li>
+                                <li><a class="white" href="/library/">Library</a></li>
+                                <li><a class="white" href="/downloads/">Downloads</a></li>
+                                
+                            </ul>
+                     </div>
+                     <div class="col-sm-3 col-xs-6">
+                        <h3>Reach Out</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="/community/workgroups/">Workgroups</a></li>
+                                 <li><a class="white" href="/community/hangouts/">Hangouts</a></li>
+                                 <li><a class="white" href="https://lists.getmonero.org/postorius/lists/monero-announce.lists.getmonero.org/">Mailing List</a></li>
+
+                            </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        <h3>Community</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="/community/merchants/">Merchants & Exchanges</a></li>
+                                 <li><a class="white" href="https://monero.stackexchange.com/">Stack Exchange</a></li>
+                                 <li><a class="white" href="https://bitcointalk.org/index.php?topic=583449.0">BitcoinTalk</a></li>
+                            </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        <h3>The Monero Project</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="https://openalias.org/">Open Alias</a></li>
+                                 <li><a class="white" href="/resources/research-lab/">Monero Research Lab (MRL)</a></li>
+                                 <li><a class="white" href="/press-kit/">Press Kit</a></li>
+                                 <li><a class="white" href="https://ccs.getmonero.org">Community Crowdfunding System</a></li>
+                            </ul>
+                    </div>
+                <div class="row center-xs">
+                    <div class="footer-links">
+                        <ul class="list-unstyled list-inline">
+                            <li><a href="http://monerotoruzizulg5ttgat2emf4d6fbmiea25detrmmy7erypseyteyd.onion/2026/05/10/deprecating-unlock-time.html" class="white footer-link"><img class="tor" src="/img/onion-tor.svg" alt="onion service">Tor Onion service</a></li>
+                             <li><a href="/legal/" class="white footer-link">Legal</a></li>
+                             <li><a href="https://github.com/monero-project/monero-site" class="white footer-link">Source Code</a></li>
+                             <li><a href="/sitemap.xml" class="white footer-link">Sitemap</a></li>
+                             <li><a class="white" href="/feed.xml"><img src="/img/feed.svg" width="30" height="30" alt="Feed icon">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+            </div>
+</footer>
+<!-- page served by server N -->
+
+    </div>
+  </body>
+</html>

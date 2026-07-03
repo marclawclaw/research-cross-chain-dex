@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang=en>
+
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+     CLSAG security proof revisions | Monero - secure, private, untraceable
+    </title>
+  <meta name="description" content="
+  Issues with CLSAG formal security proofs were identified. Monero's implementation of CLSAG is not affected.
+  ">
+	<meta name="keywords" content="monero, xmr, bitmonero, cryptocurrency">
+
+    <meta property="og:title" content="
+    
+    Blog: CLSAG security proof revisions
+    " />
+    <meta property="og:description" content="
+    Issues with CLSAG formal security proofs were identified. Monero's implementation of CLSAG is not affected.
+    ">
+    <!-- If the page specifies a dedicated image which is not an SVG file, we use that one. Otherwise we use the classic Monero logo -->
+    <meta property="og:image" content="https://www.getmonero.org/press-kit/symbols/monero-symbol-on-white-480.png">
+    <meta property="og:site_name" content="getmonero.org, The Monero Project">
+    <meta property="og:url" content="https://www.getmonero.org/2024/03/08/clsag-security-proof-revisions.html">
+    <meta property="og:type" content="website">
+    <meta http-equiv="onion-location" content="http://monerotoruzizulg5ttgat2emf4d6fbmiea25detrmmy7erypseyteyd.onion/2024/03/08/clsag-security-proof-revisions.html" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/meta/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/meta/favicon-16x16.png">
+        <link rel="manifest" href="/meta/manifest.json">
+        <link rel="mask-icon" href="/meta/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="theme-color" content="#ffffff">
+
+    <link href="/css/custom.css" rel="stylesheet">
+	
+    
+    <meta name="msapplication-config" content="/ietemplates/ieconfig.xml">
+
+  <!-- Feed autodetection -->
+  <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Monero">
+
+  </head>
+
+
+  <body>
+    <div class="page-wrapper">
+        <div class="mob-nav">
+              <input class="burger-check" id="mobile-burger" type="checkbox"><label for="mobile-burger" class="burger"></label>
+
+        <div class="slide-in-nav">
+             <div class="container slide-in">
+                 <div class="row">
+                     <div class="col-xs-12 dropdown text-center nav-item">
+                      <label for="drop1">Get Started<div class="arrow-down"></div></label>
+                      <input class="burger-checkdropdown" id="drop1" type="checkbox" tabindex="0">
+                      <div class="dropdown-content">
+                          <a href="/get-started/what-is-monero/">What is Monero?</a>
+                          <a href="/get-started/accepting/">Accepting</a>
+                          <a href="/get-started/contributing/">Contributing</a>
+                          <a href="/get-started/mining/">Mining</a>
+                          <a href="/get-started/faq/">FAQ</a>
+                  </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                    <div class="col-xs-12 dropdown nav-item">
+                      <a href="/downloads/">Downloads</a>
+                    </div>
+                 </div>
+                 <div class="row">
+                    <div class="col-xs-12 dropdown nav-item">
+                      <a href="/blog/">Blog</a>
+                    </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-xs-12 dropdown text-center nav-item">
+                    <label for="drop2">Community<div class="arrow-down"></div></label>
+                    <input class="burger-checkdropdown" id="drop2" type="checkbox" tabindex="0">
+                    <div class="dropdown-content">
+                      <a href="/community/workgroups/">Workgroups</a>
+                      <a href="/community/hangouts/">Hangouts</a>
+                      <a href="/community/sponsorships/">Sponsorships</a>
+                      <a href="/community/merchants/">Merchants & Exchanges</a>
+                    </div>
+                  </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-xs-12 dropdown text-center nav-item">
+                    <label for="drop3">Resources<div class="arrow-down"></div></label>
+                    <input class="burger-checkdropdown" id="drop3" type="checkbox" tabindex="0">
+                    <div class="dropdown-content">
+                      <a href="/resources/about/">About</a>
+                      <a href="/resources/roadmap/">Roadmap</a>
+                      <a href="/resources/research-lab/">Research Lab</a>
+                      <a href="/resources/moneropedia/">Moneropedia</a>
+                      <a href="/resources/user-guides/">User Guides</a>
+                      <a href="/resources/developer-guides/">Developer Guides</a>
+                      <a href="/resources/tools/">Tools</a>
+                      <a href="/library/">Library</a>
+                      <a href="/press-kit/">Press Kit</a>
+                    </div>
+                  </div>
+               </div>
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="text-center nav-item mob">
+                            <a href="https://ccs.getmonero.org">Community Crowdfunding</a> 
+                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="text-center nav-item mob">
+                            <a href="https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md">Vulnerability Response</a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+          
+        </div>
+       </div>
+       
+        <div class="desktop-nav">
+            <nav class="container">
+            <div class="topnav">
+              <div class="row middle-xs">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <a href="/"><img src="/img/monero-logo.png" width="500" height="135" alt="Monero Logo" class="monero-logo"></a>
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-8 topnav-list end-xs">
+                      <div class="row end-xs middle-xs">
+                         <div class="col-md-12">
+                          <a href="https://ccs.getmonero.org" class="top-link">Community Crowdfunding</a>
+                          <a href="https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md" class="top-link">Vulnerability Response</a>
+                          <div href="#" class="dropdown top-link language-change">
+                            <input class="burger-checkdropdown" id="langdrop" type="checkbox" tabindex="0">
+                            <label for="langdrop"><img src="/img/language.png" width="500" height="500" alt="Language selector icon" class="icon-language"/>English
+                           <div class="arrow-down"></div></label>
+                            <div class="dropdown-content text-center">
+                              
+                                
+                              
+                                
+                                  
+                                    <a href="/es/2024/03/08/clsag-security-proof-revisions.html" >Español</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/it/2024/03/08/clsag-security-proof-revisions.html" >Italiano</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/pl/2024/03/08/clsag-security-proof-revisions.html" >Polski</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/fr/2024/03/08/clsag-security-proof-revisions.html" >Français</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/ar/2024/03/08/clsag-security-proof-revisions.html" >العربية</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/ru/2024/03/08/clsag-security-proof-revisions.html" >Русский</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/de/2024/03/08/clsag-security-proof-revisions.html" >Deutsch</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/nl/2024/03/08/clsag-security-proof-revisions.html" >Nederlands</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/pt-br/2024/03/08/clsag-security-proof-revisions.html" >Português do Brasil</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/tr/2024/03/08/clsag-security-proof-revisions.html" >Türkçe</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/zh-cn/2024/03/08/clsag-security-proof-revisions.html" >简体中文</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/zh-tw/2024/03/08/clsag-security-proof-revisions.html" >繁體中文 臺灣</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/nb-no/2024/03/08/clsag-security-proof-revisions.html" >Norsk</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/el/2024/03/08/clsag-security-proof-revisions.html" >ελληνική</a>
+                                  
+                                
+                              
+                            </div>
+                          </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="botnav white-nav">
+                <input class="burger-check" id="burger-check" type="checkbox"><label for="burger-check" class="burger"></label>
+                <div class="row between-xs nav-items">
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop1">Get Started<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop1" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/get-started/what-is-monero/">What is Monero?</a>
+                              <a href="/get-started/accepting/">Accepting</a>
+                              <a href="/get-started/contributing/">Contributing</a>
+                              <a href="/get-started/mining/">Mining</a>
+                              <a href="/get-started/faq/">FAQ</a>
+                        </div>
+                    </div>
+                    <div class="col dropdown nav-item">
+                          <a href="/downloads/">Downloads</a>
+                    </div>
+                    <div class="col dropdown nav-item">
+                         <a href="/blog/">Blog</a>
+                    </div>
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop2">Community<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop2" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/community/workgroups/">Workgroups</a>
+                              <a href="/community/hangouts/">Hangouts</a>
+                              <a href="/community/sponsorships/">Sponsorships</a>
+                              <a href="/community/merchants/">Merchants & Exchanges</a>
+                        </div>
+                    </div>
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop3">Resources<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop3" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/resources/about/">About</a>
+                              <a href="/resources/roadmap/">Roadmap</a>
+                              <a href="/resources/research-lab/">Research Lab</a>
+                              <a href="/resources/moneropedia/">Moneropedia</a>
+                              <a href="/resources/user-guides/">User Guides</a>
+                              <a href="/resources/developer-guides/">Developer Guides</a>
+                              <a href="/resources/tools/">Tools</a>
+                              <a href="/library/">Library</a>
+                              <a href="/press-kit/">Press Kit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        </div>
+        <div class="mob bot-nav white-nav">
+            <div class="row center-xs middle-xs">
+                <div class="col-xs-6">
+                    <a href="/"><img src="/img/monero-logo.png" width="500" height="135" alt="Monero Logo" class="monero-logo"></a>
+                </div>
+                <div class="dropdown col-xs-6 text-center mob-language-change">
+                <input class="burger-checkdropdown" id="moblangdrop" type="checkbox" tabindex="0">
+                <label for="moblangdrop"><img src="/img/language.png" width="500" height="500" alt="Lang" class="icon-language"/><div class="arrow-down"></div></label>
+                               <div class="mob dropdown-content text-center">
+                               <p class="mob-lang-change mob-lang-selected">English</p>
+                               
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/es/2024/03/08/clsag-security-proof-revisions.html" >Español</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/it/2024/03/08/clsag-security-proof-revisions.html" >Italiano</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/pl/2024/03/08/clsag-security-proof-revisions.html" >Polski</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/fr/2024/03/08/clsag-security-proof-revisions.html" >Français</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/ar/2024/03/08/clsag-security-proof-revisions.html" >العربية</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/ru/2024/03/08/clsag-security-proof-revisions.html" >Русский</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/de/2024/03/08/clsag-security-proof-revisions.html" >Deutsch</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/nl/2024/03/08/clsag-security-proof-revisions.html" >Nederlands</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/pt-br/2024/03/08/clsag-security-proof-revisions.html" >Português do Brasil</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/tr/2024/03/08/clsag-security-proof-revisions.html" >Türkçe</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/zh-cn/2024/03/08/clsag-security-proof-revisions.html" >简体中文</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/zh-tw/2024/03/08/clsag-security-proof-revisions.html" >繁體中文 臺灣</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/nb-no/2024/03/08/clsag-security-proof-revisions.html" >Norsk</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/el/2024/03/08/clsag-security-proof-revisions.html" >ελληνική</a>
+                                  
+                                
+                              
+                            </div>
+                          </div>
+            </div>     
+        </div>    
+
+        
+
+<div class="site-wrap post">
+    
+    <section class="container">
+            <div class="row">
+                <!-- left two-thirds block-->
+                <div class="left two-thirds col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="info-block">
+                               <h2>CLSAG security proof revisions</h2> 
+                                <p class="author">Posted by: Cypher Stack</p>
+                                <p class="post-date">March 08, 2024</p>
+                                <p><strong>TL;DR</strong>: A recent review conducted by Cypher Stack identified issues with CLSAG formal security proofs, and proposed fixes. 
+These fixes don't affect the Monero implementation of CLSAG, so users are not at risk, and no action needs to be taken.</p>
+
+<p>The Monero transaction protocol uses <a href="https://eprint.iacr.org/2019/654">CLSAG</a>, a linkable ring signature construction, to authorize transactions.
+The CLSAG preprint and implementation were written by Monero contributing researchers and developers, and improve on an earlier design, <a href="https://eprint.iacr.org/2015/1098">MLSAG</a>.</p>
+
+<p>The <a href="https://zano.org/">Zano</a> team recently engaged Cypher Stack, an applied cryptography consultancy, to review <a href="https://github.com/hyle-team/docs/tree/master/zano/dv-CLSAG-extension">d/v-CLSAG</a>, their generalization of CLSAG.
+This generalization is intended to accommodate different types of transactions that the Zano protocol supports, but retains much of the original CLSAG design and security model.
+Because of this, as part of Cypher Stack's review of d/v-CLSAG, aspects of the original CLSAG preprint were reviewed as well.</p>
+
+<p>Cypher Stack identified two issues with formal security proofs that also apply to CLSAG, and proposed updates to the proofs and protocol description to address them.
+Neither the existing Monero implementation of CLSAG nor the in-progress Zano implementation of d/v-CLSAG is affected by these issues, so users are not at risk and no action needs to be taken.
+Despite no vulnerabilities resulting from the findings, Cypher Stack responsibly disclosed the findings to Monero contributing researchers.</p>
+
+<p>The review report, which details the findings, is <a href="https://github.com/cypherstack/zano-clsag-review/releases/tag/final">available</a>.
+While it is quite technical in nature, we encourage interested researchers and others to read it.</p>
+
+<p>The first finding applying to CLSAG concerns an argument in an unforgeability proof that references an earlier signature design, <a href="https://eprint.iacr.org/2004/027">LSAG</a>.
+The argument in LSAG fails to identify an implicit requirement that certain parts of verification equations be nonzero.
+While the argument is somewhat more subtle in CLSAG and d/v-CLSAG, there are several ways it can be addressed.
+Both the Monero and Zano implementations already check that certain values in verification are nonzero, so they are not affected by this finding.</p>
+
+<p>The other finding that applies to CLSAG deals with another technical aspect of the unforgeability proof relating to how the proof reduces to a certain discrete logarithm hardness problem.
+Essentially, the proof shows that if there existed a way to forge a CLSAG signature, there would be a way to break a cryptographic problem that is widely believed to be infeasible.
+Because of the way certain operations in the proof are performed, the method of analysis does not formally hold.
+The review proposes a modification to the security proof that uses a different, and more standard, hard cryptographic problem instead.
+Making this change doesn't affect the CLSAG protocol or any implementations, but ensures the formal proof is fixed.</p>
+
+<p>Formal analysis in applied cryptography is challenging and subtle, and it's not uncommon to discover issues in security proofs.
+Cypher Stack hopes these findings, and the proposed proof updates, will be useful to the ecosystem.</p>
+
+<p>Onward!</p>
+
+                                <hr>
+                                <p id="post-meta">Post tags <i class="fa fa-tag"></i>: <a href="/blog/tags/crypto.html">Cryptography</a></p>
+                    </div>
+                </div>
+                <!-- end left two-thirds block-->
+                
+                <!-- right one-third block-->
+                <div class="right one-third col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="sidebar col-sm-12 col-xs-12">   
+                            <div class="info-block">
+                                <div class="row center-xs">
+                                    <div class="col"><h2>Recent Posts</h2></div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/11/monero-GUI-0.18.5.0-released.html">Monero GUI 0.18.5.0 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/11/monero-0.18.5.0-released.html">Monero 0.18.5.0 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/10/deprecating-unlock-time.html">Deprecating Monero's Custom Transaction Unlock Time</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/03/04/monero-GUI-0.18.4.7-released.html">Monero GUI 0.18.4.7 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                            </div>
+                            <div class="info-block">
+                                <div class="row center-xs">
+                                    <div class="col">
+                                        <h2>Popular Tags</h2>
+                                    </div>
+                                </div>
+                                    
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/monero missives.html">Monero Missives</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/community.html">Community</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/conferences.html">Conferences</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/exchanges.html">Exchanges</a></p>
+                                         </div>
+                                     </div>
+                                     
+
+
+                            </div>
+                        </div> 
+                </div>
+                <!-- end right one-third block-->
+            </div>
+        </section>
+    </div>
+
+    <footer class="container-fluid">
+            <div class="container">
+                <div class="row around-xs footer-wrapper">
+                     <div class="col-sm-3 col-xs-6">
+                         <h3>Resources</h3>
+                            <ul class="list-unstyled">
+                                <li><a class="white" href="/resources/about/">About Monero</a></li>
+                                <li><a class="white" href="/resources/moneropedia/">Moneropedia</a></li>
+                                <li><a class="white" href="/resources/developer-guides/">Developer Guides</a></li>
+                                <li><a class="white" href="/resources/user-guides/">User Guides</a></li>
+                                <li><a class="white" href="/library/">Library</a></li>
+                                <li><a class="white" href="/downloads/">Downloads</a></li>
+                                
+                            </ul>
+                     </div>
+                     <div class="col-sm-3 col-xs-6">
+                        <h3>Reach Out</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="/community/workgroups/">Workgroups</a></li>
+                                 <li><a class="white" href="/community/hangouts/">Hangouts</a></li>
+                                 <li><a class="white" href="https://lists.getmonero.org/postorius/lists/monero-announce.lists.getmonero.org/">Mailing List</a></li>
+
+                            </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        <h3>Community</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="/community/merchants/">Merchants & Exchanges</a></li>
+                                 <li><a class="white" href="https://monero.stackexchange.com/">Stack Exchange</a></li>
+                                 <li><a class="white" href="https://bitcointalk.org/index.php?topic=583449.0">BitcoinTalk</a></li>
+                            </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        <h3>The Monero Project</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="https://openalias.org/">Open Alias</a></li>
+                                 <li><a class="white" href="/resources/research-lab/">Monero Research Lab (MRL)</a></li>
+                                 <li><a class="white" href="/press-kit/">Press Kit</a></li>
+                                 <li><a class="white" href="https://ccs.getmonero.org">Community Crowdfunding System</a></li>
+                            </ul>
+                    </div>
+                <div class="row center-xs">
+                    <div class="footer-links">
+                        <ul class="list-unstyled list-inline">
+                            <li><a href="http://monerotoruzizulg5ttgat2emf4d6fbmiea25detrmmy7erypseyteyd.onion/2024/03/08/clsag-security-proof-revisions.html" class="white footer-link"><img class="tor" src="/img/onion-tor.svg" alt="onion service">Tor Onion service</a></li>
+                             <li><a href="/legal/" class="white footer-link">Legal</a></li>
+                             <li><a href="https://github.com/monero-project/monero-site" class="white footer-link">Source Code</a></li>
+                             <li><a href="/sitemap.xml" class="white footer-link">Sitemap</a></li>
+                             <li><a class="white" href="/feed.xml"><img src="/img/feed.svg" width="30" height="30" alt="Feed icon">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+            </div>
+</footer>
+<!-- page served by server N -->
+
+    </div>
+  </body>
+</html>

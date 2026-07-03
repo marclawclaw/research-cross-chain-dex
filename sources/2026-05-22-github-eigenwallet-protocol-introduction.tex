@@ -1,0 +1,26 @@
+\section{Introduction}
+
+Since the birth of Bitcoin in 2008\cite{nakamoto2008}, many other cryptocurrencies have been introduced. 
+It is without a doubt that this flourishing ecosystem has evolved into an enormous financial market. 
+Cryptocurrencies are traded against fiat (e.g. USD, AUD, EUR) or against each other. 
+However, due to the lack of interoperability between different blockchains, most of the trades are executed on centralized exchanges. 
+Due to regulations, these centralized exchanges have integrated complex KYC (Know Your Customer) procedures where traders have to go through lengthy processes to prove their identity. 
+In addition, traders give up control over their hard-earned coins by depositing them in the exchange so that they can execute trades.
+The trader now has to trust the exchange to manage their funds according to the highest standards, to protect them against thieves or not lose them otherwise. 
+This trust was misused more than once in the past and billions of dollars in user funds have been lost\cite{exchangeHacks}. 
+
+One could say that these centralized exchanges are now a relic of the past. 
+A new era of decentralized exchanges has started, adhering to the core idea of Bitcoin: censorship resistance at all levels. 
+
+Decentralized exchanges powered by atomic swaps, first introduced in 2015 by TierNolan\cite{TierNolan2013}, can now promise more guarantees in terms of security and privacy to traders. 
+
+The original idea of atomic swaps uses HTLCs (Hash Time-Lock Contracts), imposing certain requirements on the underlying blockchains: (1) they must support scripts so that one can build hash locks; and (2) they must support timelocks. 
+
+Technology has evolved and, with advances in cryptography, a new way of cross-chain atomic swaps using adaptor signatures is gaining traction.  
+
+Atomic swaps using adaptor signatures (also referred to as Scriptless Scripts) have several advantages over traditional atomic swaps using HTLCs: 
+(1) contrary to HTLCs where the same hash has to be used on each chain, transactions involved in an atomic swap using adaptor signatures cannot be linked; and 
+(2) since no script is involved, the on-chain footprint is reduced which makes the atomic swap cheaper.
+
+Within this work we present our current efforts on cross-chain atomic swaps using adaptor signatures. 
+In particular, we show how adaptor signatures can be employed to swap between Monero and Bitcoin. Notably, the former does not support scripts or timelocks. 

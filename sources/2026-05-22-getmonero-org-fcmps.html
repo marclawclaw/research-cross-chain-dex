@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang=en>
+
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+     Full-Chain Membership Proofs Development | Monero - secure, private, untraceable
+    </title>
+  <meta name="description" content="
+  A CCS to develop Full-Chain Membership Proofs has been successfully funded.
+  ">
+	<meta name="keywords" content="monero, xmr, bitmonero, cryptocurrency">
+
+    <meta property="og:title" content="
+    
+    Blog: Full-Chain Membership Proofs Development
+    " />
+    <meta property="og:description" content="
+    A CCS to develop Full-Chain Membership Proofs has been successfully funded.
+    ">
+    <!-- If the page specifies a dedicated image which is not an SVG file, we use that one. Otherwise we use the classic Monero logo -->
+    <meta property="og:image" content="https://www.getmonero.org/press-kit/symbols/monero-symbol-on-white-480.png">
+    <meta property="og:site_name" content="getmonero.org, The Monero Project">
+    <meta property="og:url" content="https://www.getmonero.org/2024/04/27/fcmps.html">
+    <meta property="og:type" content="website">
+    <meta http-equiv="onion-location" content="http://monerotoruzizulg5ttgat2emf4d6fbmiea25detrmmy7erypseyteyd.onion/2024/04/27/fcmps.html" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/meta/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/meta/favicon-16x16.png">
+        <link rel="manifest" href="/meta/manifest.json">
+        <link rel="mask-icon" href="/meta/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="theme-color" content="#ffffff">
+
+    <link href="/css/custom.css" rel="stylesheet">
+	
+    
+    <meta name="msapplication-config" content="/ietemplates/ieconfig.xml">
+
+  <!-- Feed autodetection -->
+  <link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Monero">
+
+  </head>
+
+
+  <body>
+    <div class="page-wrapper">
+        <div class="mob-nav">
+              <input class="burger-check" id="mobile-burger" type="checkbox"><label for="mobile-burger" class="burger"></label>
+
+        <div class="slide-in-nav">
+             <div class="container slide-in">
+                 <div class="row">
+                     <div class="col-xs-12 dropdown text-center nav-item">
+                      <label for="drop1">Get Started<div class="arrow-down"></div></label>
+                      <input class="burger-checkdropdown" id="drop1" type="checkbox" tabindex="0">
+                      <div class="dropdown-content">
+                          <a href="/get-started/what-is-monero/">What is Monero?</a>
+                          <a href="/get-started/accepting/">Accepting</a>
+                          <a href="/get-started/contributing/">Contributing</a>
+                          <a href="/get-started/mining/">Mining</a>
+                          <a href="/get-started/faq/">FAQ</a>
+                  </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                    <div class="col-xs-12 dropdown nav-item">
+                      <a href="/downloads/">Downloads</a>
+                    </div>
+                 </div>
+                 <div class="row">
+                    <div class="col-xs-12 dropdown nav-item">
+                      <a href="/blog/">Blog</a>
+                    </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-xs-12 dropdown text-center nav-item">
+                    <label for="drop2">Community<div class="arrow-down"></div></label>
+                    <input class="burger-checkdropdown" id="drop2" type="checkbox" tabindex="0">
+                    <div class="dropdown-content">
+                      <a href="/community/workgroups/">Workgroups</a>
+                      <a href="/community/hangouts/">Hangouts</a>
+                      <a href="/community/sponsorships/">Sponsorships</a>
+                      <a href="/community/merchants/">Merchants & Exchanges</a>
+                    </div>
+                  </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-xs-12 dropdown text-center nav-item">
+                    <label for="drop3">Resources<div class="arrow-down"></div></label>
+                    <input class="burger-checkdropdown" id="drop3" type="checkbox" tabindex="0">
+                    <div class="dropdown-content">
+                      <a href="/resources/about/">About</a>
+                      <a href="/resources/roadmap/">Roadmap</a>
+                      <a href="/resources/research-lab/">Research Lab</a>
+                      <a href="/resources/moneropedia/">Moneropedia</a>
+                      <a href="/resources/user-guides/">User Guides</a>
+                      <a href="/resources/developer-guides/">Developer Guides</a>
+                      <a href="/resources/tools/">Tools</a>
+                      <a href="/library/">Library</a>
+                      <a href="/press-kit/">Press Kit</a>
+                    </div>
+                  </div>
+               </div>
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="text-center nav-item mob">
+                            <a href="https://ccs.getmonero.org">Community Crowdfunding</a> 
+                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-xs-12">
+                         <div class="text-center nav-item mob">
+                            <a href="https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md">Vulnerability Response</a>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+          
+        </div>
+       </div>
+       
+        <div class="desktop-nav">
+            <nav class="container">
+            <div class="topnav">
+              <div class="row middle-xs">
+                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <a href="/"><img src="/img/monero-logo.png" width="500" height="135" alt="Monero Logo" class="monero-logo"></a>
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-8 topnav-list end-xs">
+                      <div class="row end-xs middle-xs">
+                         <div class="col-md-12">
+                          <a href="https://ccs.getmonero.org" class="top-link">Community Crowdfunding</a>
+                          <a href="https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md" class="top-link">Vulnerability Response</a>
+                          <div href="#" class="dropdown top-link language-change">
+                            <input class="burger-checkdropdown" id="langdrop" type="checkbox" tabindex="0">
+                            <label for="langdrop"><img src="/img/language.png" width="500" height="500" alt="Language selector icon" class="icon-language"/>English
+                           <div class="arrow-down"></div></label>
+                            <div class="dropdown-content text-center">
+                              
+                                
+                              
+                                
+                                  
+                                    <a href="/es/2024/04/27/fcmps.html" >Español</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/it/2024/04/27/fcmps.html" >Italiano</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/pl/2024/04/27/fcmps.html" >Polski</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/fr/2024/04/27/fcmps.html" >Français</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/ar/2024/04/27/fcmps.html" >العربية</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/ru/2024/04/27/fcmps.html" >Русский</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/de/2024/04/27/fcmps.html" >Deutsch</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/nl/2024/04/27/fcmps.html" >Nederlands</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/pt-br/2024/04/27/fcmps.html" >Português do Brasil</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/tr/2024/04/27/fcmps.html" >Türkçe</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/zh-cn/2024/04/27/fcmps.html" >简体中文</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/zh-tw/2024/04/27/fcmps.html" >繁體中文 臺灣</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/nb-no/2024/04/27/fcmps.html" >Norsk</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a href="/el/2024/04/27/fcmps.html" >ελληνική</a>
+                                  
+                                
+                              
+                            </div>
+                          </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="botnav white-nav">
+                <input class="burger-check" id="burger-check" type="checkbox"><label for="burger-check" class="burger"></label>
+                <div class="row between-xs nav-items">
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop1">Get Started<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop1" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/get-started/what-is-monero/">What is Monero?</a>
+                              <a href="/get-started/accepting/">Accepting</a>
+                              <a href="/get-started/contributing/">Contributing</a>
+                              <a href="/get-started/mining/">Mining</a>
+                              <a href="/get-started/faq/">FAQ</a>
+                        </div>
+                    </div>
+                    <div class="col dropdown nav-item">
+                          <a href="/downloads/">Downloads</a>
+                    </div>
+                    <div class="col dropdown nav-item">
+                         <a href="/blog/">Blog</a>
+                    </div>
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop2">Community<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop2" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/community/workgroups/">Workgroups</a>
+                              <a href="/community/hangouts/">Hangouts</a>
+                              <a href="/community/sponsorships/">Sponsorships</a>
+                              <a href="/community/merchants/">Merchants & Exchanges</a>
+                        </div>
+                    </div>
+                    <div class="col dropdown nav-item">
+                        <label for="desktopdrop3">Resources<div class="arrow-down"></div></label>
+                        <input class="burger-checkdropdown" id="desktopdrop3" type="checkbox" tabindex="0">
+                        <div class="dropdown-content">
+                              <a href="/resources/about/">About</a>
+                              <a href="/resources/roadmap/">Roadmap</a>
+                              <a href="/resources/research-lab/">Research Lab</a>
+                              <a href="/resources/moneropedia/">Moneropedia</a>
+                              <a href="/resources/user-guides/">User Guides</a>
+                              <a href="/resources/developer-guides/">Developer Guides</a>
+                              <a href="/resources/tools/">Tools</a>
+                              <a href="/library/">Library</a>
+                              <a href="/press-kit/">Press Kit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        </div>
+        <div class="mob bot-nav white-nav">
+            <div class="row center-xs middle-xs">
+                <div class="col-xs-6">
+                    <a href="/"><img src="/img/monero-logo.png" width="500" height="135" alt="Monero Logo" class="monero-logo"></a>
+                </div>
+                <div class="dropdown col-xs-6 text-center mob-language-change">
+                <input class="burger-checkdropdown" id="moblangdrop" type="checkbox" tabindex="0">
+                <label for="moblangdrop"><img src="/img/language.png" width="500" height="500" alt="Lang" class="icon-language"/><div class="arrow-down"></div></label>
+                               <div class="mob dropdown-content text-center">
+                               <p class="mob-lang-change mob-lang-selected">English</p>
+                               
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/es/2024/04/27/fcmps.html" >Español</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/it/2024/04/27/fcmps.html" >Italiano</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/pl/2024/04/27/fcmps.html" >Polski</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/fr/2024/04/27/fcmps.html" >Français</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/ar/2024/04/27/fcmps.html" >العربية</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/ru/2024/04/27/fcmps.html" >Русский</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/de/2024/04/27/fcmps.html" >Deutsch</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/nl/2024/04/27/fcmps.html" >Nederlands</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/pt-br/2024/04/27/fcmps.html" >Português do Brasil</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/tr/2024/04/27/fcmps.html" >Türkçe</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/zh-cn/2024/04/27/fcmps.html" >简体中文</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/zh-tw/2024/04/27/fcmps.html" >繁體中文 臺灣</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/nb-no/2024/04/27/fcmps.html" >Norsk</a>
+                                  
+                                
+                              
+                                
+                                  
+                                    <a class="mob-lang-change" href="/el/2024/04/27/fcmps.html" >ελληνική</a>
+                                  
+                                
+                              
+                            </div>
+                          </div>
+            </div>     
+        </div>    
+
+        
+
+<div class="site-wrap post">
+    
+    <section class="container">
+            <div class="row">
+                <!-- left two-thirds block-->
+                <div class="left two-thirds col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="info-block">
+                               <h2>Full-Chain Membership Proofs Development</h2> 
+                                <p class="author">Posted by: Luke "Kayaba" Parker</p>
+                                <p class="post-date">April 27, 2024</p>
+                                <p>Full-Chain Membership Proofs, as a concept, is a replacement for rings within the Monero protocol. While rings have offered sender privacy to Monero since it launched, they're vulnerable to attacks such as the <a href="https://www.youtube.com/watch?v=iABIcsDJKyM&amp;list=PLsSYUeVwrHBnAUre2G_LYDsdo-tD0ov-y&amp;index=9&amp;pp=iAQB">EAE attack</a>, <a href="https://www.youtube.com/watch?v=6CVcirD90pg&amp;list=PLsSYUeVwrHBnAUre2G_LYDsdo-tD0ov-y&amp;index=4&amp;pp=iAQB">have difficulties upon chain reorganizations</a>, and in general enable statistical analysis (mitigated by distribution of the decoy selection algorithm). Full-Chain Membership Proofs prove the output spent is one of <em>any</em> output on the chain, effectively removing all of these risks. This means every input goes from an immediate anonymity set of 16 to 100,000,000.</p>
+
+<p>Two proposals have been made for Monero offering such privacy, both under the "Full-Chain Membership Proofs" moniker (further mentions acronymed to "FCMPs"). The first was announced at <a href="https://www.youtube.com/watch?v=vrCAiLPfXlg">MoneroKon in 2023</a>, and was intended to be deployed with/after <a href="/2021/12/22/what-is-seraphis.html">Seraphis</a>. Seraphis distinguished between "membership", the output spent is one of some outputs, and "spend authorization", the output being spent is authorized by the private key holder. With that, much more efficient proofs for membership became possible, including the "Grootle" proofs it was originally proposed with (effectively a ring of 128). FCMPs further improved upon this, requiring Seraphis's new key/transaction format to do so.</p>
+
+<p>The second proposal was made in March of 2024 in response to the spam attacks ongoing at the time. "FCMPs+SA+L", later shortened to simply "FCMP++s", independently adds "Spend Authorization + Linkability", removing the dependency of Seraphis. With further research and development, it was found to add several new features to the Monero protocol, without requiring the migration to Seraphis. These features include,</p>
+
+<ul>
+  <li>Transaction Chaining</li>
+</ul>
+
+<p>Transaction chaining allows signing a transaction spending another transaction, before the spent transaction is published and mined on-chain. This enables certain layer-two designs for Monero (such as some payment channel protocols).</p>
+
+<ul>
+  <li>Outgoing View Keys</li>
+</ul>
+
+<p>Outgoing view keys allow anyone with the outgoing view key to detect when received outputs are spent. Currently, Monero only offers incoming view keys, which do allow detecting spends with extremely high likelihood over the current protocol, yet don't provide 100% certainty. This certainty will make cold wallet setups and multisignature wallets much more efficient, having to bring the private key online far less often. It also allows defining a single "view key", without delineation of "incoming" or "outgoing", simplifying wallet UX.</p>
+
+<ul>
+  <li>Forward Secrecy</li>
+</ul>
+
+<p>Forward secrecy means an adversary with a discrete log oracle, such as an adversary with a quantum computer, cannot break the privacy of the protocol.</p>
+
+<p>While Seraphis also introduces all of these features, it does so with a migration to a new anonymity set and a new address format (invalidating all prior addresses). The FCMP++ proposal not only aims to be faster to deploy yet to do so without the migration. This is enabled by the trade-off of not actually offering any of this functionality at launch however.</p>
+
+<p>The deployed protocol would support all of these features. The wallet code to take advantage of it would be delayed, ensuring that we keep our scope small and achieve the largest goal, full sender privacy, as soon as possible. Wallets could then start taking advantage of these features on their own timeline, without further hard forks nor privacy issues. This would likely be done by merging the Seraphis codebase into Monero, taking advantage of its years of development and improved design. With that, the migration to the new key structures would be optional, and if so, the work done for FCMP++s would provide most of the necessary work for FCMPs with Seraphis.</p>
+
+<p>FCMP++s are based off <a href="https://eprint.iacr.org/2022/756">Curve Trees</a>, and to make the overall proof much more efficient, <a href="https://eprint.iacr.org/2022/596">Eagen's work with elliptic curve divisors</a>. The <a href="https://github.com/kayabaNerve/fcmp-ringct/">overall composition</a> has been largely specified, and is currently being reviewed and further detailed as appropriate. <a href="https://ccs.getmonero.org/proposals/fcmp++-development.html">The development of the composition was funded</a>, and an <a href="https://ccs.getmonero.org/proposals/fcmp++-research.html">earmarked fund for academic review and auditing is still raising</a>. If you are a member of the academic community and are interested in contributing, please feel free to reach out within the <a href="https://www.getmonero.org/community/workgroups/">Monero Research Lab on IRC or Matrix</a>.</p>
+
+                                <hr>
+                                <p id="post-meta">Post tags <i class="fa fa-tags"></i>: <a href="/blog/tags/crypto.html">Cryptography</a>, <a href="/blog/tags/community.html">Community</a></p>
+                    </div>
+                </div>
+                <!-- end left two-thirds block-->
+                
+                <!-- right one-third block-->
+                <div class="right one-third col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="sidebar col-sm-12 col-xs-12">   
+                            <div class="info-block">
+                                <div class="row center-xs">
+                                    <div class="col"><h2>Recent Posts</h2></div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/11/monero-GUI-0.18.5.0-released.html">Monero GUI 0.18.5.0 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/11/monero-0.18.5.0-released.html">Monero 0.18.5.0 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/05/10/deprecating-unlock-time.html">Deprecating Monero's Custom Transaction Unlock Time</a></p>
+                                     </div>
+                                </div>
+                                
+                                <div class="row start-xs info-block-row">
+                                    <div class="col">
+                                         <p><a href="/2026/03/04/monero-GUI-0.18.4.7-released.html">Monero GUI 0.18.4.7 'Fluorine Fermi' released</a></p>
+                                     </div>
+                                </div>
+                                
+                            </div>
+                            <div class="info-block">
+                                <div class="row center-xs">
+                                    <div class="col">
+                                        <h2>Popular Tags</h2>
+                                    </div>
+                                </div>
+                                    
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/monero missives.html">Monero Missives</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/community.html">Community</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/conferences.html">Conferences</a></p>
+                                         </div>
+                                     </div>
+                                     
+                                    <div class="row start-xs">
+                                        <div class="col">
+                                             <p><a href="/blog/tags/exchanges.html">Exchanges</a></p>
+                                         </div>
+                                     </div>
+                                     
+
+
+                            </div>
+                        </div> 
+                </div>
+                <!-- end right one-third block-->
+            </div>
+        </section>
+    </div>
+
+    <footer class="container-fluid">
+            <div class="container">
+                <div class="row around-xs footer-wrapper">
+                     <div class="col-sm-3 col-xs-6">
+                         <h3>Resources</h3>
+                            <ul class="list-unstyled">
+                                <li><a class="white" href="/resources/about/">About Monero</a></li>
+                                <li><a class="white" href="/resources/moneropedia/">Moneropedia</a></li>
+                                <li><a class="white" href="/resources/developer-guides/">Developer Guides</a></li>
+                                <li><a class="white" href="/resources/user-guides/">User Guides</a></li>
+                                <li><a class="white" href="/library/">Library</a></li>
+                                <li><a class="white" href="/downloads/">Downloads</a></li>
+                                
+                            </ul>
+                     </div>
+                     <div class="col-sm-3 col-xs-6">
+                        <h3>Reach Out</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="/community/workgroups/">Workgroups</a></li>
+                                 <li><a class="white" href="/community/hangouts/">Hangouts</a></li>
+                                 <li><a class="white" href="https://lists.getmonero.org/postorius/lists/monero-announce.lists.getmonero.org/">Mailing List</a></li>
+
+                            </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        <h3>Community</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="/community/merchants/">Merchants & Exchanges</a></li>
+                                 <li><a class="white" href="https://monero.stackexchange.com/">Stack Exchange</a></li>
+                                 <li><a class="white" href="https://bitcointalk.org/index.php?topic=583449.0">BitcoinTalk</a></li>
+                            </ul>
+                    </div>
+                    <div class="col-sm-3 col-xs-6">
+                        <h3>The Monero Project</h3>
+                            <ul class="list-unstyled">
+                                 <li><a class="white" href="https://openalias.org/">Open Alias</a></li>
+                                 <li><a class="white" href="/resources/research-lab/">Monero Research Lab (MRL)</a></li>
+                                 <li><a class="white" href="/press-kit/">Press Kit</a></li>
+                                 <li><a class="white" href="https://ccs.getmonero.org">Community Crowdfunding System</a></li>
+                            </ul>
+                    </div>
+                <div class="row center-xs">
+                    <div class="footer-links">
+                        <ul class="list-unstyled list-inline">
+                            <li><a href="http://monerotoruzizulg5ttgat2emf4d6fbmiea25detrmmy7erypseyteyd.onion/2024/04/27/fcmps.html" class="white footer-link"><img class="tor" src="/img/onion-tor.svg" alt="onion service">Tor Onion service</a></li>
+                             <li><a href="/legal/" class="white footer-link">Legal</a></li>
+                             <li><a href="https://github.com/monero-project/monero-site" class="white footer-link">Source Code</a></li>
+                             <li><a href="/sitemap.xml" class="white footer-link">Sitemap</a></li>
+                             <li><a class="white" href="/feed.xml"><img src="/img/feed.svg" width="30" height="30" alt="Feed icon">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
+            </div>
+</footer>
+<!-- page served by server N -->
+
+    </div>
+  </body>
+</html>

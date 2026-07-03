@@ -1,0 +1,11 @@
+\section{Conclusion}
+
+Atomic swaps constitute the main mechanism to bridge the gap between unrelated blockchains without violating the core principles of censorship resistance, permissionlessness and pseudonymity originally championed by Bitcoin.
+Up until recently, their application was believed to be exclusive to blockchains with very particular characteristics.
+Advances in cryptography have lowered the barrier to entry, allowing for new protocols to be devised in order to connect blockchains that were originally thought to be incompatible. One such example is the \textit{Bitcoin–Monero Cross-chain Atomic Swap} by Gugger\cite{gugger2020}, which has inspired the development of applications such as \cite{farcaster} and \cite{xmr-btc-comit}. 
+
+In this work, we give a high-level sketch of a new protocol which expands on the ideas of the original to serve a new use case.
+In particular, by applying adaptor signatures to the Monero signature scheme, we make possible atomic swaps in which the party holding BTC is no longer the one vulnerable to draining attacks.
+A real-world service provider could therefore leverage both protocols to put up buy and sell BTC/XMR offers as a market maker.
+
+This proposal hinges on the viability of using adaptor signatures on Monero, a topic which we do not discuss here, but one which is being researched at the time of writing.

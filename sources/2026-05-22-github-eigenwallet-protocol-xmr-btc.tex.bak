@@ -1,0 +1,71 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+%
+\documentclass[runningheads]{llncs}
+%
+\input{packages}
+\input{macros}
+
+\newcommand{\lucas}[1]{\textcolor{pink}{Lucas: }\textcolor{blue}{#1} }
+\newcommand{\phil}[1]{\textcolor{blue}{\textbf{Phil:} }\textcolor{blue}{#1} }
+
+\begin{document}
+%
+\title{Atomic Swaps between Bitcoin and Monero}
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{Philipp Hoenisch\inst{1,2} \and
+Lucas Soriano del Pino\inst{1,2}}
+%
+\authorrunning{Hoenisch et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{COMIT,
+\email{\{firstname\}@comit.network} \and
+CoBloX Pty Ltd, 
+\email{\{firstname\}@coblox.tech}
+}
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+% We see atomic swaps as necessary in a world with more than one blockchain.
+% Not all blockchains are designed with interoperability in mind, but most depend on signature schemes which can be leveraged for this purpose.
+% Monero is one such example and here we discuss the state of the art in Bitcoin-Monero atomic swaps and give a glimpse of what is to come.
+
+Due to the evergrowing blockchain ecosystem, interoperability has become a matter of great importance. 
+Atomic swaps allow connecting otherwise isolated blockchains while adhering to the core principles of censorship resistance and permissionlessnes. 
+Up until recently, atomic swap protocols have mostly relied on complex script support, excluding certain types of blockchains.
+With advances in cryptography, it is now possible to build a bridge between almost any two blockchains. 
+In this work, we give an explanation of one such protocol which applies adaptor signatures on Bitcoin to procure atomic swaps between Monero and Bitcoin. 
+We dive into the cryptographic details, discuss its limitations and give an outlook on our current work where we use adaptor signatures on the Monero signature scheme. 
+
+\keywords{Blockchain  \and Atomic Swap \and Bitcoin \and Monero \and Adaptor Signatures.}
+\end{abstract}
+%
+%
+%
+\input{introduction}
+
+\input{htlc_atomic_swaps}
+
+\input{old_protocol}
+
+% We don't care about swaps where the Bitcoin seller is the maker because that is unsupported by the current Monero protocol.
+% It will require a hardfork to work
+% \input{new_protocol}
+
+\input{conclusion}
+
+%
+% ---- Bibliography ----
+%
+
+\bibliographystyle{splncs04}
+\bibliography{mybibliography}
+\end{document}

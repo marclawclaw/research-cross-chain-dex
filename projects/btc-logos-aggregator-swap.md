@@ -3,8 +3,8 @@ tags: [project, idea, lambda-prize, atomic-swaps, bitcoin, logos, lez, rfp-003, 
 ecosystem: Bitcoin ↔ Logos Execution Zone (LEZ)
 category: Lambda-prize on RFP-003 — aggregator web app that proxies the RFP-003 taker module, plus a Satora-style browser BTC wallet
 status: idea / design sketch
-based_on: logos-co/rfp RFP-003 (Atomic Swaps with LEZ) — this is a Lambda-prize built ON TOP of it, not a competing submission
-related: [[projects/satora]], [[projects/eigenwallet]], [[projects/comit]]
+based_on: "logos-co/rfp RFP-003 (Atomic Swaps with LEZ) — a Lambda-prize built ON TOP of it, not a competing submission"
+related: "projects/satora, projects/eigenwallet, projects/comit"
 author: Marclaw
 ---
 
